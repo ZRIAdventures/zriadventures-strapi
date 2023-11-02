@@ -1,0 +1,15 @@
+{
+  "collectionName": "components_voucher_extras",
+  "info": {
+    "displayName": "extras"
+  },
+  "options": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "quantity": {
+      "type": "integer"
+    }
+  }
+}

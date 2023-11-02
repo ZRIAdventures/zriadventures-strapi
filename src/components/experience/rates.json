@@ -1,0 +1,17 @@
+{
+  "collectionName": "components_rates_rates",
+  "info": {
+    "displayName": "rates",
+    "icon": "stack",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "USD": {
+      "type": "integer"
+    },
+    "LKR": {
+      "type": "integer"
+    }
+  }
+}

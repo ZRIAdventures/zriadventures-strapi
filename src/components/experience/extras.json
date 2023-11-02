@@ -1,0 +1,21 @@
+{
+  "collectionName": "components_experience_extras",
+  "info": {
+    "displayName": "extras",
+    "icon": "chartBubble"
+  },
+  "options": {},
+  "attributes": {
+    "extrasId": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "cost": {
+      "type": "component",
+      "repeatable": false,
+      "component": "experience.rates"
+    }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "collectionName": "components_experience_options",
+  "info": {
+    "displayName": "options",
+    "icon": "bulletList",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "duration": {
+      "type": "component",
+      "repeatable": false,
+      "component": "experience.duration"
+    },
+    "paxRates": {
+      "displayName": "paxRates",
+      "type": "component",
+      "repeatable": true,
+      "component": "experience.pax-rates"
+    },
+    "childCostReduction": {
+      "type": "component",
+      "repeatable": false,
+      "component": "experience.rates"
+    }
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "kind": "collectionType",
+  "collectionName": "experience_categories",
+  "info": {
+    "singularName": "experience-category",
+    "pluralName": "experience-categories",
+    "displayName": "ExperienceCategory",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "categoryId": {
+      "type": "uid"
+    },
+    "name": {
+      "type": "string"
+    },
+    "type": {
+      "type": "enumeration",
+      "enum": [
+        "water",
+        "land",
+        "air"
+      ]
+    }
+  }
+}

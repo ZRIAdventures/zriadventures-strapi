@@ -1,0 +1,20 @@
+{
+  "collectionName": "components_experience_duration_rates",
+  "info": {
+    "displayName": "durationRates",
+    "icon": "priceTag"
+  },
+  "options": {},
+  "attributes": {
+    "duration": {
+      "type": "component",
+      "repeatable": false,
+      "component": "experience.duration"
+    },
+    "rates": {
+      "type": "component",
+      "repeatable": false,
+      "component": "experience.rates"
+    }
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "kind": "collectionType",
+  "collectionName": "vouchers",
+  "info": {
+    "singularName": "voucher",
+    "pluralName": "vouchers",
+    "displayName": "Voucher",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "couponCode": {
+      "type": "uid"
+    },
+    "status": {
+      "type": "enumeration",
+      "enum": [
+        "EXPIRED",
+        "AVAILABLE",
+        "CLAIMED",
+        "UNPAID"
+      ]
+    },
+    "type": {
+      "type": "enumeration",
+      "enum": [
+        "CASH",
+        "EXPERIENCE"
+      ]
+    },
+    "expiryDate": {
+      "type": "date"
+    },
+    "cash": {
+      "type": "component",
+      "repeatable": false,
+      "component": "voucher.cash"
+    },
+    "experience": {
+      "type": "component",
+      "repeatable": true,
+      "component": "voucher.experience"
+    }
+  }
+}

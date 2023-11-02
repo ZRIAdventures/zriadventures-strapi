@@ -1,0 +1,16 @@
+{
+  "collectionName": "components_experience_coordinates",
+  "info": {
+    "displayName": "coordinates",
+    "icon": "pinMap"
+  },
+  "options": {},
+  "attributes": {
+    "latitude": {
+      "type": "float"
+    },
+    "longitude": {
+      "type": "float"
+    }
+  }
+}

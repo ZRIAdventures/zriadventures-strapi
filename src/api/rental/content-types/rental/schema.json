@@ -1,0 +1,32 @@
+{
+  "kind": "collectionType",
+  "collectionName": "rentals",
+  "info": {
+    "singularName": "rental",
+    "pluralName": "rentals",
+    "displayName": "Rental",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "rentalId": {
+      "type": "uid"
+    },
+    "merchandise": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::merchandise.merchandise"
+    },
+    "options": {
+      "type": "component",
+      "repeatable": true,
+      "component": "rentals.rent-rates"
+    },
+    "name": {
+      "type": "string"
+    }
+  }
+}

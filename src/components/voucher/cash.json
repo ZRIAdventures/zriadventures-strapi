@@ -1,0 +1,19 @@
+{
+  "collectionName": "components_voucher_cash",
+  "info": {
+    "displayName": "cash"
+  },
+  "options": {},
+  "attributes": {
+    "amount": {
+      "type": "float"
+    },
+    "currency": {
+      "type": "enumeration",
+      "enum": [
+        "LKR",
+        "USD"
+      ]
+    }
+  }
+}

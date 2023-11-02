@@ -1,0 +1,22 @@
+{
+  "collectionName": "components_experience_pax_rates",
+  "info": {
+    "displayName": "paxRates",
+    "icon": "priceTag",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "minPax": {
+      "type": "integer"
+    },
+    "rates": {
+      "type": "component",
+      "repeatable": false,
+      "component": "experience.rates"
+    },
+    "maxPax": {
+      "type": "integer"
+    }
+  }
+}

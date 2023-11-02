@@ -1,0 +1,80 @@
+{
+  "kind": "collectionType",
+  "collectionName": "events",
+  "info": {
+    "singularName": "event",
+    "pluralName": "events",
+    "displayName": "Event",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "eventId": {
+      "type": "uid"
+    },
+    "name": {
+      "type": "string"
+    },
+    "duration": {
+      "type": "component",
+      "repeatable": false,
+      "component": "experience.duration"
+    },
+    "location": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::location.location"
+    },
+    "included": {
+      "type": "richtext"
+    },
+    "cost": {
+      "type": "component",
+      "repeatable": false,
+      "component": "experience.rates"
+    },
+    "groupSize": {
+      "type": "integer"
+    },
+    "additionalInformation": {
+      "type": "component",
+      "repeatable": true,
+      "component": "experience.requirements"
+    },
+    "about": {
+      "type": "component",
+      "repeatable": false,
+      "component": "experience.about"
+    },
+    "startDate": {
+      "type": "date"
+    },
+    "endDate": {
+      "type": "date"
+    },
+    "faqs": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::faq.faq"
+    },
+    "terms_and_condition": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::terms-and-condition.terms-and-condition"
+    },
+    "images": {
+      "type": "media",
+      "multiple": true,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    }
+  }
+}

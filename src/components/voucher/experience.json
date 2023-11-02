@@ -1,0 +1,24 @@
+{
+  "collectionName": "components_voucher_experiences",
+  "info": {
+    "displayName": "experience"
+  },
+  "options": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "adults": {
+      "type": "integer"
+    },
+    "children": {
+      "type": "integer"
+    },
+    "extras": {
+      "displayName": "extras",
+      "type": "component",
+      "repeatable": true,
+      "component": "voucher.extras"
+    }
+  }
+}

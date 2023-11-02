@@ -1,0 +1,46 @@
+{
+  "kind": "collectionType",
+  "collectionName": "locations",
+  "info": {
+    "singularName": "location",
+    "pluralName": "locations",
+    "displayName": "Location",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "locationId": {
+      "type": "uid"
+    },
+    "name": {
+      "type": "string"
+    },
+    "coordinates": {
+      "type": "component",
+      "repeatable": false,
+      "component": "experience.coordinates"
+    },
+    "trending": {
+      "type": "boolean"
+    },
+    "description": {
+      "type": "text"
+    },
+    "googleMapsLink": {
+      "type": "string"
+    },
+    "image": {
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ],
+      "type": "media",
+      "multiple": false
+    }
+  }
+}

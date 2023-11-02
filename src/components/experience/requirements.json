@@ -1,0 +1,16 @@
+{
+  "collectionName": "components_experience_requirements",
+  "info": {
+    "displayName": "requirements",
+    "icon": "archive"
+  },
+  "options": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "description": {
+      "type": "text"
+    }
+  }
+}

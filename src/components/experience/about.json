@@ -1,0 +1,16 @@
+{
+  "collectionName": "components_experience_abouts",
+  "info": {
+    "displayName": "about",
+    "icon": "book"
+  },
+  "options": {},
+  "attributes": {
+    "shortDescription": {
+      "type": "text"
+    },
+    "longDescription": {
+      "type": "text"
+    }
+  }
+}

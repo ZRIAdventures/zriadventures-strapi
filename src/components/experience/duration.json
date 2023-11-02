@@ -1,0 +1,22 @@
+{
+  "collectionName": "components_experience_durations",
+  "info": {
+    "displayName": "duration",
+    "icon": "clock",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "type": {
+      "type": "enumeration",
+      "enum": [
+        "Minutes",
+        "Hours",
+        "Days"
+      ]
+    },
+    "amount": {
+      "type": "integer"
+    }
+  }
+}

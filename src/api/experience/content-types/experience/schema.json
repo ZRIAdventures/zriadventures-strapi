@@ -1,0 +1,101 @@
+{
+  "kind": "collectionType",
+  "collectionName": "experiences",
+  "info": {
+    "singularName": "experience",
+    "pluralName": "experiences",
+    "displayName": "Experience",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "experienceId": {
+      "type": "uid"
+    },
+    "name": {
+      "type": "string"
+    },
+    "location": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::location.location"
+    },
+    "about": {
+      "displayName": "about",
+      "type": "component",
+      "repeatable": false,
+      "component": "experience.about"
+    },
+    "trending": {
+      "type": "boolean"
+    },
+    "offer": {
+      "type": "integer"
+    },
+    "additionalInformation": {
+      "type": "component",
+      "repeatable": true,
+      "component": "experience.requirements"
+    },
+    "included": {
+      "type": "richtext"
+    },
+    "experience_categories": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::experience-category.experience-category"
+    },
+    "terms_and_condition": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::terms-and-condition.terms-and-condition"
+    },
+    "faqs": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::faq.faq"
+    },
+    "extras": {
+      "type": "component",
+      "repeatable": true,
+      "component": "experience.extras"
+    },
+    "options": {
+      "type": "component",
+      "repeatable": true,
+      "component": "experience.options"
+    },
+    "bundle": {
+      "type": "boolean",
+      "default": false
+    },
+    "voucher_templates": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::voucher-template.voucher-template"
+    },
+    "images": {
+      "type": "media",
+      "multiple": true,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "difficulty": {
+      "type": "enumeration",
+      "enum": [
+        "Easy",
+        "Moderate",
+        "Hard",
+        "Challenging"
+      ]
+    }
+  }
+}

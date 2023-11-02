@@ -1,0 +1,23 @@
+{
+  "collectionName": "components_rentals_rent_rates",
+  "info": {
+    "displayName": "RentRates",
+    "icon": "archive"
+  },
+  "options": {},
+  "attributes": {
+    "duration": {
+      "type": "enumeration",
+      "enum": [
+        "days-1",
+        "days-3",
+        "days-7"
+      ]
+    },
+    "cost": {
+      "type": "component",
+      "repeatable": false,
+      "component": "experience.rates"
+    }
+  }
+}

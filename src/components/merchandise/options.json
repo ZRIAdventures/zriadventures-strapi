@@ -1,0 +1,18 @@
+{
+  "collectionName": "components_merchandise_options",
+  "info": {
+    "displayName": "Options"
+  },
+  "options": {},
+  "attributes": {
+    "type": {
+      "type": "string"
+    },
+    "option": {
+      "displayName": "MerchOption",
+      "type": "component",
+      "repeatable": true,
+      "component": "merchandise.merch-option"
+    }
+  }
+}

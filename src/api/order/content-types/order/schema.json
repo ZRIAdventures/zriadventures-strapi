@@ -1,0 +1,80 @@
+{
+  "kind": "collectionType",
+  "collectionName": "orders",
+  "info": {
+    "singularName": "order",
+    "pluralName": "orders",
+    "displayName": "Order",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "firstName": {
+      "type": "string"
+    },
+    "lastName": {
+      "type": "string"
+    },
+    "contactNumber": {
+      "type": "string"
+    },
+    "email": {
+      "type": "email"
+    },
+    "items": {
+      "type": "json"
+    },
+    "paymentStatus": {
+      "type": "enumeration",
+      "enum": [
+        "PENDING",
+        "SUCCESS",
+        "FAILED"
+      ]
+    },
+    "nationality": {
+      "type": "string"
+    },
+    "paymentVendor": {
+      "type": "enumeration",
+      "enum": [
+        "PAYHERE",
+        "BANK",
+        "KOKO",
+        "MINTPAY"
+      ]
+    },
+    "totalAmount": {
+      "type": "float"
+    },
+    "amountPaid": {
+      "type": "float"
+    },
+    "orderId": {
+      "type": "uid",
+      "required": true
+    },
+    "currency": {
+      "type": "enumeration",
+      "enum": [
+        "USD",
+        "LKR"
+      ]
+    },
+    "addrLine1": {
+      "type": "string"
+    },
+    "addrLine2": {
+      "type": "string"
+    },
+    "city": {
+      "type": "string"
+    },
+    "postalCode": {
+      "type": "string"
+    }
+  }
+}

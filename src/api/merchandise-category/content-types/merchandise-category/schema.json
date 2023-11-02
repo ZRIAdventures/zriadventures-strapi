@@ -1,0 +1,21 @@
+{
+  "kind": "collectionType",
+  "collectionName": "merchandise_categories",
+  "info": {
+    "singularName": "merchandise-category",
+    "pluralName": "merchandise-categories",
+    "displayName": "MerchandiseCategory"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "categoryId": {
+      "type": "uid"
+    },
+    "name": {
+      "type": "string"
+    }
+  }
+}

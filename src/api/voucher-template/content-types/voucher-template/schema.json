@@ -1,0 +1,32 @@
+{
+  "kind": "collectionType",
+  "collectionName": "voucher_templates",
+  "info": {
+    "singularName": "voucher-template",
+    "pluralName": "voucher-templates",
+    "displayName": "VoucherTemplate",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "voucherId": {
+      "type": "uid"
+    },
+    "name": {
+      "type": "string"
+    },
+    "image": {
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ],
+      "type": "media",
+      "multiple": false
+    }
+  }
+}
