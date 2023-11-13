@@ -17,7 +17,7 @@ module.exports = [
   {
     name: 'strapi::cors',
     config: {
-      origin: ['https://zriadventures.vercel.app', 'https://www.zriadventures.com', 'http://localhost:3000'],
+      origin: ['https://zriadventures.vercel.app', 'https://www.zriadventures.com', 'http://localhost:3000','https://strapi-production-59f6.up.railway.app'],
       methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'],
       headers: ['Content-Type', 'Authorization', 'Origin', 'Accept'],
       keepHeaderOnError: true,
