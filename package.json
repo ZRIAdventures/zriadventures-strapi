@@ -16,7 +16,7 @@
     "@strapi/strapi": "4.14.4",
     "pg": "8.11.3",
     "strapi-plugin-populate-deep": "^3.0.0",
-    "yarn": "^1.22.19"
+    "yarn": "^1.22.21"
   },
   "author": {
     "name": "A Strapi developer"
