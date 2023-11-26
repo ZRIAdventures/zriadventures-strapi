@@ -2,7 +2,8 @@
   "collectionName": "components_experience_abouts",
   "info": {
     "displayName": "about",
-    "icon": "book"
+    "icon": "book",
+    "description": ""
   },
   "options": {},
   "attributes": {
@@ -11,6 +12,9 @@
     },
     "longDescription": {
       "type": "text"
+    },
+    "longDesc": {
+      "type": "richtext"
     }
   }
 }
