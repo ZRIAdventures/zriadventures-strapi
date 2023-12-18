@@ -2,14 +2,14 @@ let previousPaymentStatus;
 
 module.exports = {
   beforeUpdate(event) {
-    const { result } = event;
-    previousPaymentStatus = result.paymentStatus;
+    const { params } = event;
+    previousPaymentStatus = params.data.paymentStatus;
   },
 
   async afterUpdate(event) {
-    const { result } = event;
+    const { params } = event;
 
-    if (result.paymentStatus !== previousPaymentStatus) {
+    if (params.data.paymentStatus !== previousPaymentStatus) {
       const axios = require("axios");
       const url =
         "https://zriadventures-dev.vercel.app/api/strapi/update-order";
