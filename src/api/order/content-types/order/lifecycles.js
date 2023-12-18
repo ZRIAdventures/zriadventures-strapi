@@ -1,38 +1,39 @@
-const cache = {};
+// let previousPaymentStatus;
 
-module.exports = {
-  async beforeUpdate(event) {
-    const { where } = event;
+// module.exports = {
+//   async beforeUpdate(event) {
+//     const { where } = event;
 
-    const existingEntry = await strapi
-      .query("api::order.order")
-      .findOne({ id: where });
-    cache[where] = existingEntry.paymentStatus;
-    console.log("Existing Entry: ", existingEntry);
-    console.log("PreviousPaymentStatus: ", cache[where]);
-  },
+//     const existingEntry = await strapi
+//       .query("api::order.order")
+//       .findOne({ id: where });
+//     previousPaymentStatus = existingEntry.paymentStatus;
 
-  async afterUpdate(event) {
-    const { params, where } = event;
+//     console.log("Existing Entry");
+//     console.log(existingEntry);
+//     console.log("Previous Payment Status");
+//     console.log(previousPaymentStatus);
+//   },
 
-    console.log("Params: ", params);
-    console.log("ParamsDataPaymentStatus: ", params.data.paymentStatus);
-    console.log("PreviousPaymentStatus: ", cache[where]);
+//   async afterUpdate(event) {
+//     const { params } = event;
 
-    if (params.data.paymentStatus !== cache[where]) {
-      const axios = require("axios");
-      const url =
-        "https://zriadventures-dev.vercel.app/api/strapi/update-order";
+//     console.log("New Entry");
+//     console.log(params.data);
+//     console.log("Previous Payment Status");
+//     console.log(previousPaymentStatus);
 
-      try {
-        const response = await axios.post(url, params.data);
-        console.log(response.data);
-      } catch (error) {
-        console.error(error);
-      }
-    }
+//     if (params.data.paymentStatus !== previousPaymentStatus) {
+//       const axios = require("axios");
+//       const url =
+//         "https://zriadventures-dev.vercel.app/api/strapi/update-order";
 
-    // Clear the cache for this id to free up memory
-    delete cache[where];
-  },
-};
+//       try {
+//         const response = await axios.post(url, params.data);
+//         console.log(response.data);
+//       } catch (error) {
+//         console.error(error);
+//       }
+//     }
+//   },
+// };
