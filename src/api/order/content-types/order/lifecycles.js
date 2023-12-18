@@ -1,7 +1,7 @@
 let previousPaymentStatus;
 
 module.exports = {
-  async beforeSave(event) {
+  async beforeUpdate(event) {
     const { where } = event;
 
     const existingEntry = await strapi
