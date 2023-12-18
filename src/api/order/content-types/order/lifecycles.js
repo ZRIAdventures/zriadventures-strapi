@@ -1,20 +1,23 @@
 let previousPaymentStatus;
 
 module.exports = {
-  beforeUpdate(event) {
-    const { params } = event;
-    previousPaymentStatus = params.data.paymentStatus;
-    console.log("Params: ", params);
-    console.log("Params: ", params.data.paymentStatus);
-    console.log("Params: ", previousPaymentStatus);
+  async beforeSave(event) {
+    const { where } = event;
+
+    const existingEntry = await strapi
+      .query("api::order.order")
+      .findOne({ id: where.id });
+    previousPaymentStatus = existingEntry.paymentStatus;
+    console.log("Existing Entry: ", existingEntry);
+    console.log("PreviousPaymentStatus: ", previousPaymentStatus);
   },
 
   async afterUpdate(event) {
     const { params } = event;
 
     console.log("Params: ", params);
-    console.log("Params: ", params.data.paymentStatus);
-    console.log("Params: ", previousPaymentStatus);
+    console.log("ParamsDataPaymentStatus: ", params.data.paymentStatus);
+    console.log("PreviousPaymentStatus: ", previousPaymentStatus);
 
     if (params.data.paymentStatus !== previousPaymentStatus) {
       const axios = require("axios");
@@ -22,7 +25,7 @@ module.exports = {
         "https://zriadventures-dev.vercel.app/api/strapi/update-order";
 
       try {
-        const response = await axios.post(url, result);
+        const response = await axios.post(url, params.data);
         console.log(response.data);
       } catch (error) {
         console.error(error);
