@@ -6,7 +6,7 @@ module.exports = {
 
     const existingEntry = await strapi
       .query("api::order.order")
-      .findOne({ id: where.id });
+      .findOne({ id: where });
     previousPaymentStatus = existingEntry.paymentStatus;
     console.log("Existing Entry: ", existingEntry);
     console.log("PreviousPaymentStatus: ", previousPaymentStatus);
