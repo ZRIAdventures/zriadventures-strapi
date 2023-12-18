@@ -1,7 +1,7 @@
 module.exports = {
   async beforeUpdate(data, model) {
     let { id } = data;
-    let existing = await strapi.query("Order").findOne({ id });
+    let existing = await strapi.query("api::order.order").findOne({ id });
 
     if (existing && existing.paymentStatus != model.paymentStatus) {
       // paymentStatus has changed, so we store the new value in model
