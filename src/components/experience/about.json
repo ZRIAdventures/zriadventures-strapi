@@ -10,9 +10,6 @@
     "shortDescription": {
       "type": "text"
     },
-    "longDescription": {
-      "type": "text"
-    },
     "longDesc": {
       "type": "richtext"
     }
