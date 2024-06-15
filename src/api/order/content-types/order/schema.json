@@ -44,7 +44,8 @@
         "PAYHERE",
         "BANK",
         "KOKO",
-        "MINTPAY"
+        "MINTPAY",
+        "GENIE"
       ]
     },
     "totalAmount": {
