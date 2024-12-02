@@ -76,6 +76,11 @@
     },
     "postalCode": {
       "type": "string"
-    }
+    },
+    "receiptSent": {
+      "type": "boolean",
+      "default": false,
+      "required": true
+    },
   }
 }
