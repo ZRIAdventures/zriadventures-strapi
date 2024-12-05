@@ -81,6 +81,9 @@
       "type": "boolean",
       "default": false,
       "required": true
+    },
+    "itemsData": {
+      "type": "json"
     }
   }
 }
