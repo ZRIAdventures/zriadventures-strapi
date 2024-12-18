@@ -40,9 +40,7 @@
       "component": "voucher.cash"
     },
     "experience": {
-      "type": "component",
-      "repeatable": true,
-      "component": "voucher.experience"
+      "type": "json"
     }
   }
 }
