@@ -41,6 +41,15 @@
     },
     "experience": {
       "type": "json"
-    }
+    },
+    "info": {
+      "type": "json"
+    },
+     "voucherTemplate": {
+      "type": "json"
+    },
+    "email": {
+      "type": "string"
+    },
   }
 }
