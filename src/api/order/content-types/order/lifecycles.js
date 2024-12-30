@@ -23,15 +23,6 @@ module.exports = {
     event.state = {
       previousPaymentStatus: existingEntry.paymentStatus,
     };
-
-    // Send the existing entry to an external API
-    const url = "https://zriadventures.com/api/strapi/test";
-    try {
-      const response = await axios.post(url, existingEntry);
-      console.log("External API Response:", response.data);
-    } catch (error) {
-      console.error("Error in beforeUpdate API call:", error.message);
-    }
   },
 
   async afterUpdate(event) {
@@ -46,7 +37,7 @@ module.exports = {
 
     // Check if paymentStatus has changed
     if (result.paymentStatus !== previousPaymentStatus) {
-      const url = "https://zriadventures.com/api/strapi/update-order";
+      const url = `https://zriadventures.com/api/strapi/update-order?previousPaymentStatus=${previousPaymentStatus}`;
       try {
         const response = await axios.post(url, result);
         console.log("External API Response:", response.data);
