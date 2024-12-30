@@ -1,39 +1,58 @@
-// let previousPaymentStatus;
+const axios = require("axios");
 
-// module.exports = {
-//   async beforeUpdate(event) {
-//     const { where } = event;
+module.exports = {
+  async beforeUpdate(event) {
+    const { where } = event.params;
 
-//     const existingEntry = await strapi
-//       .query("api::order.order")
-//       .findOne({ id: where });
-//     previousPaymentStatus = existingEntry.paymentStatus;
+    // Ensure `id` exists in the `where` clause
+    if (!where || !where.id) {
+      throw new Error("Missing 'id' in the where clause.");
+    }
 
-//     console.log("Existing Entry");
-//     console.log(existingEntry);
-//     console.log("Previous Payment Status");
-//     console.log(previousPaymentStatus);
-//   },
+    const id = where.id;
+    const existingEntry = await strapi.entityService.findOne(
+      "api::order.order",
+      id
+    );
 
-//   async afterUpdate(event) {
-//     const { params } = event;
+    if (!existingEntry) {
+      throw new Error(`Order with id ${id} not found.`);
+    }
 
-//     console.log("New Entry");
-//     console.log(params.data);
-//     console.log("Previous Payment Status");
-//     console.log(previousPaymentStatus);
+    // Store previousPaymentStatus in the event's state
+    event.state = {
+      previousPaymentStatus: existingEntry.paymentStatus,
+    };
 
-//     if (params.data.paymentStatus !== previousPaymentStatus) {
-//       const axios = require("axios");
-//       const url =
-//         "https://zriadventures-dev.vercel.app/api/strapi/update-order";
+    // Send the existing entry to an external API
+    const url = "https://zriadventures.com/api/strapi/test";
+    try {
+      const response = await axios.post(url, existingEntry);
+      console.log("External API Response:", response.data);
+    } catch (error) {
+      console.error("Error in beforeUpdate API call:", error.message);
+    }
+  },
 
-//       try {
-//         const response = await axios.post(url, params.data);
-//         console.log(response.data);
-//       } catch (error) {
-//         console.error(error);
-//       }
-//     }
-//   },
-// };
+  async afterUpdate(event) {
+    const { result, state } = event;
+
+    if (!state || !state.previousPaymentStatus) {
+      console.error("Previous payment status not available.");
+      return;
+    }
+
+    const previousPaymentStatus = state.previousPaymentStatus;
+
+    // Check if paymentStatus has changed
+    if (result.paymentStatus !== previousPaymentStatus) {
+      const url = "https://zriadventures.com/api/strapi/update-order";
+      try {
+        const response = await axios.post(url, result);
+        console.log("External API Response:", response.data);
+      } catch (error) {
+        console.error("Error in afterUpdate API call:", error.message);
+      }
+    }
+  },
+};
