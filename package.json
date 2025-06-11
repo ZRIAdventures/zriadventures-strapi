@@ -14,17 +14,20 @@
     "strapi": "strapi"
   },
   "dependencies": {
-    "@strapi/plugin-i18n": "4.25.22",
-    "@strapi/plugin-users-permissions": "4.25.22",
-    "@strapi/provider-upload-cloudinary": "4.25.22",
-    "@strapi/strapi": "4.25.22",
+    "@strapi/plugin-users-permissions": "5.15.1",
+    "@strapi/provider-upload-cloudinary": "5.15.1",
+    "@strapi/strapi": "5.15.1",
     "pg": "8.11.3",
     "strapi-plugin-import-export-entries": "^1.21.1",
     "strapi-plugin-populate-deep": "^3.0.0",
-    "yarn": "^1.22.21"
+    "yarn": "^1.22.21",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "react-router-dom": "^6.0.0",
+    "styled-components": "^6.0.0"
   },
   "engines": {
-    "node": ">=18.x.x <=20.x.x",
+    "node": "20.x.x",
     "npm": "10.x.x"
   },
   "strapi": {
