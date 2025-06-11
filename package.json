@@ -10,14 +10,17 @@
     "strapi": "strapi"
   },
   "dependencies": {
-    "@strapi/plugin-i18n": "4.14.4",
-    "@strapi/plugin-users-permissions": "4.14.4",
-    "@strapi/provider-upload-cloudinary": "4.14.4",
-    "@strapi/strapi": "4.14.4",
-    "pg": "8.11.3",
-    "strapi-plugin-import-export-entries": "^1.21.1",
-    "strapi-plugin-populate-deep": "^3.0.0",
-    "yarn": "^1.22.21"
+    "@strapi/helper-plugin": "^4.25.12",
+    "@strapi/plugin-users-permissions": "5.15.1",
+    "@strapi/provider-upload-cloudinary": "5.15.1",
+    "@strapi/strapi": "5.15.1",
+    "pg": "8.16.0",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "react-router-dom": "^6.0.0",
+    "strapi-plugin-populate-deep": "^3.0.1",
+    "styled-components": "^6.1.18",
+    "yarn": "^1.22.22"
   },
   "author": {
     "name": "ZRI Adventures"
