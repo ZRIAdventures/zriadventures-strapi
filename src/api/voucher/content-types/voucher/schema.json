@@ -27,9 +27,7 @@
       "type": "date"
     },
     "percentage": {
-      "type": "component",
-      "repeatable": false,
-      "component": "voucher.percentage"
+      "type": "integer"
     },
     "cash": {
       "type": "component",
