@@ -21,13 +21,10 @@
     },
     "type": {
       "type": "enumeration",
-      "enum": ["PERCENTAGE", "CASH", "EXPERIENCE"]
+      "enum": ["CASH", "EXPERIENCE"]
     },
     "expiryDate": {
       "type": "date"
-    },
-    "percentage": {
-      "type": "integer"
     },
     "cash": {
       "type": "component",
