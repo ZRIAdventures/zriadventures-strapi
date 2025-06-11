@@ -17,22 +17,19 @@
     },
     "status": {
       "type": "enumeration",
-      "enum": [
-        "EXPIRED",
-        "AVAILABLE",
-        "CLAIMED",
-        "UNPAID"
-      ]
+      "enum": ["EXPIRED", "AVAILABLE", "CLAIMED", "UNPAID"]
     },
     "type": {
       "type": "enumeration",
-      "enum": [
-        "CASH",
-        "EXPERIENCE"
-      ]
+      "enum": ["PERCENTAGE", "CASH", "EXPERIENCE"]
     },
     "expiryDate": {
       "type": "date"
+    },
+    "percentage": {
+      "type": "component",
+      "repeatable": false,
+      "component": "voucher.percentage"
     },
     "cash": {
       "type": "component",
@@ -45,7 +42,7 @@
     "info": {
       "type": "json"
     },
-     "voucherTemplate": {
+    "voucherTemplate": {
       "type": "json"
     },
     "email": {
