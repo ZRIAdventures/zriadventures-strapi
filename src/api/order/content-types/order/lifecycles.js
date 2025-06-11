@@ -10,9 +10,10 @@ module.exports = {
     }
 
     const id = where.id;
-    const existingEntry = await strapi.documents("api::order.order").findOne({
-      documentId: "__TODO__"
-    });
+    const existingEntry = await strapi.entityService.findOne(
+      "api::order.order",
+      id
+    );
 
     if (!existingEntry) {
       throw new Error(`Order with id ${id} not found.`);
