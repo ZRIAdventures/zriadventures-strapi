@@ -15,15 +15,6 @@
     "couponCode": {
       "type": "uid"
     },
-    "status": {
-      "type": "enumeration",
-      "enum": [
-        "EXPIRED",
-        "AVAILABLE",
-        "CLAIMED",
-        "UNPAID"
-      ]
-    },
     "type": {
       "type": "enumeration",
       "enum": [
@@ -54,6 +45,15 @@
     },
     "percentageAmount": {
       "type": "decimal"
+    },
+    "voucherStatus": {
+      "type": "enumeration",
+      "enum": [
+        "AVAILABLE",
+        "CLAIMED",
+        "EXPIRED",
+        "UNPAID"
+      ]
     }
   }
 }

@@ -865,13 +865,13 @@ export interface ApiVoucherVoucher extends Struct.CollectionTypeSchema {
       Schema.Attribute.Private;
     percentageAmount: Schema.Attribute.Decimal;
     publishedAt: Schema.Attribute.DateTime;
-    status: Schema.Attribute.Enumeration<
-      ['EXPIRED', 'AVAILABLE', 'CLAIMED', 'UNPAID']
-    >;
     type: Schema.Attribute.Enumeration<['CASH', 'PERCENTAGE', 'EXPERIENCE']>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    voucherStatus: Schema.Attribute.Enumeration<
+      ['AVAILABLE', 'CLAIMED', 'EXPIRED', 'UNPAID']
+    >;
     voucherTemplate: Schema.Attribute.JSON;
   };
 }
