@@ -693,7 +693,7 @@ export interface ApiOrderOrder extends Struct.CollectionTypeSchema {
   collectionName: 'orders';
   info: {
     description: '';
-    displayName: 'Order';
+    displayName: 'Orders Old';
     pluralName: 'orders';
     singularName: 'order';
   };
@@ -798,6 +798,57 @@ export interface ApiTermsAndConditionTermsAndCondition
     terms: Schema.Attribute.RichText;
     termsId: Schema.Attribute.UID;
     type: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiV2OrderV2Order extends Struct.CollectionTypeSchema {
+  collectionName: 'v2_orders';
+  info: {
+    displayName: 'Orders';
+    pluralName: 'v2-orders';
+    singularName: 'v2-order';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    addrLine1: Schema.Attribute.String;
+    addrLine2: Schema.Attribute.String;
+    amountPaid: Schema.Attribute.Float;
+    city: Schema.Attribute.String;
+    contactNumber: Schema.Attribute.String;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    currency: Schema.Attribute.Enumeration<['USD', 'LKR']>;
+    email: Schema.Attribute.Email;
+    firstName: Schema.Attribute.String;
+    items: Schema.Attribute.JSON;
+    itemsData: Schema.Attribute.JSON;
+    lastName: Schema.Attribute.String;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::v2-order.v2-order'
+    > &
+      Schema.Attribute.Private;
+    nationality: Schema.Attribute.String;
+    orderId: Schema.Attribute.UID & Schema.Attribute.Required;
+    paymentStatus: Schema.Attribute.Enumeration<
+      ['PENDING', 'SUCCESS', 'FAILED']
+    >;
+    paymentVendor: Schema.Attribute.Enumeration<
+      ['PAYHERE', 'BANK', 'KOKO', 'MINTPAY', 'GENIE']
+    >;
+    postalCode: Schema.Attribute.String;
+    publishedAt: Schema.Attribute.DateTime;
+    receiptSent: Schema.Attribute.Boolean &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<false>;
+    totalAmount: Schema.Attribute.Float;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -1396,6 +1447,7 @@ declare module '@strapi/strapi' {
       'api::order.order': ApiOrderOrder;
       'api::rental.rental': ApiRentalRental;
       'api::terms-and-condition.terms-and-condition': ApiTermsAndConditionTermsAndCondition;
+      'api::v2-order.v2-order': ApiV2OrderV2Order;
       'api::voucher-template.voucher-template': ApiVoucherTemplateVoucherTemplate;
       'api::voucher.voucher': ApiVoucherVoucher;
       'plugin::content-releases.release': PluginContentReleasesRelease;

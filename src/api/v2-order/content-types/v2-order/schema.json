@@ -1,11 +1,10 @@
 {
   "kind": "collectionType",
-  "collectionName": "orders",
+  "collectionName": "v2_orders",
   "info": {
-    "singularName": "order",
-    "pluralName": "orders",
-    "displayName": "Orders Old",
-    "description": ""
+    "singularName": "v2-order",
+    "pluralName": "v2-orders",
+    "displayName": "Orders"
   },
   "options": {
     "draftAndPublish": true
