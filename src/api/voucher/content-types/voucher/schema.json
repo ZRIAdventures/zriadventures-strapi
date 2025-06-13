@@ -54,6 +54,11 @@
         "EXPIRED",
         "UNPAID"
       ]
+    },
+    "reusable": {
+      "type": "boolean",
+      "required": true,
+      "default": false
     }
   }
 }

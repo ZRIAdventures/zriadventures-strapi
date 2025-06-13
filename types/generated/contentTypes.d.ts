@@ -916,6 +916,9 @@ export interface ApiVoucherVoucher extends Struct.CollectionTypeSchema {
       Schema.Attribute.Private;
     percentageAmount: Schema.Attribute.Decimal;
     publishedAt: Schema.Attribute.DateTime;
+    reusable: Schema.Attribute.Boolean &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<false>;
     type: Schema.Attribute.Enumeration<['CASH', 'PERCENTAGE', 'EXPERIENCE']>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
