@@ -1,0 +1,71 @@
+{
+  "collectionName": "components_tour_summaries",
+  "info": {
+    "displayName": "Tour Summary",
+    "icon": "information",
+    "description": "Overview details about the tour"
+  },
+  "options": {},
+  "attributes": {
+    "duration": {
+      "type": "string",
+      "required": true
+    },
+    "theme": {
+      "type": "enumeration",
+      "enum": [
+        "Adventure",
+        "Cultural",
+        "Wildlife",
+        "Beach & Relaxation",
+        "Hiking & Trekking",
+        "Photography",
+        "Culinary",
+        "Spiritual",
+        "Multi-Activity",
+        "Honeymoon",
+        "Family"
+      ]
+    },
+    "intensity": {
+      "type": "enumeration",
+      "enum": [
+        "Relaxed",
+        "Light",
+        "Moderate",
+        "Active",
+        "Challenging",
+        "Extreme"
+      ],
+      "required": true
+    },
+    "fullyGuided": {
+      "type": "boolean",
+      "default": true
+    },
+    "guideLanguages": {
+      "type": "json",
+      "default": ["English"]
+    },
+    "minAge": {
+      "type": "integer"
+    },
+    "maxGroupSize": {
+      "type": "integer"
+    },
+    "minGroupSize": {
+      "type": "integer",
+      "default": 1
+    },
+    "fitnessLevel": {
+      "type": "enumeration",
+      "enum": [
+        "No Fitness Required",
+        "Low",
+        "Moderate",
+        "High",
+        "Very High"
+      ]
+    }
+  }
+}

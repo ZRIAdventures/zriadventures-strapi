@@ -1,0 +1,35 @@
+{
+  "collectionName": "components_tour_certifications",
+  "info": {
+    "displayName": "Certification",
+    "icon": "shield",
+    "description": "Operator certifications and badges"
+  },
+  "options": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "issuedBy": {
+      "type": "string"
+    },
+    "badge": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": ["images"]
+    },
+    "verificationUrl": {
+      "type": "string"
+    },
+    "issueDate": {
+      "type": "date"
+    },
+    "expiryDate": {
+      "type": "date"
+    },
+    "description": {
+      "type": "text"
+    }
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "collectionName": "components_tour_itinerary_days",
+  "info": {
+    "displayName": "Itinerary Day",
+    "icon": "calendar",
+    "description": "Daily itinerary with activities and details"
+  },
+  "options": {},
+  "attributes": {
+    "dayNumber": {
+      "type": "integer",
+      "required": true
+    },
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "richtext",
+      "required": true
+    },
+    "activities": {
+      "type": "component",
+      "repeatable": true,
+      "component": "tour.activity"
+    },
+    "meals": {
+      "type": "enumeration",
+      "enum": [
+        "Breakfast",
+        "Lunch",
+        "Dinner",
+        "Breakfast & Lunch",
+        "Breakfast & Dinner",
+        "Lunch & Dinner",
+        "All Meals",
+        "None"
+      ],
+      "default": "None"
+    },
+    "accommodation": {
+      "type": "string"
+    },
+    "images": {
+      "type": "media",
+      "multiple": true,
+      "allowedTypes": ["images"]
+    }
+  }
+}

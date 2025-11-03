@@ -1,0 +1,92 @@
+{
+  "kind": "collectionType",
+  "collectionName": "reviews",
+  "info": {
+    "singularName": "review",
+    "pluralName": "reviews",
+    "displayName": "Review",
+    "description": "Customer reviews and ratings for tours and experiences"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "reviewerName": {
+      "type": "string",
+      "required": true
+    },
+    "reviewerAvatar": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": ["images"]
+    },
+    "overallRating": {
+      "type": "decimal",
+      "required": true,
+      "min": 0,
+      "max": 5
+    },
+    "ratings": {
+      "type": "component",
+      "repeatable": false,
+      "component": "tour.detailed-ratings"
+    },
+    "title": {
+      "type": "string"
+    },
+    "reviewText": {
+      "type": "text",
+      "required": true
+    },
+    "tripDate": {
+      "type": "date"
+    },
+    "reviewDate": {
+      "type": "datetime",
+      "default": null
+    },
+    "verified": {
+      "type": "boolean",
+      "default": false
+    },
+    "tour": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::tour.tour",
+      "inversedBy": "reviews"
+    },
+    "experience": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::experience.experience",
+      "inversedBy": "reviews"
+    },
+    "operator": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::tour-operator.tour-operator"
+    },
+    "customerPhotos": {
+      "type": "media",
+      "multiple": true,
+      "allowedTypes": ["images", "videos"]
+    },
+    "helpful": {
+      "type": "integer",
+      "default": 0
+    },
+    "operatorResponse": {
+      "type": "component",
+      "repeatable": false,
+      "component": "tour.operator-response"
+    },
+    "travelStyle": {
+      "type": "string"
+    },
+    "featured": {
+      "type": "boolean",
+      "default": false
+    }
+  }
+}

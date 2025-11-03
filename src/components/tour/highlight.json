@@ -1,0 +1,26 @@
+{
+  "collectionName": "components_tour_highlights",
+  "info": {
+    "displayName": "Highlight",
+    "icon": "star",
+    "description": "Key highlight or feature of tour/experience"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text"
+    },
+    "icon": {
+      "type": "string"
+    },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": ["images"]
+    }
+  }
+}

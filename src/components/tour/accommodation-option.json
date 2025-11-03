@@ -1,0 +1,37 @@
+{
+  "collectionName": "components_tour_accommodation_options",
+  "info": {
+    "displayName": "Accommodation Option",
+    "icon": "star",
+    "description": "Accommodation tier for tour bookings (3-star, 4-star, 5-star)"
+  },
+  "options": {},
+  "attributes": {
+    "starRating": {
+      "type": "enumeration",
+      "enum": [
+        "Not Required",
+        "Star Three",
+        "Star Four",
+        "Star Five"
+      ],
+      "required": true
+    },
+    "description": {
+      "type": "text"
+    },
+    "roomTypes": {
+      "type": "component",
+      "repeatable": true,
+      "component": "tour.room-type-pricing"
+    },
+    "includedAmenities": {
+      "type": "json"
+    },
+    "priceIncrement": {
+      "type": "component",
+      "repeatable": false,
+      "component": "experience.rates"
+    }
+  }
+}

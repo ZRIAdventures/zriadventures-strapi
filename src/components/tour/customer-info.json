@@ -1,0 +1,48 @@
+{
+  "collectionName": "components_tour_customer_info",
+  "info": {
+    "displayName": "Customer Info",
+    "icon": "user",
+    "description": "Primary customer contact information"
+  },
+  "options": {},
+  "attributes": {
+    "firstName": {
+      "type": "string",
+      "required": true
+    },
+    "lastName": {
+      "type": "string",
+      "required": true
+    },
+    "email": {
+      "type": "email",
+      "required": true
+    },
+    "phone": {
+      "type": "string",
+      "required": true
+    },
+    "nationality": {
+      "type": "string"
+    },
+    "address": {
+      "type": "text"
+    },
+    "city": {
+      "type": "string"
+    },
+    "country": {
+      "type": "string"
+    },
+    "postalCode": {
+      "type": "string"
+    },
+    "passportNumber": {
+      "type": "string"
+    },
+    "passportExpiry": {
+      "type": "date"
+    }
+  }
+}

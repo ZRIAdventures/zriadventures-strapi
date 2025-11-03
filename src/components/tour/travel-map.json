@@ -1,0 +1,40 @@
+{
+  "collectionName": "components_tour_travel_maps",
+  "info": {
+    "displayName": "Travel Map",
+    "icon": "pinMap",
+    "description": "Map configuration with route and waypoints"
+  },
+  "options": {},
+  "attributes": {
+    "mapTitle": {
+      "type": "string"
+    },
+    "mapProvider": {
+      "type": "enumeration",
+      "enum": [
+        "Google Maps",
+        "OpenStreetMap",
+        "Mapbox"
+      ],
+      "default": "Google Maps"
+    },
+    "embedUrl": {
+      "type": "text"
+    },
+    "waypoints": {
+      "type": "component",
+      "repeatable": true,
+      "component": "experience.coordinates"
+    },
+    "centerCoordinates": {
+      "type": "component",
+      "repeatable": false,
+      "component": "experience.coordinates"
+    },
+    "zoomLevel": {
+      "type": "integer",
+      "default": 8
+    }
+  }
+}

@@ -96,6 +96,75 @@
         "Hard",
         "Challenging"
       ]
+    },
+    "itinerary": {
+      "type": "component",
+      "repeatable": true,
+      "component": "tour.itinerary-day"
+    },
+    "highlights": {
+      "type": "component",
+      "repeatable": true,
+      "component": "tour.highlight"
+    },
+    "coordinates": {
+      "type": "component",
+      "repeatable": false,
+      "component": "experience.coordinates"
+    },
+    "mapEmbedUrl": {
+      "type": "text"
+    },
+    "notIncluded": {
+      "type": "richtext"
+    },
+    "seoMetadata": {
+      "type": "component",
+      "repeatable": false,
+      "component": "common.seo-metadata"
+    },
+    "operator": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::tour-operator.tour-operator"
+    },
+    "reviews": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::review.review",
+      "mappedBy": "experience"
+    },
+    "rating": {
+      "type": "decimal",
+      "min": 0,
+      "max": 5,
+      "default": 0
+    },
+    "totalReviews": {
+      "type": "integer",
+      "default": 0
+    },
+    "customerPhotos": {
+      "type": "media",
+      "multiple": true,
+      "allowedTypes": ["images"]
+    },
+    "videoUrl": {
+      "type": "string"
+    },
+    "bestSeller": {
+      "type": "boolean",
+      "default": false
+    },
+    "instantConfirmation": {
+      "type": "boolean",
+      "default": false
+    },
+    "minAge": {
+      "type": "integer"
+    },
+    "maxAge": {
+      "type": "integer"
     }
   }
 }

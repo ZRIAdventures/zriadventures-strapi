@@ -1,0 +1,41 @@
+{
+  "collectionName": "components_tour_detailed_ratings",
+  "info": {
+    "displayName": "Detailed Ratings",
+    "icon": "star",
+    "description": "Breakdown of ratings by category"
+  },
+  "options": {},
+  "attributes": {
+    "itinerary": {
+      "type": "decimal",
+      "min": 0,
+      "max": 5
+    },
+    "guide": {
+      "type": "decimal",
+      "min": 0,
+      "max": 5
+    },
+    "transport": {
+      "type": "decimal",
+      "min": 0,
+      "max": 5
+    },
+    "accommodation": {
+      "type": "decimal",
+      "min": 0,
+      "max": 5
+    },
+    "food": {
+      "type": "decimal",
+      "min": 0,
+      "max": 5
+    },
+    "valueForMoney": {
+      "type": "decimal",
+      "min": 0,
+      "max": 5
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "collectionName": "components_tour_operator_responses",
+  "info": {
+    "displayName": "Operator Response",
+    "icon": "message",
+    "description": "Tour operator response to customer review"
+  },
+  "options": {},
+  "attributes": {
+    "responseText": {
+      "type": "text",
+      "required": true
+    },
+    "responseDate": {
+      "type": "datetime"
+    },
+    "respondedBy": {
+      "type": "string"
+    }
+  }
+}

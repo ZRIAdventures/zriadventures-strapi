@@ -1,0 +1,183 @@
+{
+  "kind": "collectionType",
+  "collectionName": "tour_bookings",
+  "info": {
+    "singularName": "tour-booking",
+    "pluralName": "tour-bookings",
+    "displayName": "Tour Booking",
+    "description": "Booking management for tours with accommodation, room types, and pax details"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "bookingId": {
+      "type": "uid",
+      "required": true
+    },
+    "tour": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::tour.tour"
+    },
+    "departureDate": {
+      "type": "date",
+      "required": true
+    },
+    "returnDate": {
+      "type": "date",
+      "required": true
+    },
+    "bookingStatus": {
+      "type": "enumeration",
+      "enum": [
+        "Pending",
+        "Confirmed",
+        "Hold",
+        "Cancelled",
+        "Completed"
+      ],
+      "default": "Pending"
+    },
+    "paymentStatus": {
+      "type": "enumeration",
+      "enum": [
+        "PENDING",
+        "DEPOSIT_PAID",
+        "FULLY_PAID",
+        "REFUNDED",
+        "FAILED"
+      ],
+      "default": "PENDING"
+    },
+    "numberOfPax": {
+      "type": "integer",
+      "required": true,
+      "min": 1
+    },
+    "adultsCount": {
+      "type": "integer",
+      "default": 0
+    },
+    "childrenCount": {
+      "type": "integer",
+      "default": 0
+    },
+    "infantsCount": {
+      "type": "integer",
+      "default": 0
+    },
+    "accommodationType": {
+      "type": "enumeration",
+      "enum": [
+        "Not Required",
+        "Star Three",
+        "Star Four",
+        "Star Five"
+      ]
+    },
+    "roomType": {
+      "type": "enumeration",
+      "enum": [
+        "Single Room (1 Person - DB basis)",
+        "Double Room (2 Persons - DB)",
+        "Triple Room (3 Persons - 2 DB)",
+        "Quad Room (4 Persons - 2 DB)"
+      ]
+    },
+    "numberOfRooms": {
+      "type": "integer",
+      "default": 1
+    },
+    "singleSupplement": {
+      "type": "boolean",
+      "default": false
+    },
+    "customerInfo": {
+      "type": "component",
+      "repeatable": false,
+      "component": "tour.customer-info"
+    },
+    "travelers": {
+      "type": "component",
+      "repeatable": true,
+      "component": "tour.traveler-info"
+    },
+    "totalAmount": {
+      "type": "decimal",
+      "required": true
+    },
+    "depositAmount": {
+      "type": "decimal"
+    },
+    "amountPaid": {
+      "type": "decimal",
+      "default": 0
+    },
+    "currency": {
+      "type": "enumeration",
+      "enum": [
+        "USD",
+        "LKR"
+      ],
+      "default": "USD"
+    },
+    "paymentVendor": {
+      "type": "enumeration",
+      "enum": [
+        "PAYHERE",
+        "BANK",
+        "KOKO",
+        "MINTPAY",
+        "GENIE",
+        "STRIPE"
+      ]
+    },
+    "specialRequests": {
+      "type": "text"
+    },
+    "dietaryRequirements": {
+      "type": "json"
+    },
+    "flightDetails": {
+      "type": "json"
+    },
+    "insuranceSelected": {
+      "type": "boolean",
+      "default": false
+    },
+    "promoCode": {
+      "type": "string"
+    },
+    "discountApplied": {
+      "type": "decimal",
+      "default": 0
+    },
+    "bookingSource": {
+      "type": "enumeration",
+      "enum": [
+        "Website",
+        "Mobile App",
+        "Phone",
+        "Email",
+        "Walk-in"
+      ],
+      "default": "Website"
+    },
+    "confirmationEmailSent": {
+      "type": "boolean",
+      "default": false
+    },
+    "vouchersSent": {
+      "type": "boolean",
+      "default": false
+    },
+    "notes": {
+      "type": "text"
+    },
+    "emergencyContact": {
+      "type": "json"
+    }
+  }
+}

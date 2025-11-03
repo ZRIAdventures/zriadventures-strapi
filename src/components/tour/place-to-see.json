@@ -1,0 +1,41 @@
+{
+  "collectionName": "components_tour_places_to_see",
+  "info": {
+    "displayName": "Place to See",
+    "icon": "landscape",
+    "description": "Location with image and details for tour stops"
+  },
+  "options": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text"
+    },
+    "location": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::location.location"
+    },
+    "coordinates": {
+      "type": "component",
+      "repeatable": false,
+      "component": "experience.coordinates"
+    },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": ["images"]
+    },
+    "orderInTour": {
+      "type": "integer",
+      "default": 1
+    },
+    "timeSpent": {
+      "type": "string"
+    }
+  }
+}

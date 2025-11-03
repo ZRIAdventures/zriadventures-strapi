@@ -1,0 +1,108 @@
+{
+  "kind": "collectionType",
+  "collectionName": "tour_operators",
+  "info": {
+    "singularName": "tour-operator",
+    "pluralName": "tour-operators",
+    "displayName": "Tour Operator",
+    "description": "Tour operator/company information with ratings and certifications"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "name"
+    },
+    "description": {
+      "type": "richtext"
+    },
+    "logo": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": ["images"]
+    },
+    "coverImage": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": ["images"]
+    },
+    "rating": {
+      "type": "decimal",
+      "min": 0,
+      "max": 5,
+      "default": 0
+    },
+    "totalReviews": {
+      "type": "integer",
+      "default": 0
+    },
+    "numberOfTours": {
+      "type": "integer",
+      "default": 0
+    },
+    "ageRange": {
+      "type": "string",
+      "default": "12 to 90 years old"
+    },
+    "responseTime": {
+      "type": "string",
+      "default": "less than 24 hours"
+    },
+    "responseRate": {
+      "type": "string",
+      "default": "90%"
+    },
+    "operatorType": {
+      "type": "enumeration",
+      "enum": [
+        "Platinum Operator",
+        "Gold Operator",
+        "Silver Operator",
+        "Standard Operator"
+      ],
+      "default": "Standard Operator"
+    },
+    "website": {
+      "type": "string"
+    },
+    "email": {
+      "type": "email"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "address": {
+      "type": "text"
+    },
+    "certifications": {
+      "type": "component",
+      "repeatable": true,
+      "component": "tour.certification"
+    },
+    "sustainabilityInitiatives": {
+      "type": "component",
+      "repeatable": true,
+      "component": "tour.sustainability-initiative"
+    },
+    "socialMedia": {
+      "type": "json"
+    },
+    "yearEstablished": {
+      "type": "integer"
+    },
+    "specialties": {
+      "type": "json"
+    },
+    "languages": {
+      "type": "json",
+      "default": ["English"]
+    }
+  }
+}

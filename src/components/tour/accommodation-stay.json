@@ -1,0 +1,50 @@
+{
+  "collectionName": "components_tour_accommodation_stays",
+  "info": {
+    "displayName": "Accommodation Stay",
+    "icon": "building",
+    "description": "Details about where guests will stay during the tour"
+  },
+  "options": {},
+  "attributes": {
+    "hotelName": {
+      "type": "string",
+      "required": true
+    },
+    "starRating": {
+      "type": "enumeration",
+      "enum": [
+        "Star Three",
+        "Star Four",
+        "Star Five",
+        "Boutique",
+        "Guesthouse"
+      ]
+    },
+    "location": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::location.location"
+    },
+    "description": {
+      "type": "richtext"
+    },
+    "amenities": {
+      "type": "json"
+    },
+    "images": {
+      "type": "media",
+      "multiple": true,
+      "allowedTypes": ["images"]
+    },
+    "website": {
+      "type": "string"
+    },
+    "numberOfNights": {
+      "type": "integer"
+    },
+    "checkInDay": {
+      "type": "integer"
+    }
+  }
+}

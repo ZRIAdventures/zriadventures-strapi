@@ -501,10 +501,13 @@ export interface ApiExperienceExperience extends Struct.CollectionTypeSchema {
       'experience.requirements',
       true
     >;
+    bestSeller: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     bundle: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    coordinates: Schema.Attribute.Component<'experience.coordinates', false>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    customerPhotos: Schema.Attribute.Media<'images', true>;
     difficulty: Schema.Attribute.Enumeration<
       ['Easy', 'Moderate', 'Hard', 'Challenging']
     >;
@@ -515,11 +518,15 @@ export interface ApiExperienceExperience extends Struct.CollectionTypeSchema {
     experienceId: Schema.Attribute.UID;
     extras: Schema.Attribute.Component<'experience.extras', true>;
     faqs: Schema.Attribute.Relation<'oneToMany', 'api::faq.faq'>;
+    highlights: Schema.Attribute.Component<'tour.highlight', true>;
     images: Schema.Attribute.Media<
       'images' | 'files' | 'videos' | 'audios',
       true
     >;
     included: Schema.Attribute.RichText;
+    instantConfirmation: Schema.Attribute.Boolean &
+      Schema.Attribute.DefaultTo<false>;
+    itinerary: Schema.Attribute.Component<'tour.itinerary-day', true>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -527,18 +534,39 @@ export interface ApiExperienceExperience extends Struct.CollectionTypeSchema {
     > &
       Schema.Attribute.Private;
     location: Schema.Attribute.Relation<'oneToOne', 'api::location.location'>;
+    mapEmbedUrl: Schema.Attribute.Text;
+    maxAge: Schema.Attribute.Integer;
+    minAge: Schema.Attribute.Integer;
     name: Schema.Attribute.String;
+    notIncluded: Schema.Attribute.RichText;
     offer: Schema.Attribute.Integer;
+    operator: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::tour-operator.tour-operator'
+    >;
     options: Schema.Attribute.Component<'experience.options', true>;
     publishedAt: Schema.Attribute.DateTime;
+    rating: Schema.Attribute.Decimal &
+      Schema.Attribute.SetMinMax<
+        {
+          max: 5;
+          min: 0;
+        },
+        number
+      > &
+      Schema.Attribute.DefaultTo<0>;
+    reviews: Schema.Attribute.Relation<'oneToMany', 'api::review.review'>;
+    seoMetadata: Schema.Attribute.Component<'common.seo-metadata', false>;
     terms_and_condition: Schema.Attribute.Relation<
       'oneToOne',
       'api::terms-and-condition.terms-and-condition'
     >;
+    totalReviews: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
     trending: Schema.Attribute.Boolean;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    videoUrl: Schema.Attribute.String;
     voucher_templates: Schema.Attribute.Relation<
       'oneToMany',
       'api::voucher-template.voucher-template'
@@ -773,6 +801,68 @@ export interface ApiRentalRental extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiReviewReview extends Struct.CollectionTypeSchema {
+  collectionName: 'reviews';
+  info: {
+    description: 'Customer reviews and ratings for tours and experiences';
+    displayName: 'Review';
+    pluralName: 'reviews';
+    singularName: 'review';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    customerPhotos: Schema.Attribute.Media<'images' | 'videos', true>;
+    experience: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::experience.experience'
+    >;
+    featured: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    helpful: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::review.review'
+    > &
+      Schema.Attribute.Private;
+    operator: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::tour-operator.tour-operator'
+    >;
+    operatorResponse: Schema.Attribute.Component<
+      'tour.operator-response',
+      false
+    >;
+    overallRating: Schema.Attribute.Decimal &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMax<
+        {
+          max: 5;
+          min: 0;
+        },
+        number
+      >;
+    publishedAt: Schema.Attribute.DateTime;
+    ratings: Schema.Attribute.Component<'tour.detailed-ratings', false>;
+    reviewDate: Schema.Attribute.DateTime;
+    reviewerAvatar: Schema.Attribute.Media<'images'>;
+    reviewerName: Schema.Attribute.String & Schema.Attribute.Required;
+    reviewText: Schema.Attribute.Text & Schema.Attribute.Required;
+    title: Schema.Attribute.String;
+    tour: Schema.Attribute.Relation<'manyToOne', 'api::tour.tour'>;
+    travelStyle: Schema.Attribute.String;
+    tripDate: Schema.Attribute.Date;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    verified: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+  };
+}
+
 export interface ApiTermsAndConditionTermsAndCondition
   extends Struct.CollectionTypeSchema {
   collectionName: 'terms_and_conditions';
@@ -801,6 +891,301 @@ export interface ApiTermsAndConditionTermsAndCondition
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+  };
+}
+
+export interface ApiTourBookingTourBooking extends Struct.CollectionTypeSchema {
+  collectionName: 'tour_bookings';
+  info: {
+    description: 'Booking management for tours with accommodation, room types, and pax details';
+    displayName: 'Tour Booking';
+    pluralName: 'tour-bookings';
+    singularName: 'tour-booking';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    accommodationType: Schema.Attribute.Enumeration<
+      ['Not Required', 'Star Three', 'Star Four', 'Star Five']
+    >;
+    adultsCount: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
+    amountPaid: Schema.Attribute.Decimal & Schema.Attribute.DefaultTo<0>;
+    bookingId: Schema.Attribute.UID & Schema.Attribute.Required;
+    bookingSource: Schema.Attribute.Enumeration<
+      ['Website', 'Mobile App', 'Phone', 'Email', 'Walk-in']
+    > &
+      Schema.Attribute.DefaultTo<'Website'>;
+    bookingStatus: Schema.Attribute.Enumeration<
+      ['Pending', 'Confirmed', 'Hold', 'Cancelled', 'Completed']
+    > &
+      Schema.Attribute.DefaultTo<'Pending'>;
+    childrenCount: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
+    confirmationEmailSent: Schema.Attribute.Boolean &
+      Schema.Attribute.DefaultTo<false>;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    currency: Schema.Attribute.Enumeration<['USD', 'LKR']> &
+      Schema.Attribute.DefaultTo<'USD'>;
+    customerInfo: Schema.Attribute.Component<'tour.customer-info', false>;
+    departureDate: Schema.Attribute.Date & Schema.Attribute.Required;
+    depositAmount: Schema.Attribute.Decimal;
+    dietaryRequirements: Schema.Attribute.JSON;
+    discountApplied: Schema.Attribute.Decimal & Schema.Attribute.DefaultTo<0>;
+    emergencyContact: Schema.Attribute.JSON;
+    flightDetails: Schema.Attribute.JSON;
+    infantsCount: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
+    insuranceSelected: Schema.Attribute.Boolean &
+      Schema.Attribute.DefaultTo<false>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::tour-booking.tour-booking'
+    > &
+      Schema.Attribute.Private;
+    notes: Schema.Attribute.Text;
+    numberOfPax: Schema.Attribute.Integer &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMax<
+        {
+          min: 1;
+        },
+        number
+      >;
+    numberOfRooms: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<1>;
+    paymentStatus: Schema.Attribute.Enumeration<
+      ['PENDING', 'DEPOSIT_PAID', 'FULLY_PAID', 'REFUNDED', 'FAILED']
+    > &
+      Schema.Attribute.DefaultTo<'PENDING'>;
+    paymentVendor: Schema.Attribute.Enumeration<
+      ['PAYHERE', 'BANK', 'KOKO', 'MINTPAY', 'GENIE', 'STRIPE']
+    >;
+    promoCode: Schema.Attribute.String;
+    publishedAt: Schema.Attribute.DateTime;
+    returnDate: Schema.Attribute.Date & Schema.Attribute.Required;
+    roomType: Schema.Attribute.Enumeration<
+      [
+        'Single Room (1 Person - DB basis)',
+        'Double Room (2 Persons - DB)',
+        'Triple Room (3 Persons - 2 DB)',
+        'Quad Room (4 Persons - 2 DB)',
+      ]
+    >;
+    singleSupplement: Schema.Attribute.Boolean &
+      Schema.Attribute.DefaultTo<false>;
+    specialRequests: Schema.Attribute.Text;
+    totalAmount: Schema.Attribute.Decimal & Schema.Attribute.Required;
+    tour: Schema.Attribute.Relation<'manyToOne', 'api::tour.tour'>;
+    travelers: Schema.Attribute.Component<'tour.traveler-info', true>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    vouchersSent: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+  };
+}
+
+export interface ApiTourOperatorTourOperator
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'tour_operators';
+  info: {
+    description: 'Tour operator/company information with ratings and certifications';
+    displayName: 'Tour Operator';
+    pluralName: 'tour-operators';
+    singularName: 'tour-operator';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    address: Schema.Attribute.Text;
+    ageRange: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<'12 to 90 years old'>;
+    certifications: Schema.Attribute.Component<'tour.certification', true>;
+    coverImage: Schema.Attribute.Media<'images'>;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    description: Schema.Attribute.RichText;
+    email: Schema.Attribute.Email;
+    languages: Schema.Attribute.JSON & Schema.Attribute.DefaultTo<['English']>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::tour-operator.tour-operator'
+    > &
+      Schema.Attribute.Private;
+    logo: Schema.Attribute.Media<'images'>;
+    name: Schema.Attribute.String & Schema.Attribute.Required;
+    numberOfTours: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
+    operatorType: Schema.Attribute.Enumeration<
+      [
+        'Platinum Operator',
+        'Gold Operator',
+        'Silver Operator',
+        'Standard Operator',
+      ]
+    > &
+      Schema.Attribute.DefaultTo<'Standard Operator'>;
+    phone: Schema.Attribute.String;
+    publishedAt: Schema.Attribute.DateTime;
+    rating: Schema.Attribute.Decimal &
+      Schema.Attribute.SetMinMax<
+        {
+          max: 5;
+          min: 0;
+        },
+        number
+      > &
+      Schema.Attribute.DefaultTo<0>;
+    responseRate: Schema.Attribute.String & Schema.Attribute.DefaultTo<'90%'>;
+    responseTime: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<'less than 24 hours'>;
+    slug: Schema.Attribute.UID<'name'>;
+    socialMedia: Schema.Attribute.JSON;
+    specialties: Schema.Attribute.JSON;
+    sustainabilityInitiatives: Schema.Attribute.Component<
+      'tour.sustainability-initiative',
+      true
+    >;
+    totalReviews: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    website: Schema.Attribute.String;
+    yearEstablished: Schema.Attribute.Integer;
+  };
+}
+
+export interface ApiTourTour extends Struct.CollectionTypeSchema {
+  collectionName: 'tours';
+  info: {
+    description: 'Multi-day tours with itineraries, accommodations, and comprehensive details';
+    displayName: 'Tour';
+    pluralName: 'tours';
+    singularName: 'tour';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    about: Schema.Attribute.Component<'experience.about', false>;
+    accommodationOptions: Schema.Attribute.Component<
+      'tour.accommodation-option',
+      true
+    >;
+    accommodationStays: Schema.Attribute.Component<
+      'tour.accommodation-stay',
+      true
+    >;
+    additionalInformation: Schema.Attribute.Component<
+      'experience.requirements',
+      true
+    >;
+    ageRange: Schema.Attribute.String & Schema.Attribute.DefaultTo<'12+'>;
+    basePricePerPerson: Schema.Attribute.Component<'experience.rates', false>;
+    bestSeller: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    bookingCutoff: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<7>;
+    cancellationPolicy: Schema.Attribute.RichText;
+    coverImage: Schema.Attribute.Media<'images'>;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    customerPhotos: Schema.Attribute.Media<'images', true>;
+    customizable: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+    departureDates: Schema.Attribute.Component<'tour.departure-date', true>;
+    depositRequired: Schema.Attribute.Component<'experience.rates', false>;
+    endLocation: Schema.Attribute.Relation<
+      'oneToOne',
+      'api::location.location'
+    >;
+    faqs: Schema.Attribute.Relation<'oneToMany', 'api::faq.faq'>;
+    featured: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    guaranteedDeparture: Schema.Attribute.Boolean &
+      Schema.Attribute.DefaultTo<false>;
+    highlights: Schema.Attribute.Component<'tour.highlight', true>;
+    images: Schema.Attribute.Media<'images' | 'videos', true>;
+    included: Schema.Attribute.RichText;
+    includesFlight: Schema.Attribute.Boolean &
+      Schema.Attribute.DefaultTo<false>;
+    includesInsurance: Schema.Attribute.Boolean &
+      Schema.Attribute.DefaultTo<false>;
+    instantConfirmation: Schema.Attribute.Boolean &
+      Schema.Attribute.DefaultTo<false>;
+    itinerary: Schema.Attribute.Component<'tour.itinerary-day', true>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<'oneToMany', 'api::tour.tour'> &
+      Schema.Attribute.Private;
+    maxAge: Schema.Attribute.Integer;
+    minAge: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<12>;
+    name: Schema.Attribute.String & Schema.Attribute.Required;
+    newTour: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    notIncluded: Schema.Attribute.RichText;
+    offer: Schema.Attribute.Integer &
+      Schema.Attribute.SetMinMax<
+        {
+          max: 100;
+          min: 0;
+        },
+        number
+      >;
+    operator: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::tour-operator.tour-operator'
+    >;
+    paxPricing: Schema.Attribute.Component<'experience.pax-rates', true>;
+    pdfBrochure: Schema.Attribute.Media<'files'>;
+    placesToSee: Schema.Attribute.Component<'tour.place-to-see', true>;
+    promotionalOffers: Schema.Attribute.Component<
+      'tour.promotional-offer',
+      true
+    >;
+    publishedAt: Schema.Attribute.DateTime;
+    rating: Schema.Attribute.Decimal &
+      Schema.Attribute.SetMinMax<
+        {
+          max: 5;
+          min: 0;
+        },
+        number
+      > &
+      Schema.Attribute.DefaultTo<0>;
+    relatedExperiences: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::experience.experience'
+    >;
+    requiresAccommodation: Schema.Attribute.Boolean &
+      Schema.Attribute.DefaultTo<true>;
+    reviews: Schema.Attribute.Relation<'oneToMany', 'api::review.review'>;
+    seoMetadata: Schema.Attribute.Component<'common.seo-metadata', false>;
+    similarTours: Schema.Attribute.Relation<'oneToMany', 'api::tour.tour'>;
+    singleSupplement: Schema.Attribute.Component<'experience.rates', false>;
+    slug: Schema.Attribute.UID<'name'>;
+    startLocation: Schema.Attribute.Relation<
+      'oneToOne',
+      'api::location.location'
+    >;
+    terms_and_condition: Schema.Attribute.Relation<
+      'oneToOne',
+      'api::terms-and-condition.terms-and-condition'
+    >;
+    totalReviews: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
+    tourId: Schema.Attribute.UID;
+    tourSummary: Schema.Attribute.Component<'tour.tour-summary', false> &
+      Schema.Attribute.Required;
+    tourType: Schema.Attribute.Enumeration<['Private Tour', 'Group Tour']> &
+      Schema.Attribute.Required;
+    travelMap: Schema.Attribute.Component<'tour.travel-map', false>;
+    trending: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    upcomingGroupTourDates: Schema.Attribute.JSON;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    videoUrl: Schema.Attribute.String;
+    voucher_templates: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::voucher-template.voucher-template'
+    >;
   };
 }
 
@@ -1449,7 +1834,11 @@ declare module '@strapi/strapi' {
       'api::merchandise.merchandise': ApiMerchandiseMerchandise;
       'api::order.order': ApiOrderOrder;
       'api::rental.rental': ApiRentalRental;
+      'api::review.review': ApiReviewReview;
       'api::terms-and-condition.terms-and-condition': ApiTermsAndConditionTermsAndCondition;
+      'api::tour-booking.tour-booking': ApiTourBookingTourBooking;
+      'api::tour-operator.tour-operator': ApiTourOperatorTourOperator;
+      'api::tour.tour': ApiTourTour;
       'api::v2-order.v2-order': ApiV2OrderV2Order;
       'api::voucher-template.voucher-template': ApiVoucherTemplateVoucherTemplate;
       'api::voucher.voucher': ApiVoucherVoucher;

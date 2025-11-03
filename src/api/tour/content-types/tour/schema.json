@@ -1,0 +1,270 @@
+{
+  "kind": "collectionType",
+  "collectionName": "tours",
+  "info": {
+    "singularName": "tour",
+    "pluralName": "tours",
+    "displayName": "Tour",
+    "description": "Multi-day tours with itineraries, accommodations, and comprehensive details"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "tourId": {
+      "type": "uid"
+    },
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "name"
+    },
+    "tourType": {
+      "type": "enumeration",
+      "enum": [
+        "Private Tour",
+        "Group Tour"
+      ],
+      "required": true
+    },
+    "about": {
+      "type": "component",
+      "repeatable": false,
+      "component": "experience.about"
+    },
+    "tourSummary": {
+      "type": "component",
+      "repeatable": false,
+      "component": "tour.tour-summary",
+      "required": true
+    },
+    "itinerary": {
+      "type": "component",
+      "repeatable": true,
+      "component": "tour.itinerary-day"
+    },
+    "highlights": {
+      "type": "component",
+      "repeatable": true,
+      "component": "tour.highlight"
+    },
+    "placesToSee": {
+      "type": "component",
+      "repeatable": true,
+      "component": "tour.place-to-see"
+    },
+    "travelMap": {
+      "type": "component",
+      "repeatable": false,
+      "component": "tour.travel-map"
+    },
+    "included": {
+      "type": "richtext"
+    },
+    "notIncluded": {
+      "type": "richtext"
+    },
+    "accommodationOptions": {
+      "type": "component",
+      "repeatable": true,
+      "component": "tour.accommodation-option"
+    },
+    "accommodationStays": {
+      "type": "component",
+      "repeatable": true,
+      "component": "tour.accommodation-stay"
+    },
+    "basePricePerPerson": {
+      "type": "component",
+      "repeatable": false,
+      "component": "experience.rates"
+    },
+    "paxPricing": {
+      "type": "component",
+      "repeatable": true,
+      "component": "experience.pax-rates"
+    },
+    "requiresAccommodation": {
+      "type": "boolean",
+      "default": true
+    },
+    "customizable": {
+      "type": "boolean",
+      "default": true
+    },
+    "startLocation": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::location.location"
+    },
+    "endLocation": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::location.location"
+    },
+    "trending": {
+      "type": "boolean",
+      "default": false
+    },
+    "featured": {
+      "type": "boolean",
+      "default": false
+    },
+    "upcomingGroupTourDates": {
+      "type": "json"
+    },
+    "images": {
+      "type": "media",
+      "multiple": true,
+      "allowedTypes": [
+        "images",
+        "videos"
+      ]
+    },
+    "coverImage": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": ["images"]
+    },
+    "terms_and_condition": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::terms-and-condition.terms-and-condition"
+    },
+    "faqs": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::faq.faq"
+    },
+    "relatedExperiences": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::experience.experience"
+    },
+    "cancellationPolicy": {
+      "type": "richtext"
+    },
+    "additionalInformation": {
+      "type": "component",
+      "repeatable": true,
+      "component": "experience.requirements"
+    },
+    "offer": {
+      "type": "integer",
+      "min": 0,
+      "max": 100
+    },
+    "voucher_templates": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::voucher-template.voucher-template"
+    },
+    "seoMetadata": {
+      "type": "component",
+      "repeatable": false,
+      "component": "common.seo-metadata"
+    },
+    "operator": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::tour-operator.tour-operator"
+    },
+    "reviews": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::review.review",
+      "mappedBy": "tour"
+    },
+    "rating": {
+      "type": "decimal",
+      "min": 0,
+      "max": 5,
+      "default": 0
+    },
+    "totalReviews": {
+      "type": "integer",
+      "default": 0
+    },
+    "ageRange": {
+      "type": "string",
+      "default": "12+"
+    },
+    "minAge": {
+      "type": "integer",
+      "default": 12
+    },
+    "maxAge": {
+      "type": "integer"
+    },
+    "departureDates": {
+      "type": "component",
+      "repeatable": true,
+      "component": "tour.departure-date"
+    },
+    "promotionalOffers": {
+      "type": "component",
+      "repeatable": true,
+      "component": "tour.promotional-offer"
+    },
+    "bestSeller": {
+      "type": "boolean",
+      "default": false
+    },
+    "newTour": {
+      "type": "boolean",
+      "default": false
+    },
+    "instantConfirmation": {
+      "type": "boolean",
+      "default": false
+    },
+    "guaranteedDeparture": {
+      "type": "boolean",
+      "default": false
+    },
+    "customerPhotos": {
+      "type": "media",
+      "multiple": true,
+      "allowedTypes": ["images"]
+    },
+    "videoUrl": {
+      "type": "string"
+    },
+    "pdfBrochure": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": ["files"]
+    },
+    "similarTours": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::tour.tour"
+    },
+    "includesFlight": {
+      "type": "boolean",
+      "default": false
+    },
+    "includesInsurance": {
+      "type": "boolean",
+      "default": false
+    },
+    "singleSupplement": {
+      "type": "component",
+      "repeatable": false,
+      "component": "experience.rates"
+    },
+    "depositRequired": {
+      "type": "component",
+      "repeatable": false,
+      "component": "experience.rates"
+    },
+    "bookingCutoff": {
+      "type": "integer",
+      "default": 7
+    }
+  }
+}
