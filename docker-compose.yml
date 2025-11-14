@@ -1,0 +1,125 @@
+version: "3.8"
+
+services:
+  strapi:
+    container_name: zri-strapi-prod
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+      args:
+        NODE_ENV: production
+    image: zri-adventures-strapi:latest
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      DATABASE_CLIENT: ${DATABASE_CLIENT:-postgres}
+      DATABASE_HOST: strapiDB
+      DATABASE_PORT: ${DATABASE_PORT:-5432}
+      DATABASE_NAME: ${DATABASE_NAME:-strapi}
+      DATABASE_USERNAME: ${DATABASE_USERNAME:-strapi}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+      DATABASE_SSL: ${DATABASE_SSL:-false}
+      JWT_SECRET: ${JWT_SECRET}
+      ADMIN_JWT_SECRET: ${ADMIN_JWT_SECRET}
+      APP_KEYS: ${APP_KEYS}
+      API_TOKEN_SALT: ${API_TOKEN_SALT}
+      TRANSFER_TOKEN_SALT: ${TRANSFER_TOKEN_SALT}
+      NODE_ENV: ${NODE_ENV:-production}
+      HOST: ${HOST:-0.0.0.0}
+      PORT: ${PORT:-1337}
+      # URL configuration
+      PUBLIC_URL: ${PUBLIC_URL:-http://localhost:1337}
+      # Cloudinary configuration (if using)
+      CLOUDINARY_NAME: ${CLOUDINARY_NAME}
+      CLOUDINARY_KEY: ${CLOUDINARY_KEY}
+      CLOUDINARY_SECRET: ${CLOUDINARY_SECRET}
+    volumes:
+      # Only mount uploads directory in production
+      - ./public/uploads:/opt/app/public/uploads
+      # Optional: Mount config for runtime changes (not recommended for production)
+      # - ./config:/opt/app/config:ro
+    ports:
+      - "${PORT:-1337}:1337"
+    networks:
+      - strapi
+    depends_on:
+      strapiDB:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:1337/_health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  strapiDB:
+    container_name: zri-strapiDB-prod
+    platform: linux/amd64
+    restart: unless-stopped
+    env_file: .env
+    image: postgres:16.3-alpine
+    environment:
+      POSTGRES_USER: ${DATABASE_USERNAME:-strapi}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_DB: ${DATABASE_NAME:-strapi}
+      # Performance tuning for production
+      POSTGRES_INITDB_ARGS: "-E UTF8 --locale=C"
+    volumes:
+      # Use named volume for data persistence
+      - strapi-data:/var/lib/postgresql/data
+      # Optional: Custom PostgreSQL configuration
+      # - ./postgres.conf:/etc/postgresql/postgresql.conf:ro
+    ports:
+      - "${DATABASE_PORT:-5432}:5432"
+    networks:
+      - strapi
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DATABASE_USERNAME:-strapi} -d ${DATABASE_NAME:-strapi}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    # Resource limits (adjust based on your needs)
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 2G
+        reservations:
+          cpus: '1'
+          memory: 1G
+
+  # Optional: Nginx reverse proxy for production
+  nginx:
+    container_name: zri-nginx-prod
+    image: nginx:alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      # SSL certificates (if using)
+      # - ./ssl:/etc/nginx/ssl:ro
+      # Static files (optional)
+      - ./public/uploads:/usr/share/nginx/html/uploads:ro
+    networks:
+      - strapi
+    depends_on:
+      - strapi
+    profiles:
+      - with-proxy
+
+volumes:
+  strapi-data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./data/postgres
+
+networks:
+  strapi:
+    name: zri-strapi-network
+    driver: bridge
