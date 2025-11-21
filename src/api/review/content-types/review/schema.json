@@ -62,11 +62,6 @@
       "target": "api::experience.experience",
       "inversedBy": "reviews"
     },
-    "operator": {
-      "type": "relation",
-      "relation": "manyToOne",
-      "target": "api::tour-operator.tour-operator"
-    },
     "customerPhotos": {
       "type": "media",
       "multiple": true,

@@ -169,9 +169,9 @@
       "component": "common.seo-metadata"
     },
     "operator": {
-      "type": "relation",
-      "relation": "manyToOne",
-      "target": "api::tour-operator.tour-operator"
+      "type": "component",
+      "repeatable": false,
+      "component": "tour.tour-operator"
     },
     "reviews": {
       "type": "relation",
