@@ -168,11 +168,6 @@
       "repeatable": false,
       "component": "common.seo-metadata"
     },
-    "operator": {
-      "type": "component",
-      "repeatable": false,
-      "component": "tour.tour-operator"
-    },
     "reviews": {
       "type": "relation",
       "relation": "oneToMany",
