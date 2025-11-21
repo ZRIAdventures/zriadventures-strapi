@@ -133,11 +133,6 @@
       "repeatable": false,
       "component": "common.seo-metadata"
     },
-    "operator": {
-      "type": "relation",
-      "relation": "manyToOne",
-      "target": "api::tour-operator.tour-operator"
-    },
     "reviews": {
       "type": "relation",
       "relation": "oneToMany",
