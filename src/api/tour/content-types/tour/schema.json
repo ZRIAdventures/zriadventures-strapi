@@ -25,10 +25,7 @@
     },
     "tourType": {
       "type": "enumeration",
-      "enum": [
-        "Private Tour",
-        "Group Tour"
-      ],
+      "enum": ["Private Tour", "Group Tour"],
       "required": true
     },
     "about": {
@@ -78,15 +75,12 @@
       "repeatable": true,
       "component": "tour.accommodation-stay"
     },
-    "basePricePerPerson": {
-      "type": "component",
-      "repeatable": false,
-      "component": "experience.rates"
-    },
-    "paxPricing": {
+    "options": {
       "type": "component",
       "repeatable": true,
-      "component": "experience.pax-rates"
+      "component": "tour.options",
+      "required": true,
+      "description": "Pricing options with pax-based rates and child cost reduction"
     },
     "requiresAccommodation": {
       "type": "boolean",
@@ -120,10 +114,7 @@
     "images": {
       "type": "media",
       "multiple": true,
-      "allowedTypes": [
-        "images",
-        "videos"
-      ]
+      "allowedTypes": ["images", "videos"]
     },
     "coverImage": {
       "type": "media",

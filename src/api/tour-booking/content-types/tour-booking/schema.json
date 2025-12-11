@@ -64,10 +64,6 @@
       "type": "integer",
       "default": 0
     },
-    "infantsCount": {
-      "type": "integer",
-      "default": 0
-    },
     "accommodationType": {
       "type": "enumeration",
       "enum": [
