@@ -27,6 +27,22 @@
     },
     "name": {
       "type": "string"
+    },
+    "reviews": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::review.review",
+      "mappedBy": "rental"
+    },
+    "rating": {
+      "type": "decimal",
+      "min": 0,
+      "max": 5,
+      "default": 0
+    },
+    "totalReviews": {
+      "type": "integer",
+      "default": 0
     }
   }
 }

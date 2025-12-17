@@ -62,6 +62,24 @@
       "target": "api::experience.experience",
       "inversedBy": "reviews"
     },
+    "merchandise": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::merchandise.merchandise",
+      "inversedBy": "reviews"
+    },
+    "rental": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::rental.rental",
+      "inversedBy": "reviews"
+    },
+    "event": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::event.event",
+      "inversedBy": "reviews"
+    },
     "customerPhotos": {
       "type": "media",
       "multiple": true,

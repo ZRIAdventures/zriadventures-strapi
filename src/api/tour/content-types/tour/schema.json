@@ -19,10 +19,6 @@
       "type": "string",
       "required": true
     },
-    "slug": {
-      "type": "uid",
-      "targetField": "name"
-    },
     "tourType": {
       "type": "enumeration",
       "enum": ["Private Tour", "Group Tour"],

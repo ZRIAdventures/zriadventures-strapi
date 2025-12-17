@@ -74,6 +74,14 @@
     "@babel/helper-validator-identifier" "^7.22.20"
     to-fast-properties "^2.0.0"
 
+"@cacheable/utils@^2.3.2":
+  version "2.3.2"
+  resolved "https://registry.yarnpkg.com/@cacheable/utils/-/utils-2.3.2.tgz#8d76faef710840c391a1a35183967028c0c521f0"
+  integrity sha512-8kGE2P+HjfY8FglaOiW+y8qxcaQAfAhVML+i66XJR3YX5FtyDqn6Txctr3K2FrbxLKixRRYYBWMbuGciOhYNDg==
+  dependencies:
+    hashery "^1.2.0"
+    keyv "^5.5.4"
+
 "@casl/ability@6.5.0":
   version "6.5.0"
   resolved "https://registry.npmjs.org/@casl/ability/-/ability-6.5.0.tgz"
@@ -630,12 +638,28 @@
     "@formatjs/intl-localematcher" "0.5.4"
     tslib "^2.4.0"
 
+"@formatjs/ecma402-abstract@2.2.4":
+  version "2.2.4"
+  resolved "https://registry.yarnpkg.com/@formatjs/ecma402-abstract/-/ecma402-abstract-2.2.4.tgz#355e42d375678229d46dc8ad7a7139520dd03e7b"
+  integrity sha512-lFyiQDVvSbQOpU+WFd//ILolGj4UgA/qXrKeZxdV14uKiAUiPAtX6XAn7WBCRi7Mx6I7EybM9E5yYn4BIpZWYg==
+  dependencies:
+    "@formatjs/fast-memoize" "2.2.3"
+    "@formatjs/intl-localematcher" "0.5.8"
+    tslib "2"
+
 "@formatjs/fast-memoize@2.2.0":
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/@formatjs/fast-memoize/-/fast-memoize-2.2.0.tgz#33bd616d2e486c3e8ef4e68c99648c196887802b"
   integrity sha512-hnk/nY8FyrL5YxwP9e4r9dqeM6cAbo8PeU9UjyXojZMNvVad2Z06FAVHyR3Ecw6fza+0GH7vdJgiKIVXTMbSBA==
   dependencies:
     tslib "^2.4.0"
+
+"@formatjs/fast-memoize@2.2.3":
+  version "2.2.3"
+  resolved "https://registry.yarnpkg.com/@formatjs/fast-memoize/-/fast-memoize-2.2.3.tgz#74e64109279d5244f9fc281f3ae90c407cece823"
+  integrity sha512-3jeJ+HyOfu8osl3GNSL4vVHUuWFXR03Iz9jjgI7RwjG6ysu/Ymdr0JRCPHfF5yGbTE6JCrd63EpvX1/WybYRbA==
+  dependencies:
+    tslib "2"
 
 "@formatjs/icu-messageformat-parser@2.7.6":
   version "2.7.6"
@@ -646,6 +670,15 @@
     "@formatjs/icu-skeleton-parser" "1.8.0"
     tslib "^2.4.0"
 
+"@formatjs/icu-messageformat-parser@2.9.4":
+  version "2.9.4"
+  resolved "https://registry.yarnpkg.com/@formatjs/icu-messageformat-parser/-/icu-messageformat-parser-2.9.4.tgz#52501fbdc122a86097644f03ae1117b9ced00872"
+  integrity sha512-Tbvp5a9IWuxUcpWNIW6GlMQYEc4rwNHR259uUFoKWNN1jM9obf9Ul0e+7r7MvFOBNcN+13K7NuKCKqQiAn1QEg==
+  dependencies:
+    "@formatjs/ecma402-abstract" "2.2.4"
+    "@formatjs/icu-skeleton-parser" "1.8.8"
+    tslib "2"
+
 "@formatjs/icu-skeleton-parser@1.8.0":
   version "1.8.0"
   resolved "https://registry.yarnpkg.com/@formatjs/icu-skeleton-parser/-/icu-skeleton-parser-1.8.0.tgz#5f3d3a620c687d6f8c180d80d1241e8f213acf79"
@@ -653,6 +686,14 @@
   dependencies:
     "@formatjs/ecma402-abstract" "1.18.2"
     tslib "^2.4.0"
+
+"@formatjs/icu-skeleton-parser@1.8.8":
+  version "1.8.8"
+  resolved "https://registry.yarnpkg.com/@formatjs/icu-skeleton-parser/-/icu-skeleton-parser-1.8.8.tgz#a16eff7fd040acf096fb1853c99527181d38cf90"
+  integrity sha512-vHwK3piXwamFcx5YQdCdJxUQ1WdTl6ANclt5xba5zLGDv5Bsur7qz8AD7BevaKxITwpgDeU0u8My3AIibW9ywA==
+  dependencies:
+    "@formatjs/ecma402-abstract" "2.2.4"
+    tslib "2"
 
 "@formatjs/intl-displaynames@6.6.6":
   version "6.6.6"
@@ -663,6 +704,15 @@
     "@formatjs/intl-localematcher" "0.5.4"
     tslib "^2.4.0"
 
+"@formatjs/intl-displaynames@6.8.5":
+  version "6.8.5"
+  resolved "https://registry.yarnpkg.com/@formatjs/intl-displaynames/-/intl-displaynames-6.8.5.tgz#e9cd778764209534795f2a579d0269b26631d1ae"
+  integrity sha512-85b+GdAKCsleS6cqVxf/Aw/uBd+20EM0wDpgaxzHo3RIR3bxF4xCJqH/Grbzx8CXurTgDDZHPdPdwJC+May41w==
+  dependencies:
+    "@formatjs/ecma402-abstract" "2.2.4"
+    "@formatjs/intl-localematcher" "0.5.8"
+    tslib "2"
+
 "@formatjs/intl-listformat@7.5.5":
   version "7.5.5"
   resolved "https://registry.yarnpkg.com/@formatjs/intl-listformat/-/intl-listformat-7.5.5.tgz#e4c7d741f2201c65e7da71326726e61332c7161e"
@@ -672,12 +722,28 @@
     "@formatjs/intl-localematcher" "0.5.4"
     tslib "^2.4.0"
 
+"@formatjs/intl-listformat@7.7.5":
+  version "7.7.5"
+  resolved "https://registry.yarnpkg.com/@formatjs/intl-listformat/-/intl-listformat-7.7.5.tgz#e7d9fd66b648bbe878f9c64fcba756f1634a7794"
+  integrity sha512-Wzes10SMNeYgnxYiKsda4rnHP3Q3II4XT2tZyOgnH5fWuHDtIkceuWlRQNsvrI3uiwP4hLqp2XdQTCsfkhXulg==
+  dependencies:
+    "@formatjs/ecma402-abstract" "2.2.4"
+    "@formatjs/intl-localematcher" "0.5.8"
+    tslib "2"
+
 "@formatjs/intl-localematcher@0.5.4":
   version "0.5.4"
   resolved "https://registry.yarnpkg.com/@formatjs/intl-localematcher/-/intl-localematcher-0.5.4.tgz#caa71f2e40d93e37d58be35cfffe57865f2b366f"
   integrity sha512-zTwEpWOzZ2CiKcB93BLngUX59hQkuZjT2+SAQEscSm52peDW/getsawMcWF1rGRpMCX6D7nSJA3CzJ8gn13N/g==
   dependencies:
     tslib "^2.4.0"
+
+"@formatjs/intl-localematcher@0.5.8":
+  version "0.5.8"
+  resolved "https://registry.yarnpkg.com/@formatjs/intl-localematcher/-/intl-localematcher-0.5.8.tgz#b11bbd04bd3551f7cadcb1ef1e231822d0e3c97e"
+  integrity sha512-I+WDNWWJFZie+jkfkiK5Mp4hEDyRSEvmyfYadflOno/mmKJKcB17fEpEH0oJu/OWhhCJ8kJBDz2YMd/6cDl7Mg==
+  dependencies:
+    tslib "2"
 
 "@formatjs/intl@2.10.0":
   version "2.10.0"
@@ -691,6 +757,19 @@
     "@formatjs/intl-listformat" "7.5.5"
     intl-messageformat "10.5.11"
     tslib "^2.4.0"
+
+"@formatjs/intl@2.10.15":
+  version "2.10.15"
+  resolved "https://registry.yarnpkg.com/@formatjs/intl/-/intl-2.10.15.tgz#c592507512d7827c760b74bb8afc37629f89523a"
+  integrity sha512-i6+xVqT+6KCz7nBfk4ybMXmbKO36tKvbMKtgFz9KV+8idYFyFbfwKooYk8kGjyA5+T5f1kEPQM5IDLXucTAQ9g==
+  dependencies:
+    "@formatjs/ecma402-abstract" "2.2.4"
+    "@formatjs/fast-memoize" "2.2.3"
+    "@formatjs/icu-messageformat-parser" "2.9.4"
+    "@formatjs/intl-displaynames" "6.8.5"
+    "@formatjs/intl-listformat" "7.7.5"
+    intl-messageformat "10.7.7"
+    tslib "2"
 
 "@hapi/bourne@^3.0.0":
   version "3.0.0"
@@ -829,6 +908,16 @@
   dependencies:
     "@swc/helpers" "^0.5.0"
 
+"@ioredis/commands@1.4.0":
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/@ioredis/commands/-/commands-1.4.0.tgz#9f657d51cdd5d2fdb8889592aa4a355546151f25"
+  integrity sha512-aFT2yemJJo+TZCmieA7qnYGQooOS7QfNmYrzGtsYd3g9j5iDP8AimYYAesf79ohjbLG12XxC4nG5DyEnC88AsQ==
+
+"@ioredis/commands@^1.1.1":
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/@ioredis/commands/-/commands-1.5.0.tgz#3dddcea446a4b1dc177d0743a1e07ff50691652a"
+  integrity sha512-eUgLqrMf8nJkZxT24JvVRrQya1vZkQh8BBeYNwGDqa5I0VUi8ACx7uFvAaLxintokpTenkK6DASvo/bvNbBGow==
+
 "@isaacs/cliui@^8.0.2":
   version "8.0.2"
   resolved "https://registry.yarnpkg.com/@isaacs/cliui/-/cliui-8.0.2.tgz#b37667b7bc181c168782259bab42474fbf52b550"
@@ -893,6 +982,18 @@
   version "3.4.0"
   resolved "https://registry.npmjs.org/@juggle/resize-observer/-/resize-observer-3.4.0.tgz"
   integrity sha512-dfLbk+PwWvFzSxwk3n5ySL0hfBog779o8h68wK/7/APo/7cgyWp5jcXockbxdk5kFRkbeXWm4Fbi9FrdN381sA==
+
+"@keyv/redis@^3.0.1":
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/@keyv/redis/-/redis-3.0.1.tgz#c62e88d056cdc993449332ca16d5153a6ec92df6"
+  integrity sha512-eyqzomQC76LjUOEkPP8rdR2Fk4eZBSS0Ma47i7CNiQuv8NCw3trZvghx8L5Xruk7XPEj/eRAMrAxP//xQFOPdQ==
+  dependencies:
+    ioredis "^5.4.1"
+
+"@keyv/serialize@^1.1.1":
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/@keyv/serialize/-/serialize-1.1.1.tgz#0c01dd3a3483882af7cf3878d4e71d505c81fc4a"
+  integrity sha512-dXn3FZhPv0US+7dtJsIi2R+c7qWYiReoEh5zUntWCf4oSpMNib8FDhSoed6m3QyZdx5hK7iLFkYk3rNxwt8vTA==
 
 "@koa/cors@5.0.0":
   version "5.0.0"
@@ -1731,6 +1832,45 @@
   dependencies:
     escape-string-regexp "^2.0.0"
     lodash.deburr "^4.1.0"
+
+"@strapi-community/plugin-redis@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@strapi-community/plugin-redis/-/plugin-redis-2.0.0.tgz#f8984bb2f0199046656c05f4793c16033edcf534"
+  integrity sha512-9qxS3O5/JKCx+BxO7yHr9fL90moysBK8aq1TvCf0cJe+AN1Gd+NC/a4X2HXvA2BsAP5Fo+uLSiIXoL9gHytWzg==
+  dependencies:
+    chalk "4.1.2"
+    debug "4.3.5"
+    ioredis "5.4.1"
+    redlock "5.0.0-beta.2"
+
+"@strapi-community/plugin-rest-cache@^5.0.1":
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/@strapi-community/plugin-rest-cache/-/plugin-rest-cache-5.0.1.tgz#9a6ed9da3e2d99216d5ebf5b0ac742f224e64ffb"
+  integrity sha512-xiM2xJo7ejlxvL0ODTUlb9nDKj8suLCl7UxkG+ZzwLYYabnh1i8ZNgkfn6YafhWDPRPBbnBp++oO4C1hEvABRQ==
+  dependencies:
+    "@strapi-community/provider-rest-cache-memory" "5.0.0"
+    chalk "^4.1.2"
+    debug "^4.4.1"
+    immer "^9.0.21"
+    lodash "^4.17.21"
+    prop-types "^15.8.1"
+    react-intl "^6.4.1"
+
+"@strapi-community/provider-rest-cache-memory@5.0.0":
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/@strapi-community/provider-rest-cache-memory/-/provider-rest-cache-memory-5.0.0.tgz#1efc79152a590573160c90ccdf7d544d5046954b"
+  integrity sha512-u43BUhIaoFhUYuVPrmAUGacYjzObBvCiPgKw0+rmdXDdbanp5Dzn7w+Fn/Kx+yzORFrH6N3OA36LTP9JdixmHg==
+  dependencies:
+    cache-manager "^7.1.1"
+    quick-lru "7.0.1"
+
+"@strapi-community/provider-rest-cache-redis@^5.0.0":
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/@strapi-community/provider-rest-cache-redis/-/provider-rest-cache-redis-5.0.0.tgz#34dc282541eba6042fd4d7ffc7bd13f2cac1a57b"
+  integrity sha512-2zSxlZzCZM9M3yZrlReOqrsy2Syp3HQbxLUHw3IOy0DQd/nB4ovJymYd3EezfwkBEJ52QeFneMXr7F69IAqbxw==
+  dependencies:
+    "@keyv/redis" "^3.0.1"
+    cache-manager "^7.1.1"
 
 "@strapi/admin@5.15.1":
   version "5.15.1"
@@ -2658,6 +2798,13 @@
     "@types/minimatch" "*"
     "@types/node" "*"
 
+"@types/hoist-non-react-statics@3":
+  version "3.3.7"
+  resolved "https://registry.yarnpkg.com/@types/hoist-non-react-statics/-/hoist-non-react-statics-3.3.7.tgz#306e3a3a73828522efa1341159da4846e7573a6c"
+  integrity sha512-PQTyIulDkIDro8P+IHbKCsw7U2xxBYflVzW/FgWdCAePD9xGSidgA76/GeJ6lBKoblyhf9pBY763gbrN+1dI8g==
+  dependencies:
+    hoist-non-react-statics "^3.3.0"
+
 "@types/hoist-non-react-statics@^3.3.1":
   version "3.3.5"
   resolved "https://registry.npmjs.org/@types/hoist-non-react-statics/-/hoist-non-react-statics-3.3.5.tgz"
@@ -3546,6 +3693,14 @@ cache-content-type@^1.0.0:
     mime-types "^2.1.18"
     ylru "^1.2.0"
 
+cache-manager@^7.1.1:
+  version "7.2.7"
+  resolved "https://registry.yarnpkg.com/cache-manager/-/cache-manager-7.2.7.tgz#17271c6bfd63ec6fc93dfe300882065acd29e1d8"
+  integrity sha512-TKeeb9nSybk1e9E5yAiPVJ6YKdX9FYhwqqy8fBfVKAFVTJYZUNmeIvwjURW6+UikNsO6l2ta27thYgo/oumDsw==
+  dependencies:
+    "@cacheable/utils" "^2.3.2"
+    keyv "^5.5.4"
+
 cacheable-lookup@^5.0.3:
   version "5.0.4"
   resolved "https://registry.npmjs.org/cacheable-lookup/-/cacheable-lookup-5.0.4.tgz"
@@ -3897,6 +4052,11 @@ cloudinary@^1.41.0:
     core-js "^3.30.1"
     lodash "^4.17.21"
     q "^1.5.1"
+
+cluster-key-slot@^1.1.0:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/cluster-key-slot/-/cluster-key-slot-1.1.2.tgz#88ddaa46906e303b5de30d3153b7d9fe0a0c19ac"
+  integrity sha512-RMr0FhtfXemyinomL4hrWcYJxmX6deFdCxpJzhDttxgO1+bcCnkk+9drydLVDmAMG7NE6aN/fl4F7ucU/90gAA==
 
 co-body@^6.1.0:
   version "6.2.0"
@@ -4320,6 +4480,13 @@ debug@4.3.4, debug@^4.1.1, debug@^4.3.2, debug@^4.3.3:
   dependencies:
     ms "2.1.2"
 
+debug@4.3.5:
+  version "4.3.5"
+  resolved "https://registry.yarnpkg.com/debug/-/debug-4.3.5.tgz#e83444eceb9fedd4a1da56d671ae2446a01a6e1e"
+  integrity sha512-pt0bNEmneDIvdL1Xsd9oDQ/wrQRkXDT4AUWlNZNPKvW5x/jyO9VFXkJUP07vQ2upmw5PlaITaPKc31jK13V+jg==
+  dependencies:
+    ms "2.1.2"
+
 debug@^3.1.0:
   version "3.2.7"
   resolved "https://registry.npmjs.org/debug/-/debug-3.2.7.tgz"
@@ -4331,6 +4498,13 @@ debug@^4, debug@^4.3.4:
   version "4.4.1"
   resolved "https://registry.yarnpkg.com/debug/-/debug-4.4.1.tgz#e5a8bc6cbc4c6cd3e64308b0693a3d4fa550189b"
   integrity sha512-KcKCqiftBJcZr++7ykoDIEwSa3XWowTfNPo92BYxjXiyYEVrUQh2aLyhxBCwww+heortUFxEJYcRzosstTEBYQ==
+  dependencies:
+    ms "^2.1.3"
+
+debug@^4.4.1:
+  version "4.4.3"
+  resolved "https://registry.yarnpkg.com/debug/-/debug-4.4.3.tgz#c6ae432d9bd9662582fce08709b038c58e9e3d6a"
+  integrity sha512-RGwwWnwQvkVfavKVt22FGLw+xYSdzARwm0ru6DhTVA3umU5hZc28V3kO4stgYryrTlLpuvgI9GiijltAjNbcqA==
   dependencies:
     ms "^2.1.3"
 
@@ -4449,6 +4623,11 @@ delegates@1.0.0, delegates@^1.0.0:
   version "1.0.0"
   resolved "https://registry.npmjs.org/delegates/-/delegates-1.0.0.tgz"
   integrity sha512-bd2L678uiWATM6m5Z1VzNCErI3jiGzt6HGY8OVICs40JQq/HALfbyNJmp0UDakEY4pMMaN0Ly5om/B1VI/+xfQ==
+
+denque@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/denque/-/denque-2.1.0.tgz#e93e1a6569fb5e66f16a3c2a2964617d349d6ab1"
+  integrity sha512-HVQE3AAb/pxF8fQAoiqpvg9i3evqug3hoiwakOyZAwJm+6vZehbkYXZ0l4JxS+I3QxM97v5aaRNhj8v5oBhekw==
 
 depd@2.0.0, depd@^2.0.0, depd@~2.0.0:
   version "2.0.0"
@@ -5622,6 +5801,13 @@ hash.js@^1.0.0, hash.js@^1.0.3:
     inherits "^2.0.3"
     minimalistic-assert "^1.0.1"
 
+hashery@^1.2.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/hashery/-/hashery-1.3.0.tgz#2af169f1698efc92bf9235c4880eec92cc5b5107"
+  integrity sha512-fWltioiy5zsSAs9ouEnvhsVJeAXRybGCNNv0lvzpzNOSDbULXRy7ivFWwCCv4I5Am6kSo75hmbsCduOoc2/K4w==
+  dependencies:
+    hookified "^1.13.0"
+
 hasown@^2.0.0:
   version "2.0.0"
   resolved "https://registry.npmjs.org/hasown/-/hasown-2.0.0.tgz"
@@ -5681,7 +5867,7 @@ hmac-drbg@^1.0.1:
     minimalistic-assert "^1.0.0"
     minimalistic-crypto-utils "^1.0.1"
 
-hoist-non-react-statics@^3.3.0, hoist-non-react-statics@^3.3.1, hoist-non-react-statics@^3.3.2:
+hoist-non-react-statics@3, hoist-non-react-statics@^3.3.0, hoist-non-react-statics@^3.3.1, hoist-non-react-statics@^3.3.2:
   version "3.3.2"
   resolved "https://registry.npmjs.org/hoist-non-react-statics/-/hoist-non-react-statics-3.3.2.tgz"
   integrity sha512-/gGivxi8JPKWNm/W0jSmzcMPpfpPLc3dY/6GxhX2hQ9iGj3aDfklV4ET7NjKpSinLpJ5vafa9iiGIEZg10SfBw==
@@ -5694,6 +5880,11 @@ homedir-polyfill@^1.0.1:
   integrity sha512-eSmmWE5bZTK2Nou4g0AI3zZ9rswp7GRKoKXS1BLUkvPviOqs4YTN1djQIqrXy9k5gEtdLPy86JjRwsNM9tnDcA==
   dependencies:
     parse-passwd "^1.0.0"
+
+hookified@^1.13.0:
+  version "1.14.0"
+  resolved "https://registry.yarnpkg.com/hookified/-/hookified-1.14.0.tgz#815ca3b9f3e77c782f583bf3974e966df7a9fd7b"
+  integrity sha512-pi1ynXIMFx/uIIwpWJ/5CEtOHLGtnUB0WhGeeYT+fKcQ+WCQbm3/rrkAXnpfph++PgepNqPdTC2WTj8A6k6zoQ==
 
 hosted-git-info@^2.1.4:
   version "2.8.9"
@@ -6000,6 +6191,16 @@ intl-messageformat@10.5.11:
     "@formatjs/icu-messageformat-parser" "2.7.6"
     tslib "^2.4.0"
 
+intl-messageformat@10.7.7:
+  version "10.7.7"
+  resolved "https://registry.yarnpkg.com/intl-messageformat/-/intl-messageformat-10.7.7.tgz#42085e1664729d02240a03346e31a2540b1112a0"
+  integrity sha512-F134jIoeYMro/3I0h08D0Yt4N9o9pjddU/4IIxMMURqbAtI2wu70X8hvG1V48W49zXHXv3RKSF/po+0fDfsGjA==
+  dependencies:
+    "@formatjs/ecma402-abstract" "2.2.4"
+    "@formatjs/fast-memoize" "2.2.3"
+    "@formatjs/icu-messageformat-parser" "2.9.4"
+    tslib "2"
+
 into-stream@^5.1.0:
   version "5.1.1"
   resolved "https://registry.npmjs.org/into-stream/-/into-stream-5.1.1.tgz"
@@ -6014,6 +6215,36 @@ invariant@^2.2.4:
   integrity sha512-phJfQVBuaJM5raOpJjSfkiD6BpbCE4Ns//LaXl6wGYtUBY83nWS6Rf9tXm2e8VaK60JEjYldbPif/A2B1C2gNA==
   dependencies:
     loose-envify "^1.0.0"
+
+ioredis@5.4.1:
+  version "5.4.1"
+  resolved "https://registry.yarnpkg.com/ioredis/-/ioredis-5.4.1.tgz#1c56b70b759f01465913887375ed809134296f40"
+  integrity sha512-2YZsvl7jopIa1gaePkeMtd9rAcSjOOjPtpcLlOeusyO+XH2SK5ZcT+UCrElPP+WVIInh2TzeI4XW9ENaSLVVHA==
+  dependencies:
+    "@ioredis/commands" "^1.1.1"
+    cluster-key-slot "^1.1.0"
+    debug "^4.3.4"
+    denque "^2.1.0"
+    lodash.defaults "^4.2.0"
+    lodash.isarguments "^3.1.0"
+    redis-errors "^1.2.0"
+    redis-parser "^3.0.0"
+    standard-as-callback "^2.1.0"
+
+ioredis@^5.4.1:
+  version "5.8.2"
+  resolved "https://registry.yarnpkg.com/ioredis/-/ioredis-5.8.2.tgz#c7a228a26cf36f17a5a8011148836877780e2e14"
+  integrity sha512-C6uC+kleiIMmjViJINWk80sOQw5lEzse1ZmvD+S/s8p8CWapftSaC+kocGTx6xrbrJ4WmYQGC08ffHLr6ToR6Q==
+  dependencies:
+    "@ioredis/commands" "1.4.0"
+    cluster-key-slot "^1.1.0"
+    debug "^4.3.4"
+    denque "^2.1.0"
+    lodash.defaults "^4.2.0"
+    lodash.isarguments "^3.1.0"
+    redis-errors "^1.2.0"
+    redis-parser "^3.0.0"
+    standard-as-callback "^2.1.0"
 
 is-absolute@^1.0.0:
   version "1.0.0"
@@ -6449,6 +6680,13 @@ keyv@^4.0.0:
   dependencies:
     json-buffer "3.0.1"
 
+keyv@^5.5.4:
+  version "5.5.5"
+  resolved "https://registry.yarnpkg.com/keyv/-/keyv-5.5.5.tgz#a975b32fc03e300a0e443c705b103d8b05220834"
+  integrity sha512-FA5LmZVF1VziNc0bIdCSA1IoSVnDCqE8HJIZZv2/W8YmoAM50+tnUgJR/gQZwEeIMleuIOnRnHA/UaZRNeV4iQ==
+  dependencies:
+    "@keyv/serialize" "^1.1.1"
+
 kind-of@^6.0.2:
   version "6.0.3"
   resolved "https://registry.npmjs.org/kind-of/-/kind-of-6.0.3.tgz"
@@ -6737,10 +6975,20 @@ lodash.deburr@^4.1.0:
   resolved "https://registry.npmjs.org/lodash.deburr/-/lodash.deburr-4.1.0.tgz"
   integrity sha512-m/M1U1f3ddMCs6Hq2tAsYThTBDaAKFDX3dwDo97GEYzamXi9SqUpjWi/Rrj/gf3X2n8ktwgZrlP1z6E3v/IExQ==
 
+lodash.defaults@^4.2.0:
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/lodash.defaults/-/lodash.defaults-4.2.0.tgz#d09178716ffea4dde9e5fb7b37f6f0802274580c"
+  integrity sha512-qjxPLHd3r5DnsdGacqOMU6pb/avJzdh9tFX2ymgoZE27BmjXrNy/y4LoaiTeAb+O3gL8AfpJGtqfX/ae2leYYQ==
+
 lodash.get@^4.4.2:
   version "4.4.2"
   resolved "https://registry.npmjs.org/lodash.get/-/lodash.get-4.4.2.tgz"
   integrity sha512-z+Uw/vLuy6gQe8cfaFWD7p0wVv8fJl3mbzXh33RS+0oW2wvUqiRXiQ69gLWSLpgB5/6sU+r6BlQR0MBILadqTQ==
+
+lodash.isarguments@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/lodash.isarguments/-/lodash.isarguments-3.1.0.tgz#2f573d85c6a24289ff00663b491c1d338ff3458a"
+  integrity sha512-chi4NHZlZqZD18a0imDHnZPrDeBbTtVN7GXMwuGdRH9qotxAjYs3aVLKc7zNOG9eddR5Ksd8rvFEBc9SsggPpg==
 
 lodash.isplainobject@4.0.6:
   version "4.0.6"
@@ -8179,6 +8427,11 @@ queue-microtask@^1.2.2:
   resolved "https://registry.npmjs.org/queue-microtask/-/queue-microtask-1.2.3.tgz"
   integrity sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==
 
+quick-lru@7.0.1:
+  version "7.0.1"
+  resolved "https://registry.yarnpkg.com/quick-lru/-/quick-lru-7.0.1.tgz#6df758a00721b9d619769b1b34689e65bea28c7e"
+  integrity sha512-kLjThirJMkWKutUKbZ8ViqFc09tDQhlbQo2MNuVeLWbRauqYP96Sm6nzlQ24F0HFjUNZ4i9+AgldJ9H6DZXi7g==
+
 quick-lru@^5.1.1:
   version "5.1.1"
   resolved "https://registry.npmjs.org/quick-lru/-/quick-lru-5.1.1.tgz"
@@ -8277,6 +8530,22 @@ react-intl@6.6.2:
     hoist-non-react-statics "^3.3.2"
     intl-messageformat "10.5.11"
     tslib "^2.4.0"
+
+react-intl@^6.4.1:
+  version "6.8.9"
+  resolved "https://registry.yarnpkg.com/react-intl/-/react-intl-6.8.9.tgz#ef36b2a19a0eb97afbeaeab9679273fcbf2ea261"
+  integrity sha512-TUfj5E7lyUDvz/GtovC9OMh441kBr08rtIbgh3p0R8iF3hVY+V2W9Am7rb8BpJ/29BH1utJOqOOhmvEVh3GfZg==
+  dependencies:
+    "@formatjs/ecma402-abstract" "2.2.4"
+    "@formatjs/icu-messageformat-parser" "2.9.4"
+    "@formatjs/intl" "2.10.15"
+    "@formatjs/intl-displaynames" "6.8.5"
+    "@formatjs/intl-listformat" "7.7.5"
+    "@types/hoist-non-react-statics" "3"
+    "@types/react" "16 || 17 || 18"
+    hoist-non-react-statics "3"
+    intl-messageformat "10.7.7"
+    tslib "2"
 
 react-is@^16.13.1, react-is@^16.7.0:
   version "16.13.1"
@@ -8498,6 +8767,25 @@ rechoir@^0.8.0:
   integrity sha512-/vxpCXddiX8NGfGO/mTafwjq4aFa/71pvamip0++IQk3zG8cbCj0fifNPrjjF1XMXUne91jL9OoxmdykoEtifQ==
   dependencies:
     resolve "^1.20.0"
+
+redis-errors@^1.0.0, redis-errors@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/redis-errors/-/redis-errors-1.2.0.tgz#eb62d2adb15e4eaf4610c04afe1529384250abad"
+  integrity sha512-1qny3OExCf0UvUV/5wpYKf2YwPcOqXzkwKKSmKHiE6ZMQs5heeE/c8eXK+PNllPvmjgAbfnsbpkGZWy8cBpn9w==
+
+redis-parser@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/redis-parser/-/redis-parser-3.0.0.tgz#b66d828cdcafe6b4b8a428a7def4c6bcac31c8b4"
+  integrity sha512-DJnGAeenTdpMEH6uAJRK/uiyEIH9WVsUmoLwzudwGJUwZPp80PDBWPHXSAGNPwNvIXAbe7MSUB1zQFugFml66A==
+  dependencies:
+    redis-errors "^1.0.0"
+
+redlock@5.0.0-beta.2:
+  version "5.0.0-beta.2"
+  resolved "https://registry.yarnpkg.com/redlock/-/redlock-5.0.0-beta.2.tgz#a629c07e07d001c0fdd9f2efa614144c4416fe44"
+  integrity sha512-2RDWXg5jgRptDrB1w9O/JgSZC0j7y4SlaXnor93H/UJm/QyDiFgBKNtrh0TI6oCXqYSaSoXxFh6Sd3VtYfhRXw==
+  dependencies:
+    node-abort-controller "^3.0.1"
 
 redux-thunk@^2.4.2:
   version "2.4.2"
@@ -9261,6 +9549,11 @@ stackframe@^1.3.4:
   resolved "https://registry.npmjs.org/stackframe/-/stackframe-1.3.4.tgz"
   integrity sha512-oeVtt7eWQS+Na6F//S4kJ2K2VbRlS9D43mAlMyVpVWovy9o+jfgH8O9agzANzaiLjclA0oYzUXEM4PurhSUChw==
 
+standard-as-callback@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/standard-as-callback/-/standard-as-callback-2.1.0.tgz#8953fc05359868a77b5b9739a665c5977bb7df45"
+  integrity sha512-qoRRSyROncaz1z0mvYqIE4lCd9p2R90i6GxW3uZv5ucSu8tU7B5HXUP1gG8pVZsYNVaXjk8ClXHPttLyxAL48A==
+
 statuses@2.0.1:
   version "2.0.1"
   resolved "https://registry.npmjs.org/statuses/-/statuses-2.0.1.tgz"
@@ -9644,6 +9937,11 @@ triple-beam@^1.3.0:
   version "1.4.1"
   resolved "https://registry.npmjs.org/triple-beam/-/triple-beam-1.4.1.tgz"
   integrity sha512-aZbgViZrg1QNcG+LULa7nhZpJTZSLm/mXnHXnbAbjmN5aSa0y7V+wvv6+4WaBtpISJzThKy+PIPxc1Nq1EJ9mg==
+
+tslib@2:
+  version "2.8.1"
+  resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.8.1.tgz#612efe4ed235d567e8aba5f2a5fab70280ade83f"
+  integrity sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w==
 
 tslib@2.6.2, tslib@^2.0.0, tslib@^2.0.3, tslib@^2.1.0, tslib@^2.4.0:
   version "2.6.2"
