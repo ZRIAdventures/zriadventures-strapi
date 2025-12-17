@@ -24,7 +24,7 @@ module.exports = ({ env }) => ({
         name: "redis",
         options: {
           max: 32767,
-          connection: "redis",
+          connection: "default",
           host: env("REDISHOST", "127.0.0.1"),
           port: env.int("REDISPORT", 6379),
           password: env("REDISPASSWORD", ""),
