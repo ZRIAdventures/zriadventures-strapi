@@ -34,17 +34,7 @@ module.exports = ({ env }) => ({
     connections: {
       default: {
         connection: {
-          /**
-           * Railway supports REDIS_URL.
-           * If present, it overrides host/port/password automatically.
-           */
           url: env("REDIS_URL"),
-
-          host: env("REDISHOST"),
-          port: env.int("REDISPORT", 6379),
-          password: env("REDISPASSWORD"),
-          username: env("REDISUSER"),
-          db: 0,
         },
       },
     },
