@@ -1,9 +1,16 @@
 module.exports = ({ env }) => ({
+  /**
+   * Users & Permissions
+   */
   "users-permissions": {
     config: {
       jwtSecret: env("JWT_SECRET"),
     },
   },
+
+  /**
+   * Uploads (Cloudinary)
+   */
   upload: {
     config: {
       provider: "cloudinary",
@@ -12,106 +19,118 @@ module.exports = ({ env }) => ({
         api_key: env("CLOUDINARY_KEY"),
         api_secret: env("CLOUDINARY_SECRET"),
       },
-      actionOptions: {
-        upload: {},
-        delete: {},
+    },
+  },
+
+  /**
+   * Redis Plugin (Strapi v5)
+   * @see https://github.com/strapi-community/plugin-redis
+   */
+  redis: {
+    settings: {
+      debug: env.bool("REDIS_DEBUG", false),
+      enableRedlock: false, // enable only if you really need distributed locks
+    },
+    connections: {
+      default: {
+        connection: {
+          /**
+           * Railway supports REDIS_URL.
+           * If present, it overrides host/port/password automatically.
+           */
+          url: env("REDIS_URL"),
+
+          host: env("REDISHOST"),
+          port: env.int("REDISPORT", 6379),
+          password: env("REDISPASSWORD"),
+          username: env("REDISUSER"),
+          db: 0,
+        },
       },
     },
   },
+
+  /**
+   * REST Cache Plugin (Redis Provider)
+   * @see https://docs.strapi.io/dev-docs/plugins/rest-cache
+   */
   "rest-cache": {
     config: {
       provider: {
         name: "redis",
         options: {
-          max: 32767,
           connection: "default",
-          host: env("REDISHOST", "127.0.0.1"),
-          port: env.int("REDISPORT", 6379),
-          password: env("REDISPASSWORD", ""),
-          username: env("REDISUSER", "default"),
-          db: env("REDIS_URL"),
-          maxRetriesPerRequest: 3,
-          enableReadyCheck: true,
-          retryStrategy(times) {
-            if (times > 3) {
-              return null;
-            }
-            return Math.min(times * 200, 1000);
-          },
+          max: 32767,
         },
       },
+
       strategy: {
         debug: env.bool("REST_CACHE_DEBUG", false),
+
         enableEtagSupport: true,
         enableXCacheHeaders: true,
         enableAdminCTBMiddleware: true,
+
         resetOnStartup: false,
         clearRelatedCache: true,
 
-        // Content types to cache (READ-heavy collections)
+        keysPrefix: "strapi-cache",
+
+        headers: ["accept", "accept-encoding", "accept-language"],
+
+        /**
+         * Cache READ-heavy collections only
+         */
         contentTypes: [
-          // Core content collections (cache aggressively)
           {
             contentType: "api::experience.experience",
-            maxAge: 3600000, // 1 hour
-            hitpass: false,
+            maxAge: 60 * 60 * 1000, // 1 hour
           },
           {
             contentType: "api::tour.tour",
-            maxAge: 3600000, // 1 hour
-            hitpass: false,
+            maxAge: 60 * 60 * 1000, // 1 hour
           },
           {
             contentType: "api::merchandise.merchandise",
-            maxAge: 1800000, // 30 minutes
-            hitpass: false,
+            maxAge: 30 * 60 * 1000, // 30 min
           },
           {
             contentType: "api::rental.rental",
-            maxAge: 1800000, // 30 minutes
-            hitpass: false,
+            maxAge: 30 * 60 * 1000, // 30 min
           },
           {
             contentType: "api::event.event",
-            maxAge: 900000, // 15 minutes (events may have date-sensitive data)
-            hitpass: false,
+            maxAge: 15 * 60 * 1000, // 15 min
           },
 
-          // Static/reference data (cache very aggressively)
+          // Reference / mostly-static data
           {
             contentType: "api::experience-category.experience-category",
-            maxAge: 86400000, // 24 hours
-            hitpass: false,
+            maxAge: 24 * 60 * 60 * 1000, // 24h
           },
           {
             contentType: "api::merchandise-category.merchandise-category",
-            maxAge: 86400000, // 24 hours
-            hitpass: false,
+            maxAge: 24 * 60 * 60 * 1000,
           },
           {
             contentType: "api::location.location",
-            maxAge: 7200000, // 2 hours
-            hitpass: false,
+            maxAge: 2 * 60 * 60 * 1000, // 2h
           },
           {
             contentType: "api::banner.banner",
-            maxAge: 1800000, // 30 minutes
-            hitpass: false,
+            maxAge: 30 * 60 * 1000,
           },
           {
             contentType: "api::faq.faq",
-            maxAge: 7200000, // 2 hours
-            hitpass: false,
+            maxAge: 2 * 60 * 60 * 1000,
           },
           {
             contentType: "api::terms-and-condition.terms-and-condition",
-            maxAge: 86400000, // 24 hours (rarely changes)
-            hitpass: false,
+            maxAge: 24 * 60 * 60 * 1000,
           },
           {
             contentType: "api::voucher-template.voucher-template",
-            maxAge: 3600000, // 1 hour
-            hitpass: false,
+            maxAge: 60 * 60 * 1000,
           },
 
           // DO NOT CACHE (transactional/user-specific data):
@@ -121,12 +140,6 @@ module.exports = ({ env }) => ({
           // - api::voucher.voucher (user-specific vouchers)
           // - api::review.review (frequently updated, needs fresh data)
         ],
-
-        // Cache key configuration
-        keysPrefix: "strapi-cache",
-
-        // Headers to include in cache key (ensures unique cache per query)
-        headers: ["accept", "accept-encoding", "accept-language"],
       },
     },
   },
