@@ -178,6 +178,12 @@
       "relation": "manyToMany",
       "target": "api::addon.addon"
     },
+    "reviews": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::review.review",
+      "mappedBy": "tour"
+    },
     "seoMetadata": {
       "type": "component",
       "repeatable": false,
