@@ -23,22 +23,16 @@
       "enum": ["private", "group"],
       "required": true
     },
-    "audience": {
-      "type": "enumeration",
-      "enum": ["local", "tourist"],
-      "required": true
-    },
-    "currency": {
-      "type": "enumeration",
-      "enum": ["USD", "LKR"],
-      "required": true
-    },
     "pricingModel": {
       "type": "enumeration",
       "enum": ["per_person", "per_group"],
       "required": true
     },
-    "basePrice": {
+    "USD": {
+      "type": "decimal",
+      "required": true
+    },
+    "LKR": {
       "type": "decimal",
       "required": true
     },
