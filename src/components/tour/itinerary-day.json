@@ -3,7 +3,7 @@
   "info": {
     "displayName": "Itinerary Day",
     "icon": "calendar",
-    "description": "Daily itinerary with activities and details"
+    "description": "Daily itinerary with activities, addons, and details"
   },
   "options": {},
   "attributes": {
@@ -20,9 +20,13 @@
       "required": true
     },
     "activities": {
-      "type": "component",
-      "repeatable": true,
-      "component": "tour.activity"
+      "type": "json",
+      "description": "Array of activity names/descriptions"
+    },
+    "addons": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::addon.addon"
     },
     "meals": {
       "type": "enumeration",

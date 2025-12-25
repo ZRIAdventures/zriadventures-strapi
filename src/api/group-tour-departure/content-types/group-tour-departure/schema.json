@@ -1,0 +1,45 @@
+{
+  "kind": "collectionType",
+  "collectionName": "group_tour_departures",
+  "info": {
+    "singularName": "group-tour-departure",
+    "pluralName": "group-tour-departures",
+    "displayName": "Group Tour Departure",
+    "description": "Scheduled group tour departures with availability management"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "tour": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::tour.tour",
+      "inversedBy": "groupDepartures"
+    },
+    "startDate": {
+      "type": "date",
+      "required": true
+    },
+    "endDate": {
+      "type": "date",
+      "required": true
+    },
+    "maxCapacity": {
+      "type": "integer",
+      "required": true,
+      "min": 1
+    },
+    "bookedCount": {
+      "type": "integer",
+      "default": 0,
+      "min": 0
+    },
+    "status": {
+      "type": "enumeration",
+      "enum": ["open", "full", "closed"],
+      "default": "open"
+    }
+  }
+}

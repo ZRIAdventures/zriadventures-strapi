@@ -1,0 +1,77 @@
+{
+  "kind": "collectionType",
+  "collectionName": "tour_pricings",
+  "info": {
+    "singularName": "tour-pricing",
+    "pluralName": "tour-pricings",
+    "displayName": "Tour Pricing",
+    "description": "Pricing configurations for tours with USD/LKR, local/tourist, private/group, and DB room logic"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "tour": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::tour.tour",
+      "inversedBy": "pricing"
+    },
+    "tourType": {
+      "type": "enumeration",
+      "enum": ["private", "group"],
+      "required": true
+    },
+    "audience": {
+      "type": "enumeration",
+      "enum": ["local", "tourist"],
+      "required": true
+    },
+    "currency": {
+      "type": "enumeration",
+      "enum": ["USD", "LKR"],
+      "required": true
+    },
+    "pricingModel": {
+      "type": "enumeration",
+      "enum": ["per person", "per group"],
+      "required": true
+    },
+    "basePrice": {
+      "type": "decimal",
+      "required": true
+    },
+    "minPax": {
+      "type": "integer",
+      "min": 1
+    },
+    "maxPax": {
+      "type": "integer"
+    },
+    "additionalPaxPrice": {
+      "type": "decimal",
+      "description": "Price per additional person beyond base (optional)"
+    },
+    "roomType": {
+      "type": "enumeration",
+      "enum": ["DB"],
+      "default": "DB",
+      "description": "Double Bed (DB) room type - standard for accommodation"
+    },
+    "pricePerRoom": {
+      "type": "decimal",
+      "description": "Price per DB room when accommodation is included"
+    },
+    "maxPersonsPerRoom": {
+      "type": "integer",
+      "default": 2,
+      "description": "Max 2 persons per DB room"
+    },
+    "accommodationType": {
+      "type": "enumeration",
+      "enum": ["not required", "3 star", "4 star", "5 star"],
+      "description": "Star rating tier this pricing applies to"
+    }
+  }
+}

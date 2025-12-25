@@ -5,175 +5,152 @@
     "singularName": "tour-booking",
     "pluralName": "tour-bookings",
     "displayName": "Tour Booking",
-    "description": "Booking management for tours with accommodation, room types, and pax details"
+    "description": "Tour booking records with price snapshots (never recalculate prices after booking)"
   },
   "options": {
     "draftAndPublish": true
   },
   "pluginOptions": {},
   "attributes": {
-    "bookingId": {
-      "type": "uid",
-      "required": true
-    },
     "tour": {
       "type": "relation",
       "relation": "manyToOne",
       "target": "api::tour.tour"
     },
-    "departureDate": {
+    "departure": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::group-tour-departure.group-tour-departure",
+      "description": "Null for private tours, required for group tours"
+    },
+    "tourType": {
+      "type": "enumeration",
+      "enum": ["private", "group"],
+      "required": true
+    },
+    "audience": {
+      "type": "enumeration",
+      "enum": ["local", "tourist"],
+      "required": true
+    },
+    "currency": {
+      "type": "enumeration",
+      "enum": ["USD", "LKR"],
+      "required": true
+    },
+    "startDate": {
       "type": "date",
       "required": true
     },
-    "returnDate": {
+    "endDate": {
       "type": "date",
       "required": true
     },
-    "bookingStatus": {
-      "type": "enumeration",
-      "enum": [
-        "Pending",
-        "Confirmed",
-        "Hold",
-        "Cancelled",
-        "Completed"
-      ],
-      "default": "Pending"
+    "adults": {
+      "type": "integer",
+      "required": true,
+      "min": 0
     },
-    "paymentStatus": {
-      "type": "enumeration",
-      "enum": [
-        "PENDING",
-        "DEPOSIT_PAID",
-        "FULLY_PAID",
-        "REFUNDED",
-        "FAILED"
-      ],
-      "default": "PENDING"
+    "children": {
+      "type": "integer",
+      "default": 0,
+      "min": 0
     },
-    "numberOfPax": {
+    "totalPax": {
       "type": "integer",
       "required": true,
       "min": 1
     },
-    "adultsCount": {
-      "type": "integer",
-      "default": 0
-    },
-    "childrenCount": {
-      "type": "integer",
-      "default": 0
-    },
     "accommodationType": {
       "type": "enumeration",
-      "enum": [
-        "Not Required",
-        "Star Three",
-        "Star Four",
-        "Star Five"
-      ]
+      "enum": ["not required", "3 star", "4 star", "5 star"]
+    },
+    "roomCount": {
+      "type": "integer",
+      "description": "Auto-calculated: 1 pax = 1 DB, 3 pax = 2 DB"
     },
     "roomType": {
       "type": "enumeration",
-      "enum": [
-        "Single Room (1 Person - DB basis)",
-        "Double Room (2 Persons - DB)",
-        "Triple Room (3 Persons - 2 DB)",
-        "Quad Room (4 Persons - 2 DB)"
-      ]
+      "enum": ["DB"],
+      "default": "DB",
+      "description": "Double Bed rooms only"
     },
-    "numberOfRooms": {
-      "type": "integer",
-      "default": 1
-    },
-    "singleSupplement": {
-      "type": "boolean",
-      "default": false
-    },
-    "customerInfo": {
-      "type": "component",
-      "repeatable": false,
-      "component": "tour.customer-info"
-    },
-    "travelers": {
-      "type": "component",
-      "repeatable": true,
-      "component": "tour.traveler-info"
-    },
-    "totalAmount": {
-      "type": "decimal",
+    "fullName": {
+      "type": "string",
       "required": true
     },
-    "depositAmount": {
-      "type": "decimal"
+    "email": {
+      "type": "email",
+      "required": true
     },
-    "amountPaid": {
-      "type": "decimal",
-      "default": 0
+    "phone": {
+      "type": "string",
+      "required": true
     },
-    "currency": {
-      "type": "enumeration",
-      "enum": [
-        "USD",
-        "LKR"
-      ],
-      "default": "USD"
-    },
-    "paymentVendor": {
-      "type": "enumeration",
-      "enum": [
-        "PAYHERE",
-        "BANK",
-        "KOKO",
-        "MINTPAY",
-        "GENIE",
-        "STRIPE"
-      ]
+    "country": {
+      "type": "string"
     },
     "specialRequests": {
       "type": "text"
     },
-    "dietaryRequirements": {
-      "type": "json"
+    "selectedAddons": {
+      "type": "json",
+      "description": "Array of {addonId, title, price, quantity}"
     },
-    "flightDetails": {
-      "type": "json"
+    "baseAmount": {
+      "type": "decimal",
+      "required": true,
+      "description": "Base tour price snapshot"
     },
-    "insuranceSelected": {
-      "type": "boolean",
-      "default": false
+    "addonsAmount": {
+      "type": "decimal",
+      "default": 0,
+      "description": "Total addons price snapshot"
     },
-    "promoCode": {
+    "accommodationAmount": {
+      "type": "decimal",
+      "default": 0,
+      "description": "Accommodation price snapshot"
+    },
+    "tax": {
+      "type": "decimal",
+      "default": 0,
+      "description": "Tax amount snapshot"
+    },
+    "discount": {
+      "type": "decimal",
+      "default": 0,
+      "description": "Discount amount snapshot"
+    },
+    "totalAmount": {
+      "type": "decimal",
+      "required": true,
+      "description": "Final total price snapshot - NEVER recalculate"
+    },
+    "bookingStatus": {
+      "type": "enumeration",
+      "enum": ["pending", "confirmed", "cancelled"],
+      "default": "pending"
+    },
+    "paymentStatus": {
+      "type": "enumeration",
+      "enum": ["unpaid", "paid", "refunded"],
+      "default": "unpaid"
+    },
+    "paymentMethod": {
       "type": "string"
     },
-    "discountApplied": {
-      "type": "decimal",
-      "default": 0
+    "internalNotes": {
+      "type": "text",
+      "description": "Admin-only notes"
     },
-    "bookingSource": {
+    "source": {
       "type": "enumeration",
-      "enum": [
-        "Website",
-        "Mobile App",
-        "Phone",
-        "Email",
-        "Walk-in"
-      ],
-      "default": "Website"
+      "enum": ["web", "admin", "whatsapp", "phone", "email"],
+      "default": "web"
     },
-    "confirmationEmailSent": {
-      "type": "boolean",
-      "default": false
-    },
-    "vouchersSent": {
-      "type": "boolean",
-      "default": false
-    },
-    "notes": {
-      "type": "text"
-    },
-    "emergencyContact": {
-      "type": "json"
+    "bookingReference": {
+      "type": "uid"
     }
   }
 }
