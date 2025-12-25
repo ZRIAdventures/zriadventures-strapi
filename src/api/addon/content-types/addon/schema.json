@@ -30,8 +30,8 @@
     },
     "pricingType": {
       "type": "enumeration",
-      "enum": ["per person", "per booking"],
-      "default": "per person"
+      "enum": ["per_person", "per_booking"],
+      "default": "per_person"
     },
     "isOptional": {
       "type": "boolean",

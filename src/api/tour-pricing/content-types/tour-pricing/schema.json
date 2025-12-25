@@ -35,7 +35,7 @@
     },
     "pricingModel": {
       "type": "enumeration",
-      "enum": ["per person", "per group"],
+      "enum": ["per_person", "per_group"],
       "required": true
     },
     "basePrice": {
@@ -70,7 +70,7 @@
     },
     "accommodationType": {
       "type": "enumeration",
-      "enum": ["not required", "3 star", "4 star", "5 star"],
+      "enum": ["not_required", "star_3", "star_4", "star_5"],
       "description": "Star rating tier this pricing applies to"
     }
   }

@@ -63,7 +63,7 @@
     },
     "accommodationType": {
       "type": "enumeration",
-      "enum": ["not required", "3 star", "4 star", "5 star"]
+      "enum": ["not_required", "star_3", "star_4", "star_5"]
     },
     "roomCount": {
       "type": "integer",

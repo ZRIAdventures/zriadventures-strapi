@@ -146,7 +146,7 @@
     },
     "allowedAccommodationTypes": {
       "type": "json",
-      "description": "Array of: not required, 3 star, 4 star, 5 star"
+      "description": "Array of: not_required, star_3, star_4, star_5"
     },
     "isCustomizable": {
       "type": "boolean",
