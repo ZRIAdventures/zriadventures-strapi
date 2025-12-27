@@ -162,6 +162,16 @@
       "type": "component",
       "component": "experience.pax-rates",
       "repeatable": true
+    },
+    "extras": {
+      "type": "component",
+      "component": "experience.extras",
+      "repeatable": true
+    },
+    "accomodation": {
+      "type": "component",
+      "component": "tour.accomodation-options",
+      "repeatable": true
     }
   }
 }

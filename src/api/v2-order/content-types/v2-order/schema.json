@@ -83,6 +83,12 @@
     },
     "itemsData": {
       "type": "json"
+    },
+    "tour_booking": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::tour-booking.tour-booking",
+      "mappedBy": "orderRef"
     }
   }
 }

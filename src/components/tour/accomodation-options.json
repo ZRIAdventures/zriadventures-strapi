@@ -1,0 +1,28 @@
+{
+  "collectionName": "components_tour_accomodation_options",
+  "info": {
+    "displayName": "Accomodation Options"
+  },
+  "options": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string"
+    },
+    "rates": {
+      "type": "component",
+      "component": "experience.rates",
+      "repeatable": false
+    },
+    "pricingType": {
+      "type": "enumeration",
+      "enum": [
+        "per_person",
+        "per_db_room"
+      ]
+    }
+  },
+  "config": {}
+}

@@ -45,6 +45,11 @@
       "allowedTypes": [
         "images"
       ]
+    },
+    "addonExperiences": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::experience.experience"
     }
   }
 }

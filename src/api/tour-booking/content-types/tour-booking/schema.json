@@ -104,6 +104,12 @@
     },
     "bookingReference": {
       "type": "uid"
+    },
+    "orderRef": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::v2-order.v2-order",
+      "inversedBy": "tour_booking"
     }
   }
 }

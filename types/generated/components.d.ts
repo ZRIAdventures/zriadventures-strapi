@@ -163,6 +163,19 @@ export interface RentalsRentRates extends Struct.ComponentSchema {
   };
 }
 
+export interface TourAccomodationOptions extends Struct.ComponentSchema {
+  collectionName: 'components_tour_accomodation_options';
+  info: {
+    displayName: 'Accomodation Options';
+  };
+  attributes: {
+    name: Schema.Attribute.String;
+    pricingType: Schema.Attribute.Enumeration<['per_person', 'per_db_room']>;
+    rates: Schema.Attribute.Component<'experience.rates', false>;
+    type: Schema.Attribute.String;
+  };
+}
+
 export interface TourHighlight extends Struct.ComponentSchema {
   collectionName: 'components_tour_highlights';
   info: {
@@ -188,6 +201,10 @@ export interface TourItineraryDay extends Struct.ComponentSchema {
   attributes: {
     accommodation: Schema.Attribute.String;
     activities: Schema.Attribute.JSON;
+    addonExperiences: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::experience.experience'
+    >;
     dayNumber: Schema.Attribute.Integer & Schema.Attribute.Required;
     description: Schema.Attribute.RichText & Schema.Attribute.Required;
     images: Schema.Attribute.Media<'images', true>;
@@ -340,6 +357,7 @@ declare module '@strapi/strapi' {
       'merchandise.merch-option': MerchandiseMerchOption;
       'merchandise.options': MerchandiseOptions;
       'rentals.rent-rates': RentalsRentRates;
+      'tour.accomodation-options': TourAccomodationOptions;
       'tour.highlight': TourHighlight;
       'tour.itinerary-day': TourItineraryDay;
       'tour.place-to-see': TourPlaceToSee;

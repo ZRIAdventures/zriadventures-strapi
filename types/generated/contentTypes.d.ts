@@ -995,6 +995,7 @@ export interface ApiTourBookingTourBooking extends Struct.CollectionTypeSchema {
       'api::tour-booking.tour-booking'
     > &
       Schema.Attribute.Private;
+    orderRef: Schema.Attribute.Relation<'oneToOne', 'api::v2-order.v2-order'>;
     paymentStatus: Schema.Attribute.Enumeration<
       ['unpaid', 'paid', 'refunded']
     > &
@@ -1033,6 +1034,7 @@ export interface ApiTourTour extends Struct.CollectionTypeSchema {
     draftAndPublish: true;
   };
   attributes: {
+    accomodation: Schema.Attribute.Component<'tour.accomodation-options', true>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -1054,6 +1056,7 @@ export interface ApiTourTour extends Struct.CollectionTypeSchema {
         number
       >;
     endLocation: Schema.Attribute.String & Schema.Attribute.Required;
+    extras: Schema.Attribute.Component<'experience.extras', true>;
     featuredImage: Schema.Attribute.Media<'images'> & Schema.Attribute.Required;
     galleryImages: Schema.Attribute.Media<'images', true>;
     groupDepartures: Schema.Attribute.Relation<
@@ -1159,6 +1162,10 @@ export interface ApiV2OrderV2Order extends Struct.CollectionTypeSchema {
       Schema.Attribute.Required &
       Schema.Attribute.DefaultTo<false>;
     totalAmount: Schema.Attribute.Float;
+    tour_booking: Schema.Attribute.Relation<
+      'oneToOne',
+      'api::tour-booking.tour-booking'
+    >;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
