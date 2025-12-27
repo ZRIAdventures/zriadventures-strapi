@@ -20,16 +20,11 @@
       "required": true
     },
     "activities": {
-      "type": "json",
-      "description": "Array of activity names/descriptions"
-    },
-    "addons": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::addon.addon"
+      "type": "json"
     },
     "meals": {
       "type": "enumeration",
+      "default": "None",
       "enum": [
         "Breakfast",
         "Lunch",
@@ -39,8 +34,7 @@
         "Lunch & Dinner",
         "All Meals",
         "None"
-      ],
-      "default": "None"
+      ]
     },
     "accommodation": {
       "type": "string"
@@ -48,7 +42,9 @@
     "images": {
       "type": "media",
       "multiple": true,
-      "allowedTypes": ["images"]
+      "allowedTypes": [
+        "images"
+      ]
     }
   }
 }

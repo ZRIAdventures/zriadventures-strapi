@@ -12,32 +12,6 @@ export interface CommonImages extends Struct.ComponentSchema {
   };
 }
 
-export interface CommonSeoMetadata extends Struct.ComponentSchema {
-  collectionName: 'components_common_seo_metadata';
-  info: {
-    description: 'SEO and Google Merchant metadata';
-    displayName: 'SEO Metadata';
-    icon: 'search';
-  };
-  attributes: {
-    availability: Schema.Attribute.Enumeration<
-      ['in stock', 'out of stock', 'preorder', 'backorder']
-    > &
-      Schema.Attribute.DefaultTo<'in stock'>;
-    brand: Schema.Attribute.String &
-      Schema.Attribute.DefaultTo<'ZRI Adventures'>;
-    canonicalUrl: Schema.Attribute.String;
-    condition: Schema.Attribute.Enumeration<['new', 'refurbished', 'used']> &
-      Schema.Attribute.DefaultTo<'new'>;
-    googleProductCategory: Schema.Attribute.String;
-    gtin: Schema.Attribute.String;
-    keywords: Schema.Attribute.JSON;
-    metaDescription: Schema.Attribute.Text;
-    metaTitle: Schema.Attribute.String;
-    ogImage: Schema.Attribute.Media<'images'>;
-  };
-}
-
 export interface ExperienceAbout extends Struct.ComponentSchema {
   collectionName: 'components_experience_abouts';
   info: {
@@ -189,212 +163,6 @@ export interface RentalsRentRates extends Struct.ComponentSchema {
   };
 }
 
-export interface TourAccommodationOption extends Struct.ComponentSchema {
-  collectionName: 'components_tour_accommodation_options';
-  info: {
-    description: 'Accommodation tier for tour bookings (3-star, 4-star, 5-star)';
-    displayName: 'Accommodation Option';
-    icon: 'star';
-  };
-  attributes: {
-    description: Schema.Attribute.Text;
-    includedAmenities: Schema.Attribute.JSON;
-    priceIncrement: Schema.Attribute.Component<'experience.rates', false>;
-    roomTypes: Schema.Attribute.Component<'tour.room-type-pricing', true>;
-    starRating: Schema.Attribute.Enumeration<
-      ['Not Required', 'Star Three', 'Star Four', 'Star Five']
-    > &
-      Schema.Attribute.Required;
-  };
-}
-
-export interface TourAccommodationStay extends Struct.ComponentSchema {
-  collectionName: 'components_tour_accommodation_stays';
-  info: {
-    description: 'Details about where guests will stay during the tour';
-    displayName: 'Accommodation Stay';
-    icon: 'building';
-  };
-  attributes: {
-    amenities: Schema.Attribute.JSON;
-    checkInDay: Schema.Attribute.Integer;
-    description: Schema.Attribute.RichText;
-    hotelName: Schema.Attribute.String & Schema.Attribute.Required;
-    images: Schema.Attribute.Media<'images', true>;
-    location: Schema.Attribute.Relation<'oneToOne', 'api::location.location'>;
-    numberOfNights: Schema.Attribute.Integer;
-    starRating: Schema.Attribute.Enumeration<
-      ['Star Three', 'Star Four', 'Star Five', 'Boutique', 'Guesthouse']
-    >;
-    website: Schema.Attribute.String;
-  };
-}
-
-export interface TourActivity extends Struct.ComponentSchema {
-  collectionName: 'components_tour_activities';
-  info: {
-    description: 'Individual activity within a day';
-    displayName: 'Activity';
-    icon: 'play';
-  };
-  attributes: {
-    addonCost: Schema.Attribute.Component<'experience.rates', false>;
-    description: Schema.Attribute.Text;
-    duration: Schema.Attribute.String;
-    included: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
-    isAddon: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
-    name: Schema.Attribute.String & Schema.Attribute.Required;
-    relatedExperience: Schema.Attribute.Relation<
-      'oneToOne',
-      'api::experience.experience'
-    >;
-  };
-}
-
-export interface TourCertification extends Struct.ComponentSchema {
-  collectionName: 'components_tour_certifications';
-  info: {
-    description: 'Operator certifications and badges';
-    displayName: 'Certification';
-    icon: 'shield';
-  };
-  attributes: {
-    badge: Schema.Attribute.Media<'images'>;
-    description: Schema.Attribute.Text;
-    expiryDate: Schema.Attribute.Date;
-    issueDate: Schema.Attribute.Date;
-    issuedBy: Schema.Attribute.String;
-    name: Schema.Attribute.String & Schema.Attribute.Required;
-    verificationUrl: Schema.Attribute.String;
-  };
-}
-
-export interface TourCustomerInfo extends Struct.ComponentSchema {
-  collectionName: 'components_tour_customer_info';
-  info: {
-    description: 'Primary customer contact information';
-    displayName: 'Customer Info';
-    icon: 'user';
-  };
-  attributes: {
-    address: Schema.Attribute.Text;
-    city: Schema.Attribute.String;
-    country: Schema.Attribute.String;
-    email: Schema.Attribute.Email & Schema.Attribute.Required;
-    firstName: Schema.Attribute.String & Schema.Attribute.Required;
-    lastName: Schema.Attribute.String & Schema.Attribute.Required;
-    nationality: Schema.Attribute.String;
-    passportExpiry: Schema.Attribute.Date;
-    passportNumber: Schema.Attribute.String;
-    phone: Schema.Attribute.String & Schema.Attribute.Required;
-    postalCode: Schema.Attribute.String;
-  };
-}
-
-export interface TourDepartureDate extends Struct.ComponentSchema {
-  collectionName: 'components_tour_departure_dates';
-  info: {
-    description: 'Tour departure dates with availability and pricing';
-    displayName: 'Departure Date';
-    icon: 'calendar';
-  };
-  attributes: {
-    availability: Schema.Attribute.Enumeration<
-      [
-        'Available',
-        'Filling Fast',
-        'Almost Sold Out',
-        'Sold Out',
-        'Departure on Request',
-      ]
-    > &
-      Schema.Attribute.DefaultTo<'Available'>;
-    bookingDeadline: Schema.Attribute.Date;
-    currentBookings: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
-    discountPercentage: Schema.Attribute.Integer &
-      Schema.Attribute.SetMinMax<
-        {
-          max: 100;
-          min: 0;
-        },
-        number
-      >;
-    endDate: Schema.Attribute.Date & Schema.Attribute.Required;
-    guaranteedDeparture: Schema.Attribute.Boolean &
-      Schema.Attribute.DefaultTo<false>;
-    holdSpaceHours: Schema.Attribute.Integer;
-    instantConfirmation: Schema.Attribute.Boolean &
-      Schema.Attribute.DefaultTo<false>;
-    language: Schema.Attribute.String & Schema.Attribute.DefaultTo<'English'>;
-    maxGroupSize: Schema.Attribute.Integer;
-    minGroupSize: Schema.Attribute.Integer;
-    originalPrice: Schema.Attribute.Component<'experience.rates', false>;
-    price: Schema.Attribute.Component<'experience.rates', false>;
-    specialOffer: Schema.Attribute.String;
-    spotsRemaining: Schema.Attribute.Integer;
-    startDate: Schema.Attribute.Date & Schema.Attribute.Required;
-  };
-}
-
-export interface TourDetailedRatings extends Struct.ComponentSchema {
-  collectionName: 'components_tour_detailed_ratings';
-  info: {
-    description: 'Breakdown of ratings by category';
-    displayName: 'Detailed Ratings';
-    icon: 'star';
-  };
-  attributes: {
-    accommodation: Schema.Attribute.Decimal &
-      Schema.Attribute.SetMinMax<
-        {
-          max: 5;
-          min: 0;
-        },
-        number
-      >;
-    food: Schema.Attribute.Decimal &
-      Schema.Attribute.SetMinMax<
-        {
-          max: 5;
-          min: 0;
-        },
-        number
-      >;
-    guide: Schema.Attribute.Decimal &
-      Schema.Attribute.SetMinMax<
-        {
-          max: 5;
-          min: 0;
-        },
-        number
-      >;
-    itinerary: Schema.Attribute.Decimal &
-      Schema.Attribute.SetMinMax<
-        {
-          max: 5;
-          min: 0;
-        },
-        number
-      >;
-    transport: Schema.Attribute.Decimal &
-      Schema.Attribute.SetMinMax<
-        {
-          max: 5;
-          min: 0;
-        },
-        number
-      >;
-    valueForMoney: Schema.Attribute.Decimal &
-      Schema.Attribute.SetMinMax<
-        {
-          max: 5;
-          min: 0;
-        },
-        number
-      >;
-  };
-}
-
 export interface TourHighlight extends Struct.ComponentSchema {
   collectionName: 'components_tour_highlights';
   info: {
@@ -413,13 +181,13 @@ export interface TourHighlight extends Struct.ComponentSchema {
 export interface TourItineraryDay extends Struct.ComponentSchema {
   collectionName: 'components_tour_itinerary_days';
   info: {
-    description: 'Daily itinerary with activities and details';
+    description: 'Daily itinerary with activities, addons, and details';
     displayName: 'Itinerary Day';
     icon: 'calendar';
   };
   attributes: {
     accommodation: Schema.Attribute.String;
-    activities: Schema.Attribute.Component<'tour.activity', true>;
+    activities: Schema.Attribute.JSON;
     dayNumber: Schema.Attribute.Integer & Schema.Attribute.Required;
     description: Schema.Attribute.RichText & Schema.Attribute.Required;
     images: Schema.Attribute.Media<'images', true>;
@@ -440,20 +208,6 @@ export interface TourItineraryDay extends Struct.ComponentSchema {
   };
 }
 
-export interface TourOperatorResponse extends Struct.ComponentSchema {
-  collectionName: 'components_tour_operator_responses';
-  info: {
-    description: 'Tour operator response to customer review';
-    displayName: 'Operator Response';
-    icon: 'message';
-  };
-  attributes: {
-    respondedBy: Schema.Attribute.String;
-    responseDate: Schema.Attribute.DateTime;
-    responseText: Schema.Attribute.Text & Schema.Attribute.Required;
-  };
-}
-
 export interface TourPlaceToSee extends Struct.ComponentSchema {
   collectionName: 'components_tour_places_to_see';
   info: {
@@ -469,110 +223,6 @@ export interface TourPlaceToSee extends Struct.ComponentSchema {
     name: Schema.Attribute.String & Schema.Attribute.Required;
     orderInTour: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<1>;
     timeSpent: Schema.Attribute.String;
-  };
-}
-
-export interface TourPromotionalOffer extends Struct.ComponentSchema {
-  collectionName: 'components_tour_promotional_offers';
-  info: {
-    description: 'Special offers and promotional campaigns';
-    displayName: 'Promotional Offer';
-    icon: 'percent';
-  };
-  attributes: {
-    applicableToAllTours: Schema.Attribute.Boolean &
-      Schema.Attribute.DefaultTo<false>;
-    badge: Schema.Attribute.Media<'images'>;
-    currentRedemptions: Schema.Attribute.Integer &
-      Schema.Attribute.DefaultTo<0>;
-    description: Schema.Attribute.RichText;
-    discountAmount: Schema.Attribute.Component<'experience.rates', false>;
-    discountPercentage: Schema.Attribute.Integer &
-      Schema.Attribute.SetMinMax<
-        {
-          max: 100;
-          min: 0;
-        },
-        number
-      >;
-    endDate: Schema.Attribute.DateTime & Schema.Attribute.Required;
-    isActive: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
-    maxRedemptions: Schema.Attribute.Integer;
-    minimumBookingValue: Schema.Attribute.Component<'experience.rates', false>;
-    offerName: Schema.Attribute.String & Schema.Attribute.Required;
-    offerType: Schema.Attribute.Enumeration<
-      [
-        'Black Friday',
-        'Cyber Monday',
-        'Early Bird',
-        'Last Minute',
-        'Seasonal',
-        'Flash Sale',
-        'Year End',
-        'New Year',
-        'Summer Sale',
-        'Winter Sale',
-        'Limited Time',
-      ]
-    > &
-      Schema.Attribute.Required;
-    promoCode: Schema.Attribute.String;
-    startDate: Schema.Attribute.DateTime & Schema.Attribute.Required;
-    termsAndConditions: Schema.Attribute.RichText;
-  };
-}
-
-export interface TourRoomTypePricing extends Struct.ComponentSchema {
-  collectionName: 'components_tour_room_type_pricings';
-  info: {
-    description: 'Room configuration with Double Bed (DB) basis pricing';
-    displayName: 'Room Type Pricing';
-    icon: 'house';
-  };
-  attributes: {
-    description: Schema.Attribute.Text;
-    maxOccupancy: Schema.Attribute.Integer & Schema.Attribute.Required;
-    numberOfBeds: Schema.Attribute.Integer &
-      Schema.Attribute.Required &
-      Schema.Attribute.DefaultTo<1>;
-    pricePerPerson: Schema.Attribute.Component<'experience.rates', false>;
-    roomType: Schema.Attribute.Enumeration<
-      [
-        'Single Room (1 Person - DB basis)',
-        'Double Room (2 Persons - DB)',
-        'Triple Room (3 Persons - 2 DB)',
-        'Quad Room (4 Persons - 2 DB)',
-      ]
-    > &
-      Schema.Attribute.Required;
-    totalRoomPrice: Schema.Attribute.Component<'experience.rates', false>;
-  };
-}
-
-export interface TourSustainabilityInitiative extends Struct.ComponentSchema {
-  collectionName: 'components_tour_sustainability_initiatives';
-  info: {
-    description: 'Environmental and social sustainability programs';
-    displayName: 'Sustainability Initiative';
-    icon: 'earth';
-  };
-  attributes: {
-    category: Schema.Attribute.Enumeration<
-      [
-        'Animal Welfare',
-        'Supporting Destinations',
-        'Sustainability Programs',
-        'Carbon Offset',
-        'Community Support',
-        'Waste Reduction',
-        'Water Conservation',
-      ]
-    > &
-      Schema.Attribute.Required;
-    description: Schema.Attribute.RichText;
-    icon: Schema.Attribute.Media<'images'>;
-    impact: Schema.Attribute.Text;
-    title: Schema.Attribute.String & Schema.Attribute.Required;
   };
 }
 
@@ -639,32 +289,6 @@ export interface TourTravelMap extends Struct.ComponentSchema {
   };
 }
 
-export interface TourTravelerInfo extends Struct.ComponentSchema {
-  collectionName: 'components_tour_traveler_info';
-  info: {
-    description: 'Individual traveler details';
-    displayName: 'Traveler Info';
-    icon: 'user';
-  };
-  attributes: {
-    ageCategory: Schema.Attribute.Enumeration<['Adult', 'Child', 'Infant']> &
-      Schema.Attribute.DefaultTo<'Adult'>;
-    dateOfBirth: Schema.Attribute.Date;
-    dietaryRequirements: Schema.Attribute.String;
-    emergencyContactName: Schema.Attribute.String;
-    emergencyContactPhone: Schema.Attribute.String;
-    firstName: Schema.Attribute.String & Schema.Attribute.Required;
-    gender: Schema.Attribute.Enumeration<
-      ['Male', 'Female', 'Other', 'Prefer not to say']
-    >;
-    lastName: Schema.Attribute.String & Schema.Attribute.Required;
-    medicalConditions: Schema.Attribute.Text;
-    nationality: Schema.Attribute.String;
-    passportExpiry: Schema.Attribute.Date;
-    passportNumber: Schema.Attribute.String;
-  };
-}
-
 export interface VoucherCash extends Struct.ComponentSchema {
   collectionName: 'components_voucher_cash';
   info: {
@@ -704,7 +328,6 @@ declare module '@strapi/strapi' {
   export module Public {
     export interface ComponentSchemas {
       'common.images': CommonImages;
-      'common.seo-metadata': CommonSeoMetadata;
       'experience.about': ExperienceAbout;
       'experience.coordinates': ExperienceCoordinates;
       'experience.duration': ExperienceDuration;
@@ -717,23 +340,11 @@ declare module '@strapi/strapi' {
       'merchandise.merch-option': MerchandiseMerchOption;
       'merchandise.options': MerchandiseOptions;
       'rentals.rent-rates': RentalsRentRates;
-      'tour.accommodation-option': TourAccommodationOption;
-      'tour.accommodation-stay': TourAccommodationStay;
-      'tour.activity': TourActivity;
-      'tour.certification': TourCertification;
-      'tour.customer-info': TourCustomerInfo;
-      'tour.departure-date': TourDepartureDate;
-      'tour.detailed-ratings': TourDetailedRatings;
       'tour.highlight': TourHighlight;
       'tour.itinerary-day': TourItineraryDay;
-      'tour.operator-response': TourOperatorResponse;
       'tour.place-to-see': TourPlaceToSee;
-      'tour.promotional-offer': TourPromotionalOffer;
-      'tour.room-type-pricing': TourRoomTypePricing;
-      'tour.sustainability-initiative': TourSustainabilityInitiative;
       'tour.tour-summary': TourTourSummary;
       'tour.travel-map': TourTravelMap;
-      'tour.traveler-info': TourTravelerInfo;
       'voucher.cash': VoucherCash;
       'voucher.experience': VoucherExperience;
       'voucher.extras': VoucherExtras;

@@ -22,8 +22,11 @@
     },
     "status": {
       "type": "enumeration",
-      "enum": ["draft", "published"],
-      "default": "draft"
+      "default": "draft",
+      "enum": [
+        "draft",
+        "published"
+      ]
     },
     "isFeatured": {
       "type": "boolean",
@@ -31,8 +34,12 @@
     },
     "tourType": {
       "type": "enumeration",
-      "enum": ["private", "group", "both"],
-      "required": true
+      "required": true,
+      "enum": [
+        "private",
+        "group",
+        "both"
+      ]
     },
     "shortDescription": {
       "type": "text",
@@ -41,20 +48,20 @@
     "longDescription": {
       "type": "richtext"
     },
-    "highlights": {
-      "type": "json",
-      "description": "Array of highlight strings"
-    },
     "featuredImage": {
       "type": "media",
       "multiple": false,
-      "allowedTypes": ["images"],
-      "required": true
+      "required": true,
+      "allowedTypes": [
+        "images"
+      ]
     },
     "galleryImages": {
       "type": "media",
       "multiple": true,
-      "allowedTypes": ["images"]
+      "allowedTypes": [
+        "images"
+      ]
     },
     "promoVideoUrl": {
       "type": "string"
@@ -94,59 +101,49 @@
     },
     "intensity": {
       "type": "enumeration",
-      "enum": ["easy", "moderate", "challenging"],
-      "default": "moderate"
+      "default": "moderate",
+      "enum": [
+        "easy",
+        "moderate",
+        "challenging"
+      ]
     },
     "guidedType": {
       "type": "enumeration",
-      "enum": ["fully guided", "partially guided", "self-guided"],
-      "default": "fully guided"
+      "default": "fully guided",
+      "enum": [
+        "fully guided",
+        "partially guided",
+        "self-guided"
+      ]
     },
     "languages": {
-      "type": "json",
-      "description": "Array of language strings"
+      "type": "json"
     },
     "travelStyle": {
       "type": "enumeration",
-      "enum": ["private", "group", "customizable"],
-      "default": "customizable"
-    },
-    "travelMap": {
-      "type": "string",
-      "description": "URL or embed code for travel map"
-    },
-    "mapLocations": {
-      "type": "json",
-      "description": "Array of {name, lat, lng} objects"
+      "default": "customizable",
+      "enum": [
+        "private",
+        "group",
+        "customizable"
+      ]
     },
     "itineraryDays": {
       "type": "component",
-      "repeatable": true,
-      "component": "tour.itinerary-day"
+      "component": "tour.itinerary-day",
+      "repeatable": true
     },
     "places": {
       "type": "component",
-      "repeatable": true,
-      "component": "tour.place-to-see"
+      "component": "tour.place-to-see",
+      "repeatable": true
     },
     "included": {
-      "type": "json",
-      "description": "Array of included items"
+      "type": "json"
     },
     "notIncluded": {
-      "type": "json",
-      "description": "Array of not included items"
-    },
-    "accommodationAvailable": {
-      "type": "boolean",
-      "default": true
-    },
-    "accommodationDescription": {
-      "type": "text"
-    },
-    "allowedAccommodationTypes": {
-      "type": "json",
-      "description": "Array of: not_required, star_3, star_4, star_5"
+      "type": "json"
     },
     "isCustomizable": {
       "type": "boolean",
@@ -155,39 +152,16 @@
     "customizationNotes": {
       "type": "text"
     },
-    "cancellationPolicy": {
-      "type": "richtext"
-    },
-    "termsAndConditions": {
-      "type": "richtext"
-    },
-    "pricing": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::tour-pricing.tour-pricing",
-      "mappedBy": "tour"
-    },
     "groupDepartures": {
       "type": "relation",
       "relation": "oneToMany",
       "target": "api::group-tour-departure.group-tour-departure",
       "mappedBy": "tour"
     },
-    "addons": {
-      "type": "relation",
-      "relation": "manyToMany",
-      "target": "api::addon.addon"
-    },
-    "reviews": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::review.review",
-      "mappedBy": "tour"
-    },
-    "seoMetadata": {
+    "paxRates": {
       "type": "component",
-      "repeatable": false,
-      "component": "common.seo-metadata"
+      "component": "experience.pax-rates",
+      "repeatable": true
     }
   }
 }

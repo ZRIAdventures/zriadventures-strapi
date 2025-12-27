@@ -25,18 +25,11 @@
     },
     "tourType": {
       "type": "enumeration",
-      "enum": ["private", "group"],
-      "required": true
-    },
-    "audience": {
-      "type": "enumeration",
-      "enum": ["local", "tourist"],
-      "required": true
-    },
-    "currency": {
-      "type": "enumeration",
-      "enum": ["USD", "LKR"],
-      "required": true
+      "required": true,
+      "enum": [
+        "private",
+        "group"
+      ]
     },
     "startDate": {
       "type": "date",
@@ -63,91 +56,51 @@
     },
     "accommodationType": {
       "type": "enumeration",
-      "enum": ["not_required", "star_3", "star_4", "star_5"]
+      "enum": [
+        "not_required",
+        "star_3",
+        "star_4",
+        "star_5"
+      ]
     },
     "roomCount": {
-      "type": "integer",
-      "description": "Auto-calculated: 1 pax = 1 DB, 3 pax = 2 DB"
-    },
-    "roomType": {
-      "type": "enumeration",
-      "enum": ["DB"],
-      "default": "DB",
-      "description": "Double Bed rooms only"
-    },
-    "fullName": {
-      "type": "string",
-      "required": true
-    },
-    "email": {
-      "type": "email",
-      "required": true
-    },
-    "phone": {
-      "type": "string",
-      "required": true
-    },
-    "country": {
-      "type": "string"
+      "type": "integer"
     },
     "specialRequests": {
       "type": "text"
     },
-    "selectedAddons": {
-      "type": "json",
-      "description": "Array of {addonId, title, price, quantity}"
-    },
-    "baseAmount": {
-      "type": "decimal",
-      "required": true,
-      "description": "Base tour price snapshot"
-    },
-    "addonsAmount": {
-      "type": "decimal",
-      "default": 0,
-      "description": "Total addons price snapshot"
-    },
     "accommodationAmount": {
       "type": "decimal",
-      "default": 0,
-      "description": "Accommodation price snapshot"
-    },
-    "tax": {
-      "type": "decimal",
-      "default": 0,
-      "description": "Tax amount snapshot"
+      "default": 0
     },
     "discount": {
       "type": "decimal",
-      "default": 0,
-      "description": "Discount amount snapshot"
+      "default": 0
     },
     "totalAmount": {
       "type": "decimal",
-      "required": true,
-      "description": "Final total price snapshot - NEVER recalculate"
+      "required": true
     },
     "bookingStatus": {
       "type": "enumeration",
-      "enum": ["pending", "confirmed", "cancelled"],
-      "default": "pending"
+      "default": "pending",
+      "enum": [
+        "pending",
+        "confirmed",
+        "cancelled"
+      ]
     },
     "paymentStatus": {
       "type": "enumeration",
-      "enum": ["unpaid", "paid", "refunded"],
-      "default": "unpaid"
-    },
-    "paymentMethod": {
-      "type": "string"
+      "default": "unpaid",
+      "enum": [
+        "unpaid",
+        "paid",
+        "refunded"
+      ]
     },
     "internalNotes": {
-      "type": "text",
-      "description": "Admin-only notes"
-    },
-    "source": {
-      "type": "enumeration",
-      "enum": ["web", "admin", "whatsapp", "phone", "email"],
-      "default": "web"
+      "type": "text"
     },
     "bookingReference": {
       "type": "uid"

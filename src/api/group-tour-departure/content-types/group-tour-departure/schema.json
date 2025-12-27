@@ -38,7 +38,11 @@
     },
     "status": {
       "type": "enumeration",
-      "enum": ["open", "full", "closed"],
+      "enum": [
+        "open",
+        "full",
+        "closed"
+      ],
       "default": "open"
     }
   }
