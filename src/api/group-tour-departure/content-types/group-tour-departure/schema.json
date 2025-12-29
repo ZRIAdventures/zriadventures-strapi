@@ -36,14 +36,14 @@
       "default": 0,
       "min": 0
     },
-    "status": {
+    "groupStatus": {
       "type": "enumeration",
+      "default": "open",
       "enum": [
         "open",
         "full",
         "closed"
-      ],
-      "default": "open"
+      ]
     }
   }
 }

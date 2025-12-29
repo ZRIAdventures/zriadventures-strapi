@@ -608,6 +608,8 @@ export interface ApiGroupTourDepartureGroupTourDeparture
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     endDate: Schema.Attribute.Date & Schema.Attribute.Required;
+    groupStatus: Schema.Attribute.Enumeration<['open', 'full', 'closed']> &
+      Schema.Attribute.DefaultTo<'open'>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -624,8 +626,6 @@ export interface ApiGroupTourDepartureGroupTourDeparture
       >;
     publishedAt: Schema.Attribute.DateTime;
     startDate: Schema.Attribute.Date & Schema.Attribute.Required;
-    status: Schema.Attribute.Enumeration<['open', 'full', 'closed']> &
-      Schema.Attribute.DefaultTo<'open'>;
     tour: Schema.Attribute.Relation<'manyToOne', 'api::tour.tour'>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
