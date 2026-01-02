@@ -27,6 +27,12 @@
       ],
       "type": "media",
       "multiple": false
+    },
+    "vouchers": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::voucher.voucher",
+      "mappedBy": "voucherTemplate"
     }
   }
 }

@@ -38,7 +38,10 @@
       "type": "json"
     },
     "voucherTemplate": {
-      "type": "json"
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::voucher-template.voucher-template",
+      "inversedBy": "vouchers"
     },
     "email": {
       "type": "string"

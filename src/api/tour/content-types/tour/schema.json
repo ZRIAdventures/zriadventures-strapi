@@ -172,6 +172,11 @@
       "type": "component",
       "component": "tour.accomodation-options",
       "repeatable": true
+    },
+    "voucher_templates": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::voucher-template.voucher-template"
     }
   }
 }

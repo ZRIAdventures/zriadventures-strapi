@@ -1114,6 +1114,10 @@ export interface ApiTourTour extends Struct.CollectionTypeSchema {
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    voucher_templates: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::voucher-template.voucher-template'
+    >;
   };
 }
 
@@ -1201,6 +1205,7 @@ export interface ApiVoucherTemplateVoucherTemplate
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     voucherId: Schema.Attribute.UID;
+    vouchers: Schema.Attribute.Relation<'oneToMany', 'api::voucher.voucher'>;
   };
 }
 
@@ -1243,7 +1248,10 @@ export interface ApiVoucherVoucher extends Struct.CollectionTypeSchema {
     voucherStatus: Schema.Attribute.Enumeration<
       ['AVAILABLE', 'CLAIMED', 'EXPIRED', 'UNPAID']
     >;
-    voucherTemplate: Schema.Attribute.JSON;
+    voucherTemplate: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::voucher-template.voucher-template'
+    >;
   };
 }
 
