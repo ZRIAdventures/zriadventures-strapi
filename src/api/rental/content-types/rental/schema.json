@@ -43,6 +43,12 @@
     "totalReviews": {
       "type": "integer",
       "default": 0
+    },
+    "minPriceUSD": {
+      "type": "decimal"
+    },
+    "minPriceLKR": {
+      "type": "decimal"
     }
   }
 }
