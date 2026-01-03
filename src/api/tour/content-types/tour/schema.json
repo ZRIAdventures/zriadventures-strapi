@@ -177,6 +177,12 @@
       "type": "relation",
       "relation": "oneToMany",
       "target": "api::voucher-template.voucher-template"
+    },
+    "minPriceUSD": {
+      "type": "decimal"
+    },
+    "minPriceLKR": {
+      "type": "decimal"
     }
   }
 }

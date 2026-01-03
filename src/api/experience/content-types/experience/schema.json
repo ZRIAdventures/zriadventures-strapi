@@ -95,6 +95,15 @@
         "Hard",
         "Challenging"
       ]
+    },
+    "minPriceUSD": {
+      "type": "decimal"
+    },
+    "minPriceLKR": {
+      "type": "decimal"
+    },
+    "minDurationHours": {
+      "type": "decimal"
     }
   }
 }
