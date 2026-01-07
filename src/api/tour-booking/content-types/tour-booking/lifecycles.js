@@ -18,9 +18,25 @@ module.exports = {
 
     try {
       // Fetch the departure to check capacity
-      const departure = await strapi.documents("api::group-tour-departure.group-tour-departure").findOne({
-        documentId: data.departure
-      });
+      // Handle both numeric id and documentId string
+      let departure;
+      if (typeof data.departure === "number") {
+        // Legacy numeric id - use findFirst with filters
+        const results = await strapi
+          .documents("api::group-tour-departure.group-tour-departure")
+          .findMany({
+            filters: { id: data.departure },
+            limit: 1,
+          });
+        departure = results?.[0];
+      } else {
+        // documentId string
+        departure = await strapi
+          .documents("api::group-tour-departure.group-tour-departure")
+          .findOne({
+            documentId: data.departure,
+          });
+      }
 
       if (!departure) {
         throw new Error(`Group tour departure ${data.departure} not found`);
@@ -33,16 +49,21 @@ module.exports = {
 
       if (requestedPax > availableSeats) {
         throw new Error(
-          `Insufficient capacity. Requested: ${requestedPax} seats, Available: ${availableSeats} seats`
+          `Insufficient capacity. Requested: ${requestedPax} seats, Available: ${availableSeats} seats`,
         );
       }
 
       // Check if departure is open
       if (departure.groupStatus !== "open") {
-        throw new Error(`This departure is ${departure.groupStatus} and no longer accepting bookings`);
+        throw new Error(
+          `This departure is ${departure.groupStatus} and no longer accepting bookings`,
+        );
       }
     } catch (error) {
-      console.error("[tour-booking beforeCreate] Validation error:", error.message);
+      console.error(
+        "[tour-booking beforeCreate] Validation error:",
+        error.message,
+      );
       throw error;
     }
   },
@@ -57,12 +78,43 @@ module.exports = {
 
     try {
       // Fetch the current departure
-      const departure = await strapi.documents("api::group-tour-departure.group-tour-departure").findOne({
-        documentId: result.departure.documentId
-      });
+      // Handle both populated relation (object with documentId) and raw ID
+      let departureIdentifier;
+      if (typeof result.departure === "object" && result.departure.documentId) {
+        departureIdentifier = result.departure.documentId;
+      } else if (typeof result.departure === "number") {
+        departureIdentifier = result.departure;
+      } else if (typeof result.departure === "string") {
+        departureIdentifier = result.departure;
+      } else {
+        console.error(
+          "[tour-booking afterCreate] Invalid departure reference:",
+          result.departure,
+        );
+        return;
+      }
+
+      let departure;
+      if (typeof departureIdentifier === "number") {
+        const results = await strapi
+          .documents("api::group-tour-departure.group-tour-departure")
+          .findMany({
+            filters: { id: departureIdentifier },
+            limit: 1,
+          });
+        departure = results?.[0];
+      } else {
+        departure = await strapi
+          .documents("api::group-tour-departure.group-tour-departure")
+          .findOne({
+            documentId: departureIdentifier,
+          });
+      }
 
       if (!departure) {
-        console.error(`[tour-booking afterCreate] Departure ${result.departure.documentId} not found`);
+        console.error(
+          `[tour-booking afterCreate] Departure ${departureIdentifier} not found`,
+        );
         return;
       }
 
@@ -76,21 +128,26 @@ module.exports = {
         newStatus = "full";
       }
 
-      // Update the departure
-      await strapi.documents("api::group-tour-departure.group-tour-departure").update({
-        documentId: result.departure.documentId,
-        data: {
-          bookedCount: newBooked,
-          groupStatus: newStatus,
-        },
-      });
+      // Update the departure using its documentId
+      await strapi
+        .documents("api::group-tour-departure.group-tour-departure")
+        .update({
+          documentId: departure.documentId,
+          data: {
+            bookedCount: newBooked,
+            groupStatus: newStatus,
+          },
+        });
 
       console.log(
-        `[tour-booking afterCreate] Updated departure ${result.departure.documentId}: ` +
-        `bookedCount: ${currentBooked} → ${newBooked}, status: ${departure.groupStatus} → ${newStatus}`
+        `[tour-booking afterCreate] Updated departure ${departure.documentId}: ` +
+          `bookedCount: ${currentBooked} → ${newBooked}, status: ${departure.groupStatus} → ${newStatus}`,
       );
     } catch (error) {
-      console.error("[tour-booking afterCreate] Error updating departure:", error.message);
+      console.error(
+        "[tour-booking afterCreate] Error updating departure:",
+        error.message,
+      );
       // Don't throw - booking is already created, log the error for manual intervention
     }
   },
@@ -105,12 +162,43 @@ module.exports = {
 
     try {
       // Fetch the current departure
-      const departure = await strapi.documents("api::group-tour-departure.group-tour-departure").findOne({
-        documentId: result.departure.documentId
-      });
+      // Handle both populated relation (object with documentId) and raw ID
+      let departureIdentifier;
+      if (typeof result.departure === "object" && result.departure.documentId) {
+        departureIdentifier = result.departure.documentId;
+      } else if (typeof result.departure === "number") {
+        departureIdentifier = result.departure;
+      } else if (typeof result.departure === "string") {
+        departureIdentifier = result.departure;
+      } else {
+        console.error(
+          "[tour-booking afterDelete] Invalid departure reference:",
+          result.departure,
+        );
+        return;
+      }
+
+      let departure;
+      if (typeof departureIdentifier === "number") {
+        const results = await strapi
+          .documents("api::group-tour-departure.group-tour-departure")
+          .findMany({
+            filters: { id: departureIdentifier },
+            limit: 1,
+          });
+        departure = results?.[0];
+      } else {
+        departure = await strapi
+          .documents("api::group-tour-departure.group-tour-departure")
+          .findOne({
+            documentId: departureIdentifier,
+          });
+      }
 
       if (!departure) {
-        console.error(`[tour-booking afterDelete] Departure ${result.departure.documentId} not found`);
+        console.error(
+          `[tour-booking afterDelete] Departure ${departureIdentifier} not found`,
+        );
         return;
       }
 
@@ -120,25 +208,33 @@ module.exports = {
 
       // Determine new status
       let newStatus = departure.groupStatus;
-      if (newBooked < departure.maxCapacity && departure.groupStatus === "full") {
+      if (
+        newBooked < departure.maxCapacity &&
+        departure.groupStatus === "full"
+      ) {
         newStatus = "open";
       }
 
-      // Update the departure
-      await strapi.documents("api::group-tour-departure.group-tour-departure").update({
-        documentId: result.departure.documentId,
-        data: {
-          bookedCount: newBooked,
-          groupStatus: newStatus,
-        },
-      });
+      // Update the departure using its documentId
+      await strapi
+        .documents("api::group-tour-departure.group-tour-departure")
+        .update({
+          documentId: departure.documentId,
+          data: {
+            bookedCount: newBooked,
+            groupStatus: newStatus,
+          },
+        });
 
       console.log(
         `[tour-booking afterDelete] Updated departure ${result.departure.documentId}: ` +
-        `bookedCount: ${currentBooked} → ${newBooked}, status: ${departure.groupStatus} → ${newStatus}`
+          `bookedCount: ${currentBooked} → ${newBooked}, status: ${departure.groupStatus} → ${newStatus}`,
       );
     } catch (error) {
-      console.error("[tour-booking afterDelete] Error updating departure:", error.message);
+      console.error(
+        "[tour-booking afterDelete] Error updating departure:",
+        error.message,
+      );
       // Don't throw - booking is already deleted, log the error for manual intervention
     }
   },
