@@ -21,14 +21,17 @@ module.exports = {
       // Handle both numeric id and documentId string
       let departure;
       if (typeof data.departure === "number") {
-        // Legacy numeric id - use findFirst with filters
-        const results = await strapi
-          .documents("api::group-tour-departure.group-tour-departure")
-          .findMany({
-            filters: { id: data.departure },
-            limit: 1,
-          });
-        departure = results?.[0];
+        // Legacy numeric id - convert to documentId by fetching via entity service
+        const entity = await strapi.db.query("api::group-tour-departure.group-tour-departure").findOne({
+          where: { id: data.departure },
+        });
+        if (entity && entity.documentId) {
+          departure = await strapi
+            .documents("api::group-tour-departure.group-tour-departure")
+            .findOne({
+              documentId: entity.documentId,
+            });
+        }
       } else {
         // documentId string
         departure = await strapi
@@ -96,13 +99,17 @@ module.exports = {
 
       let departure;
       if (typeof departureIdentifier === "number") {
-        const results = await strapi
-          .documents("api::group-tour-departure.group-tour-departure")
-          .findMany({
-            filters: { id: departureIdentifier },
-            limit: 1,
-          });
-        departure = results?.[0];
+        // Convert numeric id to documentId via entity service
+        const entity = await strapi.db.query("api::group-tour-departure.group-tour-departure").findOne({
+          where: { id: departureIdentifier },
+        });
+        if (entity && entity.documentId) {
+          departure = await strapi
+            .documents("api::group-tour-departure.group-tour-departure")
+            .findOne({
+              documentId: entity.documentId,
+            });
+        }
       } else {
         departure = await strapi
           .documents("api::group-tour-departure.group-tour-departure")
@@ -180,13 +187,17 @@ module.exports = {
 
       let departure;
       if (typeof departureIdentifier === "number") {
-        const results = await strapi
-          .documents("api::group-tour-departure.group-tour-departure")
-          .findMany({
-            filters: { id: departureIdentifier },
-            limit: 1,
-          });
-        departure = results?.[0];
+        // Convert numeric id to documentId via entity service
+        const entity = await strapi.db.query("api::group-tour-departure.group-tour-departure").findOne({
+          where: { id: departureIdentifier },
+        });
+        if (entity && entity.documentId) {
+          departure = await strapi
+            .documents("api::group-tour-departure.group-tour-departure")
+            .findOne({
+              documentId: entity.documentId,
+            });
+        }
       } else {
         departure = await strapi
           .documents("api::group-tour-departure.group-tour-departure")
