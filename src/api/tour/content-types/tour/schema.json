@@ -20,11 +20,6 @@
       "type": "uid",
       "targetField": "title"
     },
-    "status": {
-      "type": "enumeration",
-      "default": "draft",
-      "enum": ["draft", "published"]
-    },
     "isFeatured": {
       "type": "boolean",
       "default": false
