@@ -23,10 +23,7 @@
     "status": {
       "type": "enumeration",
       "default": "draft",
-      "enum": [
-        "draft",
-        "published"
-      ]
+      "enum": ["draft", "published"]
     },
     "isFeatured": {
       "type": "boolean",
@@ -35,11 +32,7 @@
     "tourType": {
       "type": "enumeration",
       "required": true,
-      "enum": [
-        "private",
-        "group",
-        "both"
-      ]
+      "enum": ["private", "group", "both"]
     },
     "shortDescription": {
       "type": "text",
@@ -52,16 +45,12 @@
       "type": "media",
       "multiple": false,
       "required": true,
-      "allowedTypes": [
-        "images"
-      ]
+      "allowedTypes": ["images"]
     },
     "galleryImages": {
       "type": "media",
       "multiple": true,
-      "allowedTypes": [
-        "images"
-      ]
+      "allowedTypes": ["images"]
     },
     "promoVideoUrl": {
       "type": "string"
@@ -102,20 +91,12 @@
     "intensity": {
       "type": "enumeration",
       "default": "moderate",
-      "enum": [
-        "easy",
-        "moderate",
-        "challenging"
-      ]
+      "enum": ["easy", "moderate", "challenging"]
     },
     "guidedType": {
       "type": "enumeration",
       "default": "fully guided",
-      "enum": [
-        "fully guided",
-        "partially guided",
-        "self-guided"
-      ]
+      "enum": ["fully guided", "partially guided", "self-guided"]
     },
     "languages": {
       "type": "json"
@@ -123,11 +104,7 @@
     "travelStyle": {
       "type": "enumeration",
       "default": "customizable",
-      "enum": [
-        "private",
-        "group",
-        "customizable"
-      ]
+      "enum": ["private", "group", "customizable"]
     },
     "itineraryDays": {
       "type": "component",
@@ -183,6 +160,10 @@
     },
     "minPriceLKR": {
       "type": "decimal"
+    },
+    "durationBucket": {
+      "type": "enumeration",
+      "enum": ["under_one_day", "three_days", "five_days", "one_week_plus"]
     }
   }
 }

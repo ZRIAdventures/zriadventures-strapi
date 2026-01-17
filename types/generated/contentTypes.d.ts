@@ -439,6 +439,8 @@ export interface ApiEventEvent extends Struct.CollectionTypeSchema {
     localizations: Schema.Attribute.Relation<'oneToMany', 'api::event.event'> &
       Schema.Attribute.Private;
     location: Schema.Attribute.Relation<'oneToOne', 'api::location.location'>;
+    minPriceLKR: Schema.Attribute.Decimal;
+    minPriceUSD: Schema.Attribute.Decimal;
     name: Schema.Attribute.String;
     publishedAt: Schema.Attribute.DateTime;
     rating: Schema.Attribute.Decimal &
@@ -519,6 +521,9 @@ export interface ApiExperienceExperience extends Struct.CollectionTypeSchema {
     difficulty: Schema.Attribute.Enumeration<
       ['Easy', 'Moderate', 'Hard', 'Challenging']
     >;
+    durationBucket: Schema.Attribute.Enumeration<
+      ['under_one_hour', 'two_to_four_hours', 'four_to_ten_hours', 'overnight']
+    >;
     experience_categories: Schema.Attribute.Relation<
       'oneToMany',
       'api::experience-category.experience-category'
@@ -538,6 +543,9 @@ export interface ApiExperienceExperience extends Struct.CollectionTypeSchema {
     > &
       Schema.Attribute.Private;
     location: Schema.Attribute.Relation<'oneToOne', 'api::location.location'>;
+    minDurationHours: Schema.Attribute.Decimal;
+    minPriceLKR: Schema.Attribute.Decimal;
+    minPriceUSD: Schema.Attribute.Decimal;
     name: Schema.Attribute.String;
     offer: Schema.Attribute.Integer;
     options: Schema.Attribute.Component<'experience.options', true>;
@@ -731,6 +739,8 @@ export interface ApiMerchandiseMerchandise extends Struct.CollectionTypeSchema {
       'api::merchandise-category.merchandise-category'
     >;
     merchandiseId: Schema.Attribute.UID;
+    minPriceLKR: Schema.Attribute.Decimal;
+    minPriceUSD: Schema.Attribute.Decimal;
     name: Schema.Attribute.String;
     offer: Schema.Attribute.Integer;
     onlyRental: Schema.Attribute.Boolean &
@@ -835,6 +845,8 @@ export interface ApiRentalRental extends Struct.CollectionTypeSchema {
       'oneToOne',
       'api::merchandise.merchandise'
     >;
+    minPriceLKR: Schema.Attribute.Decimal;
+    minPriceUSD: Schema.Attribute.Decimal;
     name: Schema.Attribute.String;
     options: Schema.Attribute.Component<'rentals.rent-rates', true>;
     publishedAt: Schema.Attribute.DateTime;
@@ -1039,6 +1051,9 @@ export interface ApiTourTour extends Struct.CollectionTypeSchema {
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     customizationNotes: Schema.Attribute.Text;
+    durationBucket: Schema.Attribute.Enumeration<
+      ['under_one_day', 'three_days', 'five_days', 'one_week_plus']
+    >;
     durationDays: Schema.Attribute.Integer &
       Schema.Attribute.Required &
       Schema.Attribute.SetMinMax<
@@ -1080,6 +1095,8 @@ export interface ApiTourTour extends Struct.CollectionTypeSchema {
     localizations: Schema.Attribute.Relation<'oneToMany', 'api::tour.tour'> &
       Schema.Attribute.Private;
     longDescription: Schema.Attribute.RichText;
+    minPriceLKR: Schema.Attribute.Decimal;
+    minPriceUSD: Schema.Attribute.Decimal;
     notIncluded: Schema.Attribute.JSON;
     paxRates: Schema.Attribute.Component<'experience.pax-rates', true>;
     places: Schema.Attribute.Component<'tour.place-to-see', true>;
