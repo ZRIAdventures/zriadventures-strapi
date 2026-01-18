@@ -60,14 +60,6 @@
       "required": true,
       "min": 0
     },
-    "startLocation": {
-      "type": "string",
-      "required": true
-    },
-    "endLocation": {
-      "type": "string",
-      "required": true
-    },
     "theme": {
       "type": "enumeration",
       "enum": [
@@ -156,9 +148,15 @@
     "minPriceLKR": {
       "type": "decimal"
     },
-    "durationBucket": {
-      "type": "enumeration",
-      "enum": ["under_one_day", "three_days", "five_days", "one_week_plus"]
+    "startLocation": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::location.location"
+    },
+    "endLocation": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::location.location"
     }
   }
 }

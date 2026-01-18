@@ -543,7 +543,6 @@ export interface ApiExperienceExperience extends Struct.CollectionTypeSchema {
     > &
       Schema.Attribute.Private;
     location: Schema.Attribute.Relation<'oneToOne', 'api::location.location'>;
-    minDurationHours: Schema.Attribute.Decimal;
     minPriceLKR: Schema.Attribute.Decimal;
     minPriceUSD: Schema.Attribute.Decimal;
     name: Schema.Attribute.String;
@@ -1051,9 +1050,6 @@ export interface ApiTourTour extends Struct.CollectionTypeSchema {
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     customizationNotes: Schema.Attribute.Text;
-    durationBucket: Schema.Attribute.Enumeration<
-      ['under_one_day', 'three_days', 'five_days', 'one_week_plus']
-    >;
     durationDays: Schema.Attribute.Integer &
       Schema.Attribute.Required &
       Schema.Attribute.SetMinMax<
@@ -1070,7 +1066,10 @@ export interface ApiTourTour extends Struct.CollectionTypeSchema {
         },
         number
       >;
-    endLocation: Schema.Attribute.String & Schema.Attribute.Required;
+    endLocation: Schema.Attribute.Relation<
+      'oneToOne',
+      'api::location.location'
+    >;
     extras: Schema.Attribute.Component<'experience.extras', true>;
     featuredImage: Schema.Attribute.Media<'images'> & Schema.Attribute.Required;
     galleryImages: Schema.Attribute.Media<'images', true>;
@@ -1104,9 +1103,10 @@ export interface ApiTourTour extends Struct.CollectionTypeSchema {
     publishedAt: Schema.Attribute.DateTime;
     shortDescription: Schema.Attribute.Text & Schema.Attribute.Required;
     slug: Schema.Attribute.UID<'title'>;
-    startLocation: Schema.Attribute.String & Schema.Attribute.Required;
-    status: Schema.Attribute.Enumeration<['draft', 'published']> &
-      Schema.Attribute.DefaultTo<'draft'>;
+    startLocation: Schema.Attribute.Relation<
+      'oneToOne',
+      'api::location.location'
+    >;
     theme: Schema.Attribute.Enumeration<
       [
         'culture',

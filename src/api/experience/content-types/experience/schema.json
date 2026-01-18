@@ -80,19 +80,26 @@
       "type": "media",
       "multiple": true,
       "required": false,
-      "allowedTypes": ["images", "files", "videos", "audios"]
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
     },
     "difficulty": {
       "type": "enumeration",
-      "enum": ["Easy", "Moderate", "Hard", "Challenging"]
+      "enum": [
+        "Easy",
+        "Moderate",
+        "Hard",
+        "Challenging"
+      ]
     },
     "minPriceUSD": {
       "type": "decimal"
     },
     "minPriceLKR": {
-      "type": "decimal"
-    },
-    "minDurationHours": {
       "type": "decimal"
     },
     "durationBucket": {
