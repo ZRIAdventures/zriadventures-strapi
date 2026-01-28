@@ -805,7 +805,7 @@ export interface ApiOrderOrder extends Struct.CollectionTypeSchema {
       ['PENDING', 'SUCCESS', 'FAILED']
     >;
     paymentVendor: Schema.Attribute.Enumeration<
-      ['PAYHERE', 'BANK', 'KOKO', 'MINTPAY', 'GENIE']
+      ['PAYHERE', 'BANK', 'KOKO', 'MINTPAY']
     >;
     postalCode: Schema.Attribute.String;
     publishedAt: Schema.Attribute.DateTime;
@@ -1146,7 +1146,7 @@ export interface ApiV2OrderV2Order extends Struct.CollectionTypeSchema {
     singularName: 'v2-order';
   };
   options: {
-    draftAndPublish: true;
+    draftAndPublish: false;
   };
   attributes: {
     addrLine1: Schema.Attribute.String;
@@ -1175,14 +1175,28 @@ export interface ApiV2OrderV2Order extends Struct.CollectionTypeSchema {
       ['PENDING', 'SUCCESS', 'FAILED']
     >;
     paymentVendor: Schema.Attribute.Enumeration<
-      ['PAYHERE', 'BANK', 'KOKO', 'MINTPAY', 'GENIE']
+      ['PAYHERE', 'BANK', 'KOKO', 'MINTPAY']
+    >;
+    paymentAmountType: Schema.Attribute.Enumeration<
+      ['ADVANCE', 'FULL', 'INSTALLMENT']
     >;
     postalCode: Schema.Attribute.String;
+    paymentProviderRef: Schema.Attribute.String;
+    paidAt: Schema.Attribute.DateTime;
+    webhookProcessedAt: Schema.Attribute.DateTime;
+    checkoutProcessedAt: Schema.Attribute.DateTime;
+    bookingsCreatedAt: Schema.Attribute.DateTime;
+    vouchersCreatedAt: Schema.Attribute.DateTime;
+    receiptSentAt: Schema.Attribute.DateTime;
+    bookingEmailsSentAt: Schema.Attribute.DateTime;
+    voucherEmailsSentAt: Schema.Attribute.DateTime;
+    verifiedBy: Schema.Attribute.String;
+    verifiedAt: Schema.Attribute.DateTime;
+    verificationNotes: Schema.Attribute.Text;
     publishedAt: Schema.Attribute.DateTime;
-    receiptSent: Schema.Attribute.Boolean &
-      Schema.Attribute.Required &
-      Schema.Attribute.DefaultTo<false>;
     totalAmount: Schema.Attribute.Float;
+    cartSnapshot: Schema.Attribute.JSON;
+    bankCurrency: Schema.Attribute.String;
     tour_booking: Schema.Attribute.Relation<
       'oneToOne',
       'api::tour-booking.tour-booking'

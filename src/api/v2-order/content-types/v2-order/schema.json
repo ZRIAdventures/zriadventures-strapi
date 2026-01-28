@@ -7,7 +7,7 @@
     "displayName": "Orders"
   },
   "options": {
-    "draftAndPublish": true
+    "draftAndPublish": false
   },
   "pluginOptions": {},
   "attributes": {
@@ -43,8 +43,15 @@
         "PAYHERE",
         "BANK",
         "KOKO",
-        "MINTPAY",
-        "GENIE"
+        "MINTPAY"
+      ]
+    },
+    "paymentAmountType": {
+      "type": "enumeration",
+      "enum": [
+        "ADVANCE",
+        "FULL",
+        "INSTALLMENT"
       ]
     },
     "totalAmount": {
@@ -76,13 +83,50 @@
     "postalCode": {
       "type": "string"
     },
-    "receiptSent": {
-      "type": "boolean",
-      "required": true,
-      "default": false
+    "paymentProviderRef": {
+      "type": "string"
+    },
+    "paidAt": {
+      "type": "datetime"
+    },
+    "webhookProcessedAt": {
+      "type": "datetime"
+    },
+    "checkoutProcessedAt": {
+      "type": "datetime"
+    },
+    "bookingsCreatedAt": {
+      "type": "datetime"
+    },
+    "vouchersCreatedAt": {
+      "type": "datetime"
+    },
+    "receiptSentAt": {
+      "type": "datetime"
+    },
+    "bookingEmailsSentAt": {
+      "type": "datetime"
+    },
+    "voucherEmailsSentAt": {
+      "type": "datetime"
+    },
+    "verifiedBy": {
+      "type": "string"
+    },
+    "verifiedAt": {
+      "type": "datetime"
+    },
+    "verificationNotes": {
+      "type": "text"
     },
     "itemsData": {
       "type": "json"
+    },
+    "cartSnapshot": {
+      "type": "json"
+    },
+    "bankCurrency": {
+      "type": "string"
     },
     "tour_booking": {
       "type": "relation",

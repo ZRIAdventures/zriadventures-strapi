@@ -77,27 +77,34 @@ module.exports = {
           `for order ${result.orderId}`,
       );
 
-      const url = `https://zriadventures.com/api/strapi/update-order?previousPaymentStatus=${previousPaymentStatus}`;
+      const baseUrl = process.env.APP_BASE_URL;
+      const internalSecret = process.env.INTERNAL_API_SECRET;
+
+      if (!baseUrl) {
+        console.warn(
+          "[v2-order afterUpdate] APP_BASE_URL is not set; skipping external sync."
+        );
+        return;
+      }
+
+      const url = `${baseUrl}/api/strapi/update-order?previousPaymentStatus=${previousPaymentStatus}`;
 
       try {
-        const response = await axios.post(url, result);
+        const response = await fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            ...(internalSecret
+              ? { Authorization: `Bearer ${internalSecret}` }
+              : {}),
+          },
+          body: JSON.stringify(result),
+        });
+        const responseBody = await response.json().catch(() => ({}));
         console.log(
           `[v2-order afterUpdate] External API Response:`,
-          response.data,
+          responseBody,
         );
-
-        // Update receiptSent flag if payment succeeded
-        if (result.paymentStatus === "SUCCESS" && !result.receiptSent) {
-          await strapi.documents("api::v2-order.v2-order").update({
-            documentId: result.documentId,
-            data: {
-              receiptSent: true,
-            },
-          });
-          console.log(
-            `[v2-order afterUpdate] Receipt sent flag updated for order ${result.orderId}`,
-          );
-        }
       } catch (error) {
         console.error(
           `[v2-order afterUpdate] Error calling external API:`,
