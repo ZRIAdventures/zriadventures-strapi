@@ -104,11 +104,38 @@
     "receiptSentAt": {
       "type": "datetime"
     },
+    "receiptEmailStatus": {
+      "type": "enumeration",
+      "enum": [
+        "PENDING",
+        "SENT",
+        "FAILED"
+      ],
+      "default": "PENDING"
+    },
     "bookingEmailsSentAt": {
       "type": "datetime"
     },
+    "bookingEmailStatus": {
+      "type": "enumeration",
+      "enum": [
+        "PENDING",
+        "SENT",
+        "FAILED"
+      ],
+      "default": "PENDING"
+    },
     "voucherEmailsSentAt": {
       "type": "datetime"
+    },
+    "voucherEmailStatus": {
+      "type": "enumeration",
+      "enum": [
+        "PENDING",
+        "SENT",
+        "FAILED"
+      ],
+      "default": "PENDING"
     },
     "verifiedBy": {
       "type": "string"
