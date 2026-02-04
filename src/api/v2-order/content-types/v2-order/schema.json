@@ -86,23 +86,8 @@
     "paymentProviderRef": {
       "type": "string"
     },
-    "paidAt": {
-      "type": "datetime"
-    },
-    "webhookProcessedAt": {
-      "type": "datetime"
-    },
-    "checkoutProcessedAt": {
-      "type": "datetime"
-    },
-    "bookingsCreatedAt": {
-      "type": "datetime"
-    },
-    "vouchersCreatedAt": {
-      "type": "datetime"
-    },
-    "receiptSentAt": {
-      "type": "datetime"
+    "itemsData": {
+      "type": "json"
     },
     "receiptEmailStatus": {
       "type": "enumeration",
@@ -112,45 +97,6 @@
         "FAILED"
       ],
       "default": "PENDING"
-    },
-    "bookingEmailsSentAt": {
-      "type": "datetime"
-    },
-    "bookingEmailStatus": {
-      "type": "enumeration",
-      "enum": [
-        "PENDING",
-        "SENT",
-        "FAILED"
-      ],
-      "default": "PENDING"
-    },
-    "voucherEmailsSentAt": {
-      "type": "datetime"
-    },
-    "voucherEmailStatus": {
-      "type": "enumeration",
-      "enum": [
-        "PENDING",
-        "SENT",
-        "FAILED"
-      ],
-      "default": "PENDING"
-    },
-    "verifiedBy": {
-      "type": "string"
-    },
-    "verifiedAt": {
-      "type": "datetime"
-    },
-    "verificationNotes": {
-      "type": "text"
-    },
-    "itemsData": {
-      "type": "json"
-    },
-    "cartSnapshot": {
-      "type": "json"
     },
     "bankCurrency": {
       "type": "string"
