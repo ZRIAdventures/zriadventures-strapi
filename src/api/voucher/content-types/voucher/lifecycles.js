@@ -12,6 +12,9 @@
  * - Coupon code uniqueness and immutability
  */
 
+const { errors } = require("@strapi/utils");
+const { ValidationError } = errors;
+
 module.exports = {
   async beforeCreate(event) {
     const { data } = event.params;
@@ -20,13 +23,13 @@ module.exports = {
 
     // Validate type is present
     if (!data.type) {
-      throw new Error("Voucher type is required");
+      throw new ValidationError("Voucher type is required");
     }
 
     // Validate CASH vouchers
     if (data.type === "CASH") {
       if (!data.cash || !data.cash.amount || !data.cash.currency) {
-        throw new Error("CASH vouchers must have cash amount and currency");
+        throw new ValidationError("CASH vouchers must have cash amount and currency");
       }
 
       // Validate fixed amounts
@@ -39,7 +42,7 @@ module.exports = {
         data.cash.currency === "LKR" &&
         !validLKRAmounts.includes(data.cash.amount)
       ) {
-        throw new Error(
+        throw new ValidationError(
           `Invalid LKR amount: ${data.cash.amount}. Must be one of: ${validLKRAmounts.join(", ")}`,
         );
       }
@@ -48,7 +51,7 @@ module.exports = {
         data.cash.currency === "USD" &&
         !validUSDAmounts.includes(data.cash.amount)
       ) {
-        throw new Error(
+        throw new ValidationError(
           `Invalid USD amount: ${data.cash.amount}. Must be one of: ${validUSDAmounts.join(", ")}`,
         );
       }
@@ -62,7 +65,7 @@ module.exports = {
     // Validate EXPERIENCE vouchers
     if (data.type === "EXPERIENCE") {
       if (!data.experience) {
-        throw new Error("EXPERIENCE vouchers must have experience data");
+        throw new ValidationError("EXPERIENCE vouchers must have experience data");
       }
 
       // Ensure cash field is not populated for EXPERIENCE vouchers
@@ -78,7 +81,7 @@ module.exports = {
         data.percentageAmount <= 0 ||
         data.percentageAmount > 100
       ) {
-        throw new Error(
+        throw new ValidationError(
           "PERCENTAGE vouchers must have a valid percentage amount (1-100)",
         );
       }
@@ -91,7 +94,7 @@ module.exports = {
       });
 
       if (existing) {
-        throw new Error(`Coupon code ${data.couponCode} already exists`);
+        throw new ValidationError(`Coupon code ${data.couponCode} already exists`);
       }
     }
 
@@ -158,7 +161,7 @@ module.exports = {
       });
 
       if (existing && existing.couponCode !== data.couponCode) {
-        throw new Error(
+        throw new ValidationError(
           "Cannot modify coupon code after creation. Coupon codes are immutable.",
         );
       }
@@ -175,14 +178,14 @@ module.exports = {
         data.cash.currency === "LKR" &&
         !validLKRAmounts.includes(data.cash.amount)
       ) {
-        throw new Error(`Invalid LKR amount: ${data.cash.amount}`);
+        throw new ValidationError(`Invalid LKR amount: ${data.cash.amount}`);
       }
 
       if (
         data.cash.currency === "USD" &&
         !validUSDAmounts.includes(data.cash.amount)
       ) {
-        throw new Error(`Invalid USD amount: ${data.cash.amount}`);
+        throw new ValidationError(`Invalid USD amount: ${data.cash.amount}`);
       }
     }
 
