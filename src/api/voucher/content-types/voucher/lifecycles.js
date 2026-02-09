@@ -29,7 +29,9 @@ module.exports = {
     // Validate CASH vouchers
     if (data.type === "CASH") {
       if (!data.cash || !data.cash.amount || !data.cash.currency) {
-        throw new ValidationError("CASH vouchers must have cash amount and currency");
+        throw new ValidationError(
+          "CASH vouchers must have cash amount and currency",
+        );
       }
 
       // Validate fixed amounts
@@ -65,7 +67,9 @@ module.exports = {
     // Validate EXPERIENCE vouchers
     if (data.type === "EXPERIENCE") {
       if (!data.experience) {
-        throw new ValidationError("EXPERIENCE vouchers must have experience data");
+        throw new ValidationError(
+          "EXPERIENCE vouchers must have experience data",
+        );
       }
 
       // Ensure cash field is not populated for EXPERIENCE vouchers
@@ -88,13 +92,25 @@ module.exports = {
     }
 
     // Validate couponCode uniqueness
+    // In Strapi v5 with draftAndPublish, draft and published versions share the same documentId
+    // but are separate rows. We need to allow the same couponCode within the same document.
     if (data.couponCode) {
+      const whereClause = { couponCode: data.couponCode };
+
+      // If this is a publish operation (has documentId), exclude entries with same documentId
+      // This allows draft + published versions to coexist with the same couponCode
+      if (data.documentId) {
+        whereClause.documentId = { $ne: data.documentId };
+      }
+
       const existing = await strapi.db.query("api::voucher.voucher").findOne({
-        where: { couponCode: data.couponCode },
+        where: whereClause,
       });
 
       if (existing) {
-        throw new ValidationError(`Coupon code ${data.couponCode} already exists`);
+        throw new ValidationError(
+          `Coupon code ${data.couponCode} already exists`,
+        );
       }
     }
 
@@ -156,8 +172,20 @@ module.exports = {
 
     // Prevent changing coupon code after creation (immutability)
     if (data.couponCode) {
+      // In Strapi v5, use documentId or id to properly identify the entry
+      const id = where?.documentId || where?.id;
+
+      if (!id) {
+        console.warn(
+          "[voucher beforeUpdate] No id or documentId found in where clause",
+        );
+        return;
+      }
+
       const existing = await strapi.db.query("api::voucher.voucher").findOne({
-        where: where,
+        where: {
+          $or: [{ documentId: id }, { id: id }],
+        },
       });
 
       if (existing && existing.couponCode !== data.couponCode) {

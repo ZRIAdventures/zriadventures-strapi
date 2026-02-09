@@ -4,7 +4,50 @@ This directory contains maintenance and migration scripts for the ZRI Adventures
 
 ## 📜 Available Scripts
 
-### 1. `backfill-computed-fields.js`
+### 1. `test-voucher-lifecycle.js`
+
+**Purpose:** Test voucher draft/publish flow and couponCode uniqueness validation.
+
+**When to use:**
+
+- After fixing voucher lifecycle bugs
+- To verify draft/publish behavior in Strapi v5
+- To test couponCode uniqueness across draft and published versions
+
+**Usage:**
+
+```bash
+npm run strapi -- scripts/test-voucher-lifecycle.js
+```
+
+**What it tests:**
+
+- ✅ Create draft voucher with couponCode
+- ✅ Publish draft voucher (should succeed without "coupon code exists" error)
+- ✅ Verify draft and published versions coexist with same documentId
+- ✅ Reject duplicate couponCode from different documents
+- ✅ Test couponCode immutability (prevent changes after creation)
+- ✅ Create and publish new voucher with different couponCode
+
+**Expected output:**
+
+```
+🧪 Starting Voucher Lifecycle Tests
+
+✅ PASS: Create draft voucher
+✅ PASS: Publish draft voucher
+✅ PASS: Draft and published coexist
+✅ PASS: Duplicate couponCode validation
+✅ PASS: Create and publish new voucher
+✅ PASS: CouponCode immutability
+
+📊 TEST SUMMARY
+Total Tests: 6
+Passed: 6 ✅
+Failed: 0 ❌
+```
+
+### 2. `backfill-computed-fields.js`
 
 **Purpose:** Populate `minPrice*` and `durationBucket` fields for all existing records.
 
