@@ -197,6 +197,73 @@ console.log("Expected: 85");
 console.log("✅ Pass:", discounted === 85);
 console.log("\n---\n");
 
+// Test 11: Tour — paxRates present but rates sub-component missing (ID-only, publish flow)
+console.log("Test 11: Tour — paxRates ID-only (no nested rates, simulates publish flow)");
+const tour4 = {
+  // Simulates data.paxRates when Strapi sends only component IDs without
+  // re-inlining the nested rates sub-component (common in publish operations).
+  paxRates: [
+    { id: 1, minPax: 1, maxPax: 4 },
+    { id: 2, minPax: 5, maxPax: 8 },
+  ],
+  offer: 0,
+};
+const result11 = pricing.calculateMinPrices_Tour(tour4);
+console.log("Input:", JSON.stringify(tour4, null, 2));
+console.log("Output:", result11);
+console.log("Expected: { minPriceUSD: null, minPriceLKR: null } (no rates data)");
+console.log(
+  "✅ Pass:",
+  result11.minPriceUSD === null && result11.minPriceLKR === null,
+);
+console.log("\n---\n");
+
+// Test 12: Tour — paxRates partially populated (some have rates, some are ID-only)
+console.log("Test 12: Tour — paxRates partially populated (mixed)");
+const tour5 = {
+  paxRates: [
+    { rates: { USD: 300, LKR: 90000 } },
+    { rates: { USD: null, LKR: null } }, // invalid
+    { rates: { USD: 250, LKR: 75000 } },
+  ],
+  offer: 0,
+};
+const result12 = pricing.calculateMinPrices_Tour(tour5);
+console.log("Input:", JSON.stringify(tour5, null, 2));
+console.log("Output:", result12);
+console.log("Expected: { minPriceUSD: 250, minPriceLKR: 75000 }");
+console.log(
+  "✅ Pass:",
+  result12.minPriceUSD === 250 && result12.minPriceLKR === 75000,
+);
+console.log("\n---\n");
+
+// Test 13: Tour — empty paxRates array
+console.log("Test 13: Tour — empty paxRates array");
+const tour6 = { paxRates: [], offer: 0 };
+const result13 = pricing.calculateMinPrices_Tour(tour6);
+console.log("Input:", JSON.stringify(tour6, null, 2));
+console.log("Output:", result13);
+console.log("Expected: { minPriceUSD: null, minPriceLKR: null }");
+console.log(
+  "✅ Pass:",
+  result13.minPriceUSD === null && result13.minPriceLKR === null,
+);
+console.log("\n---\n");
+
+// Test 14: Tour — null paxRates
+console.log("Test 14: Tour — null paxRates");
+const tour7 = { paxRates: null, offer: 0 };
+const result14 = pricing.calculateMinPrices_Tour(tour7);
+console.log("Input:", JSON.stringify(tour7, null, 2));
+console.log("Output:", result14);
+console.log("Expected: { minPriceUSD: null, minPriceLKR: null }");
+console.log(
+  "✅ Pass:",
+  result14.minPriceUSD === null && result14.minPriceLKR === null,
+);
+console.log("\n---\n");
+
 console.log("🎉 All tests completed!");
 console.log("\nTo run in Strapi context:");
 console.log("1. SSH/connect to Strapi server");
