@@ -19,8 +19,52 @@ module.exports = {
     }
 
     try {
+      // In Strapi v5 publish flow, component data can arrive as ID-only stubs.
+      // Fetch the draft document with fully populated options to compute prices.
+      const hasRatesData = data.options.some(
+        (option) =>
+          option.paxRates &&
+          Array.isArray(option.paxRates) &&
+          option.paxRates.some(
+            (paxRate) =>
+              paxRate.rates &&
+              (paxRate.rates.USD != null || paxRate.rates.LKR != null),
+          ),
+      );
+
+      let options = data.options;
+
+      if (!hasRatesData) {
+        const documentId = event.params.documentId;
+        if (documentId && strapi?.documents) {
+          const draft = await strapi
+            .documents("api::experience.experience")
+            .findOne({
+              documentId,
+              status: "draft",
+              populate: {
+                options: {
+                  populate: {
+                    paxRates: {
+                      populate: ["rates"],
+                    },
+                  },
+                },
+              },
+            });
+
+          if (draft?.options?.length > 0) {
+            options = draft.options;
+          } else {
+            return;
+          }
+        } else {
+          return;
+        }
+      }
+
       const { minPriceUSD, minPriceLKR } = calculateMinPrices_Experience({
-        options: data.options,
+        options,
         offer: data.offer,
       });
 
@@ -66,15 +110,22 @@ module.exports = {
         return;
       }
 
-      // Check if data.options has full populated data or just relation IDs
-      const hasFullOptionsData = data.options?.[0]?.paxRates !== undefined;
+      // During admin updates, options may come as ID-only component entries.
+      const hasFullOptionsData =
+        data.options &&
+        Array.isArray(data.options) &&
+        data.options.length > 0 &&
+        data.options[0].paxRates !== undefined &&
+        Array.isArray(data.options[0].paxRates) &&
+        data.options[0].paxRates[0]?.rates !== undefined;
       const options = hasFullOptionsData ? data.options : existing.options;
       const offer = data.offer !== undefined ? data.offer : existing.offer;
 
       // Only recalculate if pricing fields changed OR minPrices are missing
       const pricingFieldsChanged =
         hasFullOptionsData || data.offer !== undefined;
-      const minPricesMissing = !existing.minPriceUSD || !existing.minPriceLKR;
+      const minPricesMissing =
+        existing.minPriceUSD == null || existing.minPriceLKR == null;
 
       if (pricingFieldsChanged || minPricesMissing) {
         const { minPriceUSD, minPriceLKR } = calculateMinPrices_Experience({

@@ -19,8 +19,45 @@ module.exports = {
     }
 
     try {
+      // In Strapi v5 publish flow, options.option may come as ID-only entries.
+      // Fetch draft document with populated cost objects when needed.
+      const hasCostData = data.options.option.some(
+        (opt) => opt.cost && (opt.cost.USD != null || opt.cost.LKR != null),
+      );
+
+      let options = data.options;
+
+      if (!hasCostData) {
+        const documentId = event.params.documentId;
+        if (documentId && strapi?.documents) {
+          const draft = await strapi
+            .documents("api::merchandise.merchandise")
+            .findOne({
+              documentId,
+              status: "draft",
+              populate: {
+                options: {
+                  populate: {
+                    option: {
+                      populate: ["cost"],
+                    },
+                  },
+                },
+              },
+            });
+
+          if (draft?.options?.option?.length > 0) {
+            options = draft.options;
+          } else {
+            return;
+          }
+        } else {
+          return;
+        }
+      }
+
       const { minPriceUSD, minPriceLKR } = calculateMinPrices_Merchandise({
-        options: data.options,
+        options,
         offer: data.offer,
       });
 
@@ -71,17 +108,25 @@ module.exports = {
         return;
       }
 
-      // Use updated values if provided, otherwise use existing
-      const options = data.options?.option || existing.options?.option;
+      const hasFullOptionsData =
+        data.options &&
+        data.options.option &&
+        Array.isArray(data.options.option) &&
+        data.options.option.length > 0 &&
+        data.options.option[0].cost !== undefined;
+
+      const options = hasFullOptionsData ? data.options : existing.options;
       const offer = data.offer !== undefined ? data.offer : existing.offer;
 
       // Only recalculate if pricing fields changed OR minPrices are missing
-      const pricingFieldsChanged = data.options || data.offer !== undefined;
-      const minPricesMissing = !existing.minPriceUSD || !existing.minPriceLKR;
+      const pricingFieldsChanged =
+        hasFullOptionsData || data.offer !== undefined;
+      const minPricesMissing =
+        existing.minPriceUSD == null || existing.minPriceLKR == null;
 
       if (pricingFieldsChanged || minPricesMissing) {
         const { minPriceUSD, minPriceLKR } = calculateMinPrices_Merchandise({
-          options: { option: options },
+          options,
           offer,
         });
 
