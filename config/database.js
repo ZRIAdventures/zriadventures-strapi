@@ -8,6 +8,13 @@ module.exports = ({ env }) => ({
       user: env("PGUSER", "strapi"),
       password: env("PGPASSWORD", "password"),
       ssl: env.bool("DATABASE_SSL", false),
+      // Isolate Strapi environments (prod/dev) when sharing one Postgres instance.
+      schema: env("DATABASE_SCHEMA", "public"),
+    },
+    settings: {
+      // Keep explicit to avoid accidental overrides from external config.
+      runMigrations: true,
+      forceMigration: true,
     },
     pool: { min: 0 },
   },

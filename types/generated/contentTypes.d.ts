@@ -1006,7 +1006,7 @@ export interface ApiTourBookingTourBooking extends Struct.CollectionTypeSchema {
       'api::tour-booking.tour-booking'
     > &
       Schema.Attribute.Private;
-    orderRef: Schema.Attribute.Relation<'oneToOne', 'api::v2-order.v2-order'>;
+    orderRef: Schema.Attribute.Relation<'manyToOne', 'api::v2-order.v2-order'>;
     paymentStatus: Schema.Attribute.Enumeration<
       ['unpaid', 'paid', 'refunded']
     > &
@@ -1152,6 +1152,7 @@ export interface ApiV2OrderV2Order extends Struct.CollectionTypeSchema {
     addrLine1: Schema.Attribute.String;
     addrLine2: Schema.Attribute.String;
     amountPaid: Schema.Attribute.Float;
+    bankCurrency: Schema.Attribute.String;
     city: Schema.Attribute.String;
     contactNumber: Schema.Attribute.String;
     createdAt: Schema.Attribute.DateTime;
@@ -1171,34 +1172,25 @@ export interface ApiV2OrderV2Order extends Struct.CollectionTypeSchema {
       Schema.Attribute.Private;
     nationality: Schema.Attribute.String;
     orderId: Schema.Attribute.UID & Schema.Attribute.Required;
+    paymentAmountType: Schema.Attribute.Enumeration<
+      ['ADVANCE', 'FULL', 'INSTALLMENT']
+    >;
+    paymentProviderRef: Schema.Attribute.String;
     paymentStatus: Schema.Attribute.Enumeration<
       ['PENDING', 'SUCCESS', 'FAILED']
     >;
     paymentVendor: Schema.Attribute.Enumeration<
       ['PAYHERE', 'BANK', 'KOKO', 'MINTPAY']
     >;
-    paymentAmountType: Schema.Attribute.Enumeration<
-      ['ADVANCE', 'FULL', 'INSTALLMENT']
-    >;
     postalCode: Schema.Attribute.String;
-    paymentProviderRef: Schema.Attribute.String;
-    paidAt: Schema.Attribute.DateTime;
-    webhookProcessedAt: Schema.Attribute.DateTime;
-    checkoutProcessedAt: Schema.Attribute.DateTime;
-    bookingsCreatedAt: Schema.Attribute.DateTime;
-    vouchersCreatedAt: Schema.Attribute.DateTime;
-    receiptSentAt: Schema.Attribute.DateTime;
-    bookingEmailsSentAt: Schema.Attribute.DateTime;
-    voucherEmailsSentAt: Schema.Attribute.DateTime;
-    verifiedBy: Schema.Attribute.String;
-    verifiedAt: Schema.Attribute.DateTime;
-    verificationNotes: Schema.Attribute.Text;
     publishedAt: Schema.Attribute.DateTime;
+    receiptEmailStatus: Schema.Attribute.Enumeration<
+      ['PENDING', 'SENT', 'FAILED']
+    > &
+      Schema.Attribute.DefaultTo<'PENDING'>;
     totalAmount: Schema.Attribute.Float;
-    cartSnapshot: Schema.Attribute.JSON;
-    bankCurrency: Schema.Attribute.String;
     tour_booking: Schema.Attribute.Relation<
-      'oneToOne',
+      'oneToMany',
       'api::tour-booking.tour-booking'
     >;
     updatedAt: Schema.Attribute.DateTime;
