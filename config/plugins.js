@@ -19,6 +19,12 @@ module.exports = ({ env }) => ({
         api_key: env("CLOUDINARY_KEY"),
         api_secret: env("CLOUDINARY_SECRET"),
       },
+      actionOptions: {
+        upload: {
+          transformation: { fetch_format: "auto", quality: "auto" },
+        },
+        delete: {},
+      },
     },
   },
 
