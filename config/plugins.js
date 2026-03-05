@@ -28,23 +28,33 @@ module.exports = ({ env }) => ({
     },
   },
 
-  // /**
-  //  * Redis Plugin (Strapi v5)
-  //  * @see https://github.com/strapi-community/plugin-redis
-  //  */
-  // redis: {
-  //   settings: {
-  //     debug: env.bool("REDIS_DEBUG", false),
-  //     enableRedlock: false, // enable only if you really need distributed locks
-  //   },
-  //   connections: {
-  //     default: {
-  //       connection: {
-  //         url: env("REDIS_URL"),
-  //       },
-  //     },
-  //   },
-  // },
+  /**
+   * Redis Plugin (Strapi v5)
+   * Uses Railway-provided REDIS_URL by default.
+   */
+  redis: {
+    config: {
+      settings: {
+        debug: env.bool("REDIS_DEBUG", false),
+        enableRedlock: env.bool("REDIS_ENABLE_REDLOCK", false),
+      },
+      connections: {
+        default: {
+          connection: env("REDIS_URL")
+            ? {
+                url: env("REDIS_URL"),
+              }
+            : {
+                host: env("REDISHOST", "127.0.0.1"),
+                port: env.int("REDISPORT", 6379),
+                username: env("REDISUSER", undefined),
+                password: env("REDIS_PASSWORD", env("REDISPASSWORD", undefined)),
+                db: env.int("REDIS_DB", 0),
+              },
+        },
+      },
+    },
+  },
 
   // /**
   //  * REST Cache Plugin (Redis Provider)

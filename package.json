@@ -17,6 +17,7 @@
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-router-dom": "^6.0.0",
+    "@strapi-community/plugin-redis": "^2.0.0",
     "strapi-v5-plugin-populate-deep": "^4.0.6",
     "styled-components": "^6.3.9",
     "yarn": "^1.22.22"
