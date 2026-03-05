@@ -102,14 +102,8 @@
     "minPriceLKR": {
       "type": "decimal"
     },
-    "durationBucket": {
-      "type": "enumeration",
-      "enum": [
-        "under_one_hour",
-        "two_to_four_hours",
-        "four_to_ten_hours",
-        "overnight"
-      ]
+    "minDuration": {
+      "type": "decimal"
     }
   }
 }

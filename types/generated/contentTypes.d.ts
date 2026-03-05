@@ -521,9 +521,6 @@ export interface ApiExperienceExperience extends Struct.CollectionTypeSchema {
     difficulty: Schema.Attribute.Enumeration<
       ['Easy', 'Moderate', 'Hard', 'Challenging']
     >;
-    durationBucket: Schema.Attribute.Enumeration<
-      ['under_one_hour', 'two_to_four_hours', 'four_to_ten_hours', 'overnight']
-    >;
     experience_categories: Schema.Attribute.Relation<
       'oneToMany',
       'api::experience-category.experience-category'

@@ -109,6 +109,16 @@
     "notIncluded": {
       "type": "json"
     },
+    "terms_and_condition": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::terms-and-condition.terms-and-condition"
+    },
+    "faqs": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::faq.faq"
+    },
     "isCustomizable": {
       "type": "boolean",
       "default": true

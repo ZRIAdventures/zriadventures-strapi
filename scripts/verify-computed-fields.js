@@ -20,8 +20,7 @@ async function verifyFields() {
           "name",
           "minPriceUSD",
           "minPriceLKR",
-          "minDurationHours",
-          "durationBucket",
+          "minDuration",
         ],
       });
 
@@ -30,8 +29,7 @@ async function verifyFields() {
       console.log(`  - ${exp.name || "Unnamed"} (ID: ${exp.id})`);
       console.log(`    minPriceUSD: ${exp.minPriceUSD}`);
       console.log(`    minPriceLKR: ${exp.minPriceLKR}`);
-      console.log(`    minDurationHours: ${exp.minDurationHours}`);
-      console.log(`    durationBucket: ${exp.durationBucket}`);
+      console.log(`    minDuration: ${exp.minDuration}`);
       console.log("");
     });
 

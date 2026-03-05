@@ -49,7 +49,7 @@ Failed: 0 ❌
 
 ### 2. `backfill-computed-fields.js`
 
-**Purpose:** Populate `minPrice*` and `durationBucket` fields for all existing records.
+**Purpose:** Populate computed fields (including `minPrice*` and duration fields) for all existing records.
 
 **When to use:**
 
@@ -96,6 +96,25 @@ node scripts/backfill-computed-fields.js
 ```
 
 **Runtime:** ~30-60 seconds for 300 records
+
+---
+
+### 2.1 `backfill-experience-duration.js`
+
+**Purpose:** Populate `minDuration` for all experiences.
+
+**Usage:**
+
+```bash
+node scripts/backfill-experience-duration.js
+node scripts/backfill-experience-duration.js --dry-run
+```
+
+**Output summary:**
+
+```
+[backfill-experience-duration] scanned=320 updated=210 skipped=109 failed=1
+```
 
 ---
 

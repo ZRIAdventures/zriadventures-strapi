@@ -4,6 +4,9 @@
  */
 
 const { calculateMinPrices_Experience } = require("../../../../utils/pricing");
+const {
+  computeExperienceDurationFields,
+} = require("../../../../utils/experience-duration");
 
 module.exports = {
   async beforeCreate(event) {
@@ -67,9 +70,11 @@ module.exports = {
         options,
         offer: data.offer,
       });
+      const { minDuration } = computeExperienceDurationFields(options);
 
       data.minPriceUSD = minPriceUSD;
       data.minPriceLKR = minPriceLKR;
+      data.minDuration = minDuration;
     } catch (error) {
       console.error(
         "[experience beforeCreate] Error calculating min prices:",
@@ -86,14 +91,15 @@ module.exports = {
         return;
       }
 
-      const id = where?.id || where?.documentId;
-      if (!id) {
+      const id = where?.id;
+      const documentId = where?.documentId || event.params.documentId;
+      if (!id && !documentId) {
         return;
       }
 
-      const existing = await strapi.db
-        .query("api::experience.experience")
-        .findOne({
+      let existing = null;
+      if (id) {
+        existing = await strapi.db.query("api::experience.experience").findOne({
           where: { id },
           populate: {
             options: {
@@ -105,6 +111,23 @@ module.exports = {
             },
           },
         });
+      } else if (documentId && strapi?.documents) {
+        existing = await strapi
+          .documents("api::experience.experience")
+          .findOne({
+            documentId,
+            status: "draft",
+            populate: {
+              options: {
+                populate: {
+                  paxRates: {
+                    populate: ["rates"],
+                  },
+                },
+              },
+            },
+          });
+      }
 
       if (!existing) {
         return;
@@ -118,7 +141,30 @@ module.exports = {
         data.options[0].paxRates !== undefined &&
         Array.isArray(data.options[0].paxRates) &&
         data.options[0].paxRates[0]?.rates !== undefined;
-      const options = hasFullOptionsData ? data.options : existing.options;
+
+      let options = hasFullOptionsData ? data.options : existing.options;
+      if (!hasFullOptionsData && data.options && documentId && strapi?.documents) {
+        const draft = await strapi
+          .documents("api::experience.experience")
+          .findOne({
+            documentId,
+            status: "draft",
+            populate: {
+              options: {
+                populate: {
+                  paxRates: {
+                    populate: ["rates"],
+                  },
+                },
+              },
+            },
+          });
+
+        if (draft?.options?.length) {
+          options = draft.options;
+        }
+      }
+
       const offer = data.offer !== undefined ? data.offer : existing.offer;
 
       // Only recalculate if pricing fields changed OR minPrices are missing
@@ -132,9 +178,11 @@ module.exports = {
           options,
           offer,
         });
+        const { minDuration } = computeExperienceDurationFields(options);
 
         data.minPriceUSD = minPriceUSD;
         data.minPriceLKR = minPriceLKR;
+        data.minDuration = minDuration;
       }
     } catch (error) {
       console.error(
