@@ -1,4 +1,12 @@
-module.exports = ({ env }) => ({
+module.exports = ({ env }) => {
+  const redisUrl = env("REDIS_URL");
+  const redisHost = env("REDISHOST");
+  const redisPort = env.int("REDISPORT", 0);
+  const redisEnabled =
+    env.bool("REDIS_ENABLED", true) &&
+    (Boolean(redisUrl) || (Boolean(redisHost) && redisPort > 0));
+
+  return {
   /**
    * Users & Permissions
    */
@@ -32,29 +40,36 @@ module.exports = ({ env }) => ({
    * Redis Plugin (Strapi v5)
    * Uses Railway-provided REDIS_URL by default.
    */
-  redis: {
-    config: {
-      settings: {
-        debug: env.bool("REDIS_DEBUG", false),
-        enableRedlock: env.bool("REDIS_ENABLE_REDLOCK", false),
-      },
-      connections: {
-        default: {
-          connection: env("REDIS_URL")
-            ? {
-                url: env("REDIS_URL"),
-              }
-            : {
-                host: env("REDISHOST", "127.0.0.1"),
-                port: env.int("REDISPORT", 6379),
-                username: env("REDISUSER", undefined),
-                password: env("REDIS_PASSWORD", env("REDISPASSWORD", undefined)),
-                db: env.int("REDIS_DB", 0),
+  ...(redisEnabled
+    ? {
+        redis: {
+          config: {
+            settings: {
+              debug: env.bool("REDIS_DEBUG", false),
+              enableRedlock: env.bool("REDIS_ENABLE_REDLOCK", false),
+            },
+            connections: {
+              default: {
+                connection: redisUrl
+                  ? {
+                      url: redisUrl,
+                    }
+                  : {
+                      host: redisHost,
+                      port: redisPort,
+                      username: env("REDISUSER", undefined),
+                      password: env(
+                        "REDIS_PASSWORD",
+                        env("REDISPASSWORD", undefined),
+                      ),
+                      db: env.int("REDIS_DB", 0),
+                    },
               },
+            },
+          },
         },
-      },
-    },
-  },
+      }
+    : {}),
 
   // /**
   //  * REST Cache Plugin (Redis Provider)
@@ -149,4 +164,5 @@ module.exports = ({ env }) => ({
   //     },
   //   },
   // },
-});
+  };
+};
