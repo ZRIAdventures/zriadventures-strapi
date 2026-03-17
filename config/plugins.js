@@ -51,9 +51,7 @@ module.exports = ({ env }) => {
             connections: {
               default: {
                 connection: redisUrl
-                  ? {
-                      url: redisUrl,
-                    }
+                  ? redisUrl
                   : {
                       host: redisHost,
                       port: redisPort,
