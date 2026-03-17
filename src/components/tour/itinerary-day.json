@@ -20,7 +20,12 @@
       "required": true
     },
     "activities": {
-      "type": "json"
+      "type": "json",
+      "pluginOptions": {
+        "i18n": {
+          "localized": false
+        }
+      }
     },
     "meals": {
       "type": "enumeration",

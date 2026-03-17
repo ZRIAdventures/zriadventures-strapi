@@ -1,10 +1,29 @@
 module.exports = ({ env }) => {
   const redisUrl = env("REDIS_URL");
-  const redisHost = env("REDISHOST");
-  const redisPort = env.int("REDISPORT", 0);
-  const redisEnabled =
-    env.bool("REDIS_ENABLED", true) &&
-    (Boolean(redisUrl) || (Boolean(redisHost) && redisPort > 0));
+  const redisEnabled = env.bool("REDIS_ENABLED", true) && Boolean(redisUrl);
+
+  let redisConnection = {};
+  if (redisUrl) {
+    try {
+      const parsed = new URL(redisUrl);
+      redisConnection = {
+        host: parsed.hostname,
+        port: parseInt(parsed.port, 10) || 6379,
+        username: parsed.username || undefined,
+        password: parsed.password || undefined,
+        db: env.int("REDIS_DB", 0),
+      };
+    } catch (_) {
+      // fallback to individual vars if URL is malformed
+      redisConnection = {
+        host: env("REDISHOST"),
+        port: env.int("REDISPORT", 6379),
+        username: env("REDISUSER", undefined),
+        password: env("REDIS_PASSWORD", env("REDISPASSWORD", undefined)),
+        db: env.int("REDIS_DB", 0),
+      };
+    }
+  }
 
   return {
   /**
@@ -50,18 +69,7 @@ module.exports = ({ env }) => {
             },
             connections: {
               default: {
-                connection: redisUrl
-                  ? redisUrl
-                  : {
-                      host: redisHost,
-                      port: redisPort,
-                      username: env("REDISUSER", undefined),
-                      password: env(
-                        "REDIS_PASSWORD",
-                        env("REDISPASSWORD", undefined),
-                      ),
-                      db: env.int("REDIS_DB", 0),
-                    },
+                connection: redisConnection,
               },
             },
           },
