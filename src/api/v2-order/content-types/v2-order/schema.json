@@ -101,6 +101,9 @@
     "bankCurrency": {
       "type": "string"
     },
+    "appliedCoupon": {
+      "type": "json"
+    },
     "tour_booking": {
       "type": "relation",
       "relation": "oneToMany",
