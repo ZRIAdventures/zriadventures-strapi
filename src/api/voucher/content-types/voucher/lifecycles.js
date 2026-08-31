@@ -32,8 +32,6 @@ module.exports = {
     // only for an existing document) and backfill the real amount/currency
     // from the existing row before validating.
     let cashWasBackfilled = false;
-    let backfilledCash = null;
-    let backfilledExperience = null;
 
     const cashIsIncomplete =
       data.type === "CASH" &&
@@ -61,25 +59,15 @@ module.exports = {
             currency: existing.cash.currency,
           };
           cashWasBackfilled = true;
-          backfilledCash = { ...data.cash };
         }
         if (data.type === "EXPERIENCE" && !data.experience && existing.experience) {
           data.experience = existing.experience;
-          backfilledExperience = existing.experience;
         }
         if (data.percentageAmount === undefined && existing.percentageAmount != null) {
           data.percentageAmount = existing.percentageAmount;
         }
       }
     }
-
-    // afterCreate needs to know what the correct cash/experience data was
-    // supposed to be, to verify it actually got persisted (see afterCreate).
-    event.state = {
-      ...event.state,
-      backfilledCash,
-      backfilledExperience,
-    };
 
     // === VALIDATION ===
 
@@ -314,45 +302,19 @@ module.exports = {
   },
 
   async afterCreate(event) {
-    const { result, state } = event;
+    const { result } = event;
 
     console.log(
       `[voucher afterCreate] New voucher created: ${result.couponCode} ` +
         `(Type: ${result.type}, Expiry: ${result.expiryDate}, Status: ${result.voucherStatus})`,
     );
 
-    // Safety net for the publish-sync path (see beforeCreate above): the
-    // document service's own component-cloning has been observed to
-    // silently drop the `cash` component when re-creating the published row
-    // for an existing document, even though beforeCreate's backfilled
-    // data.cash was correct and passed validation - components aren't
-    // handled by the same insert path relations are (they're handled one
-    // layer up, which the beforeCreate mutation runs too late to affect).
-    // Verify what actually landed in the DB and repair it via
-    // entityService, which does correctly write components, if it's still
-    // missing.
-    if (state?.backfilledCash) {
-      try {
-        const persisted = await strapi.db
-          .query("api::voucher.voucher")
-          .findOne({ where: { id: result.id }, populate: ["cash"] });
-
-        if (!persisted?.cash || persisted.cash.amount == null) {
-          console.warn(
-            `[voucher afterCreate] cash component missing after publish-sync ` +
-              `for voucher ${result.id} (${result.couponCode}); repairing.`,
-          );
-          await strapi.entityService.update("api::voucher.voucher", result.id, {
-            data: { cash: state.backfilledCash },
-          });
-        }
-      } catch (error) {
-        console.error(
-          `[voucher afterCreate] Failed to repair cash for voucher ${result.id}`,
-          error,
-        );
-      }
-    }
+    // NOTE: a same-transaction repair attempt was tried here (re-writing
+    // the cash component via entityService.update if it came back missing
+    // after a publish-sync) and reverted - it risked lock contention with
+    // the create()'s own transaction on the same row and caused requests to
+    // hang. Any repair for the "cash goes missing on republish" bug must run
+    // fully outside this lifecycle's call stack, not inline here.
 
     // The recipient email is sent from the Next.js app (ensureVouchers() in
     // lib/server/orders/process-success.ts) right after it creates the
