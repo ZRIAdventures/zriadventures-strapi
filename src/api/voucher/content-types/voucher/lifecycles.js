@@ -19,6 +19,50 @@ module.exports = {
   async beforeCreate(event) {
     const { data } = event.params;
 
+    // Strapi v5's draft/publish sync can invoke beforeCreate not only for a
+    // genuinely new entry, but also when it re-creates the published row for
+    // an EXISTING document (e.g. any partial update - flipping voucherStatus,
+    // setting confirmationSentAt - routed through the published-entity path).
+    // In that sync path `data` only reliably carries the fields the caller
+    // actually sent; component fields like `cash` are not carried over, even
+    // when explicitly included in the update payload. Validating that
+    // incomplete `data` as if it were a fresh create wrongly rejects updates
+    // that never touched type/cash/experience at all. Detect this via
+    // data.documentId (present only for an existing document) and backfill
+    // the missing required fields from the existing row before validating.
+    let cashWasBackfilled = false;
+
+    if (
+      data.documentId &&
+      (!data.type ||
+        (data.type === "CASH" && !data.cash) ||
+        (data.type === "EXPERIENCE" && !data.experience))
+    ) {
+      const existing = await strapi.db.query("api::voucher.voucher").findOne({
+        where: { documentId: data.documentId },
+        populate: ["cash"],
+      });
+
+      if (existing) {
+        if (!data.type) {
+          data.type = existing.type;
+        }
+        if (data.type === "CASH" && !data.cash && existing.cash) {
+          data.cash = {
+            amount: existing.cash.amount,
+            currency: existing.cash.currency,
+          };
+          cashWasBackfilled = true;
+        }
+        if (data.type === "EXPERIENCE" && !data.experience && existing.experience) {
+          data.experience = existing.experience;
+        }
+        if (data.percentageAmount === undefined && existing.percentageAmount != null) {
+          data.percentageAmount = existing.percentageAmount;
+        }
+      }
+    }
+
     // === VALIDATION ===
 
     // Validate type is present
@@ -34,13 +78,17 @@ module.exports = {
         );
       }
 
-      // Validate fixed amounts
+      // Validate fixed amounts. Skip this for cash data we backfilled from
+      // an existing record above: it's already-persisted historical data
+      // being carried forward untouched (e.g. a record predating the
+      // current fixed-tier list), not new input a caller is submitting.
       const validLKRAmounts = [
         10000, 15000, 20000, 25000, 30000, 35000, 40000, 45000,
       ];
       const validUSDAmounts = [10, 15, 20, 25, 30, 35, 40, 45];
 
       if (
+        !cashWasBackfilled &&
         data.cash.currency === "LKR" &&
         !validLKRAmounts.includes(data.cash.amount)
       ) {
@@ -50,6 +98,7 @@ module.exports = {
       }
 
       if (
+        !cashWasBackfilled &&
         data.cash.currency === "USD" &&
         !validUSDAmounts.includes(data.cash.amount)
       ) {
@@ -115,6 +164,20 @@ module.exports = {
     }
 
     // === AUTO-SET DEFAULTS ===
+
+    // Reject a manually-supplied expiry date that's already in the past.
+    // Only applies to a genuinely new voucher (no documentId) - the
+    // documentId-bearing publish-sync path above can legitimately carry an
+    // expiryDate from long ago (e.g. re-syncing an old voucher whose
+    // validity window has since elapsed), which must not be rejected here.
+    if (!data.documentId && data.expiryDate) {
+      const today = new Date().toISOString().split("T")[0];
+      if (data.expiryDate < today) {
+        throw new ValidationError(
+          `Expiry date ${data.expiryDate} is in the past. Vouchers must expire in the future.`,
+        );
+      }
+    }
 
     // Auto-set expiry date based on voucher type if not manually set
     if (!data.expiryDate) {
@@ -240,9 +303,9 @@ module.exports = {
         `(Type: ${result.type}, Expiry: ${result.expiryDate}, Status: ${result.voucherStatus})`,
     );
 
-    // Future enhancement: Send voucher email to recipient
-    // if (result.email && result.voucherStatus === "AVAILABLE") {
-    //   // Trigger email notification
-    // }
+    // The recipient email is sent from the Next.js app (ensureVouchers() in
+    // lib/server/orders/process-success.ts) right after it creates the
+    // voucher via the REST API, not from this hook. Sending it here too
+    // would double-send, since the create call above IS that request.
   },
 };

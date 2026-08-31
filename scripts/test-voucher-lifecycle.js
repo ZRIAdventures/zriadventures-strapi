@@ -214,6 +214,100 @@ async function testVoucherLifecycle() {
       }
     }
 
+    // Test 7: Partial update (e.g. just flipping voucherStatus, the same
+    // shape the Next.js app sends via strapiPut) against an ALREADY
+    // published voucher must not require re-submitting cash/experience data.
+    // This reproduces a bug found in production: any REST PUT that doesn't
+    // pin ?status=draft re-runs create-style validation against the caller's
+    // partial payload alone, wrongly rejecting updates that never touched
+    // type/cash/experience at all - which silently broke voucherStatus
+    // flips (AVAILABLE/CLAIMED) and confirmationSentAt tracking for every
+    // CASH/EXPERIENCE voucher in production.
+    console.log(
+      "\n🔁 Test 7: Partial update to an already-published CASH voucher's status",
+    );
+    let partialUpdateDraft;
+    try {
+      partialUpdateDraft = await strapi
+        .documents("api::voucher.voucher")
+        .create({
+          data: {
+            couponCode: "test-partial-update-def",
+            type: "CASH",
+            cash: { amount: 20000, currency: "LKR" },
+            voucherStatus: "UNPAID",
+            reusable: false,
+          },
+        });
+      await strapi.documents("api::voucher.voucher").publish({
+        documentId: partialUpdateDraft.documentId,
+      });
+
+      const updated = await strapi.documents("api::voucher.voucher").update({
+        documentId: partialUpdateDraft.documentId,
+        status: "published",
+        data: { voucherStatus: "AVAILABLE" },
+      });
+
+      if (updated.voucherStatus === "AVAILABLE") {
+        logTest(
+          "Partial update to published CASH voucher",
+          true,
+          "voucherStatus flipped without needing to resend cash data",
+        );
+      } else {
+        logTest(
+          "Partial update to published CASH voucher",
+          false,
+          `Expected voucherStatus AVAILABLE, got ${updated.voucherStatus}`,
+        );
+      }
+    } catch (error) {
+      logTest(
+        "Partial update to published CASH voucher",
+        false,
+        `${error.message} - this is the bug the backfill fix addresses!`,
+      );
+    }
+
+    // Test 8: Creating a brand new voucher with an already-past expiryDate
+    // must be rejected (a crafted request could otherwise create a voucher
+    // that's expired the moment it's issued).
+    console.log(
+      "\n📅 Test 8: Reject a brand new voucher with a past expiryDate",
+    );
+    try {
+      await strapi.documents("api::voucher.voucher").create({
+        data: {
+          couponCode: "test-past-expiry-ghi",
+          type: "CASH",
+          cash: { amount: 10000, currency: "LKR" },
+          expiryDate: "2020-01-01",
+          voucherStatus: "AVAILABLE",
+          reusable: false,
+        },
+      });
+      logTest(
+        "Reject past expiryDate on create",
+        false,
+        "Should have thrown a validation error for a past expiryDate",
+      );
+    } catch (error) {
+      if (error.message.includes("in the past")) {
+        logTest(
+          "Reject past expiryDate on create",
+          true,
+          "Correctly rejected a past expiryDate",
+        );
+      } else {
+        logTest(
+          "Reject past expiryDate on create",
+          false,
+          `Unexpected error: ${error.message}`,
+        );
+      }
+    }
+
     // Cleanup
     console.log("\n🧹 Cleaning up test data...");
     try {
@@ -223,7 +317,12 @@ async function testVoucherLifecycle() {
         .findMany({
           where: {
             couponCode: {
-              $in: ["test-draft-xyz", "test-different-abc"],
+              $in: [
+                "test-draft-xyz",
+                "test-different-abc",
+                "test-partial-update-def",
+                "test-past-expiry-ghi",
+              ],
             },
           },
         });
