@@ -13,9 +13,8 @@ module.exports = {
 
     // If still no documentId, log warning but don't fail - allow the update to proceed
     if (!documentId) {
-      console.warn(
-        "[v2-order beforeUpdate] Could not determine documentId from where clause:",
-        JSON.stringify(where),
+      strapi.log.warn(
+        `[v2-order beforeUpdate] Could not determine documentId from where clause: ${JSON.stringify(where)}`,
       );
       // Don't throw error - just proceed with the update
       // The lifecycle will work with whatever Strapi provides
@@ -33,7 +32,7 @@ module.exports = {
         });
 
       if (!existingEntry) {
-        console.warn(
+        strapi.log.warn(
           `[v2-order beforeUpdate] Order with documentId ${documentId} not found.`,
         );
         event.state = {
@@ -47,9 +46,8 @@ module.exports = {
         previousPaymentStatus: existingEntry.paymentStatus,
       };
     } catch (error) {
-      console.error(
-        `[v2-order beforeUpdate] Error fetching existing entry:`,
-        error.message,
+      strapi.log.error(
+        `[v2-order beforeUpdate] Error fetching existing entry: ${error.message}`,
       );
       // Don't throw - allow update to continue
       event.state = {
@@ -62,7 +60,7 @@ module.exports = {
     const { result, state } = event;
 
     if (!state || !state.previousPaymentStatus) {
-      console.log(
+      strapi.log.info(
         "[v2-order afterUpdate] Skipping notification - no previous payment status available or no change.",
       );
       return;
@@ -72,7 +70,7 @@ module.exports = {
 
     // Check if paymentStatus has changed
     if (result.paymentStatus !== previousPaymentStatus) {
-      console.log(
+      strapi.log.info(
         `[v2-order afterUpdate] Payment status changed: ${previousPaymentStatus} → ${result.paymentStatus} ` +
           `for order ${result.orderId}`,
       );
@@ -81,7 +79,7 @@ module.exports = {
       const internalSecret = process.env.INTERNAL_API_SECRET;
 
       if (!baseUrl) {
-        console.warn(
+        strapi.log.warn(
           "[v2-order afterUpdate] APP_BASE_URL is not set; skipping external sync."
         );
         return;
@@ -101,14 +99,12 @@ module.exports = {
           body: JSON.stringify(result),
         });
         const responseBody = await response.json().catch(() => ({}));
-        console.log(
-          `[v2-order afterUpdate] External API Response:`,
-          responseBody,
+        strapi.log.info(
+          `[v2-order afterUpdate] External API Response: ${JSON.stringify(responseBody)}`,
         );
       } catch (error) {
-        console.error(
-          `[v2-order afterUpdate] Error calling external API:`,
-          error.message,
+        strapi.log.error(
+          `[v2-order afterUpdate] Error calling external API: ${error.message}`,
         );
         // Don't throw - order is already updated, log for manual intervention
       }
@@ -118,7 +114,7 @@ module.exports = {
   async afterCreate(event) {
     const { result } = event;
 
-    console.log(`[v2-order afterCreate] New order created: ${result.orderId}`);
+    strapi.log.info(`[v2-order afterCreate] New order created: ${result.orderId}`);
 
     // Trigger notification for new order (optional - external API handles this)
     // Could add additional logic here for order confirmation emails

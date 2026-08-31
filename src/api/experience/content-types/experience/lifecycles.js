@@ -76,9 +76,8 @@ module.exports = {
       data.minPriceLKR = minPriceLKR;
       data.minDuration = minDuration;
     } catch (error) {
-      console.error(
-        "[experience beforeCreate] Error calculating min prices:",
-        error.message,
+      strapi.log.error(
+        `[experience beforeCreate] Error calculating min prices: ${error.message}`,
       );
     }
   },
@@ -185,9 +184,8 @@ module.exports = {
         data.minDuration = minDuration;
       }
     } catch (error) {
-      console.error(
-        "[experience beforeUpdate] Error calculating min prices:",
-        error.message,
+      strapi.log.error(
+        `[experience beforeUpdate] Error calculating min prices: ${error.message}`,
       );
     }
   },

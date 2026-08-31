@@ -60,9 +60,8 @@ module.exports = {
       data.minPriceUSD = minPriceUSD;
       data.minPriceLKR = minPriceLKR;
     } catch (error) {
-      console.error(
-        "[tour beforeCreate] Error calculating min prices:",
-        error.message,
+      strapi.log.error(
+        `[tour beforeCreate] Error calculating min prices: ${error.message}`,
       );
     }
   },
@@ -72,13 +71,13 @@ module.exports = {
 
     try {
       if (!strapi?.db?.query) {
-        console.warn("[tour beforeUpdate] strapi.db.query not available");
+        strapi.log.warn("[tour beforeUpdate] strapi.db.query not available");
         return;
       }
 
       const id = where?.id || where?.documentId;
       if (!id) {
-        console.warn("[tour beforeUpdate] No id found");
+        strapi.log.warn("[tour beforeUpdate] No id found");
         return;
       }
 
@@ -92,7 +91,7 @@ module.exports = {
       });
 
       if (!existing) {
-        console.warn(`[tour beforeUpdate] Tour ${id} not found`);
+        strapi.log.warn(`[tour beforeUpdate] Tour ${id} not found`);
         return;
       }
 
@@ -131,9 +130,8 @@ module.exports = {
         data.minPriceLKR = minPriceLKR;
       }
     } catch (error) {
-      console.error(
-        "[tour beforeUpdate] Error calculating min prices:",
-        error.message,
+      strapi.log.error(
+        `[tour beforeUpdate] Error calculating min prices: ${error.message}`,
       );
     }
   },

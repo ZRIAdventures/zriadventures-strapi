@@ -46,6 +46,69 @@ function isComponentPivotRef(value) {
   return Boolean(value && typeof value === "object" && value.__pivot);
 }
 
+function hasCashData(cash) {
+  return Boolean(cash && cash.amount != null && cash.currency != null);
+}
+
+// Verifies the cash component actually landed on a just-created CASH
+// voucher row and repairs it if the draft/publish sync dropped it (see the
+// isComponentPivotRef comment above for why beforeCreate can't always catch
+// this itself - the pivot attach can still silently fail after validation
+// is skipped). Runs decoupled from the create's own transaction via
+// setImmediate: an earlier same-transaction repair attempt here caused lock
+// contention with create()'s transaction on the same row and hung requests.
+async function repairCashIfMissing(created) {
+  if (created.type !== "CASH") return;
+
+  try {
+    const fresh = await strapi.db.query("api::voucher.voucher").findOne({
+      where: { id: created.id },
+      populate: ["cash"],
+    });
+    if (!fresh || hasCashData(fresh.cash)) return;
+
+    // Recover from whichever copy of this document actually has good data -
+    // the value on the row we just created, or its draft/published
+    // counterpart (they're only out of sync because of the drop we're
+    // working around).
+    const sibling = created.documentId
+      ? await strapi.db.query("api::voucher.voucher").findOne({
+          where: { documentId: created.documentId, id: { $ne: created.id } },
+          populate: ["cash"],
+        })
+      : null;
+
+    const source = hasCashData(created.cash)
+      ? created.cash
+      : hasCashData(sibling?.cash)
+        ? sibling.cash
+        : null;
+
+    if (!source) {
+      strapi.log.error(
+        `[voucher] CASH voucher ${created.documentId} (row ${created.id}) is ` +
+          `missing cash data and no known-good copy was found to recover ` +
+          `from - manual fix required.`,
+      );
+      return;
+    }
+
+    strapi.log.warn(
+      `[voucher] Repairing cash component dropped by draft/publish sync on ` +
+        `voucher ${created.documentId} (row ${created.id}) using recovered ` +
+        `value ${JSON.stringify(source)}.`,
+    );
+    await strapi.db.query("api::voucher.voucher").update({
+      where: { id: created.id },
+      data: { cash: { amount: source.amount, currency: source.currency } },
+    });
+  } catch (error) {
+    strapi.log.error(
+      `[voucher] Failed to verify/repair cash data for voucher ${created.documentId}: ${error.message}`,
+    );
+  }
+}
+
 module.exports = {
   async beforeCreate(event) {
     const { data } = event.params;
@@ -75,6 +138,14 @@ module.exports = {
       if (data.percentageAmount == null && existing.percentageAmount != null) {
         data.percentageAmount = existing.percentageAmount;
       }
+      if (
+        data.type === "CASH" &&
+        !isComponentPivotRef(data.cash) &&
+        !hasCashData(data.cash) &&
+        hasCashData(existing.cash)
+      ) {
+        data.cash = { amount: existing.cash.amount, currency: existing.cash.currency };
+      }
       if (!data.expiryDate && existing.expiryDate) {
         // Preserve the originally-computed expiry - never recompute it just
         // because the document is being re-synced/republished.
@@ -96,7 +167,7 @@ module.exports = {
         // trust it, Strapi's own attribute validation already ran on the
         // original raw input before it reached this pivot shape.
       } else {
-        if (!data.cash || data.cash.amount == null || data.cash.currency == null) {
+        if (!hasCashData(data.cash)) {
           throw new ValidationError(
             "CASH vouchers must have cash amount and currency",
           );
@@ -214,7 +285,7 @@ module.exports = {
           break;
 
         default:
-          console.warn(
+          strapi.log.warn(
             `[voucher beforeCreate] Unknown voucher type: ${data.type}`,
           );
           // Default to 3 months
@@ -223,7 +294,7 @@ module.exports = {
       }
 
       data.expiryDate = expiryDate.toISOString().split("T")[0]; // Format as YYYY-MM-DD
-      console.log(
+      strapi.log.info(
         `[voucher beforeCreate] Auto-set expiry date for ${data.type} voucher: ${data.expiryDate}`,
       );
     }
@@ -248,7 +319,7 @@ module.exports = {
       const id = where?.documentId || where?.id;
 
       if (!id) {
-        console.warn(
+        strapi.log.warn(
           "[voucher beforeUpdate] No id or documentId found in where clause",
         );
         return;
@@ -290,7 +361,7 @@ module.exports = {
       const now = new Date();
 
       if (newExpiry < now) {
-        console.warn(
+        strapi.log.warn(
           `[voucher beforeUpdate] Attempted to set past expiry date: ${data.expiryDate}`,
         );
         // Allow it for admin correction, but log warning
@@ -301,22 +372,21 @@ module.exports = {
   async afterCreate(event) {
     const { result } = event;
 
-    console.log(
+    strapi.log.info(
       `[voucher afterCreate] New voucher created: ${result.couponCode} ` +
         `(Type: ${result.type}, Expiry: ${result.expiryDate}, Status: ${result.voucherStatus})`,
     );
 
-    // NOTE: a same-transaction repair attempt was tried here (re-writing
-    // the cash component via entityService.update if it came back missing
-    // after a publish-sync) and reverted - it risked lock contention with
-    // the create()'s own transaction on the same row and caused requests to
-    // hang. The actual fix was twofold: beforeCreate above no longer
-    // overwrites Strapi's internal component pivot reference (see
-    // isComponentPivotRef), and zriadventures-web verifies the cash data
-    // right after creation via a separate follow-up request
-    // (verifyAndRepairCashVoucher in lib/server/orders/process-success.ts),
-    // which avoids the lock contention since it isn't nested in this
-    // transaction.
+    // Deliberately not awaited/nested in this handler - see
+    // repairCashIfMissing's own comment for why it must run decoupled from
+    // this transaction. This covers every path that can (re)create a CASH
+    // voucher row (purchases, admin edits, the Publish button, draft/publish
+    // sync), not just the checkout flow that zriadventures-web's
+    // verifyAndRepairCashVoucher (lib/server/orders/process-success.ts)
+    // already guards.
+    setImmediate(() => {
+      repairCashIfMissing(result);
+    });
 
     // The recipient email is sent from the Next.js app (ensureVouchers() in
     // lib/server/orders/process-success.ts) right after it creates the

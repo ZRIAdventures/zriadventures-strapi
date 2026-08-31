@@ -52,7 +52,7 @@ function computeMinPrices(data) {
   data.minPriceUSD = usdPrices.length > 0 ? Math.min(...usdPrices) : null;
   data.minPriceLKR = lkrPrices.length > 0 ? Math.min(...lkrPrices) : null;
 
-  console.log(
+  strapi.log.debug(
     `[Rental Lifecycle] Computed prices - USD: $${data.minPriceUSD}, LKR: රු${data.minPriceLKR}`
   );
 }

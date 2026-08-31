@@ -10,8 +10,8 @@ module.exports = {
     }
 
     const id = where.id;
-    const existingEntry = await strapi.documents("api::order.order").findOne({
-      documentId: "__TODO__"
+    const existingEntry = await strapi.db.query("api::order.order").findOne({
+      where: { id },
     });
 
     if (!existingEntry) {
@@ -28,7 +28,7 @@ module.exports = {
     const { result, state } = event;
 
     if (!state || !state.previousPaymentStatus) {
-      console.error("Previous payment status not available.");
+      strapi.log.error("Previous payment status not available.");
       return;
     }
 
@@ -39,9 +39,9 @@ module.exports = {
       const url = `https://zriadventures.com/api/strapi/update-order?previousPaymentStatus=${previousPaymentStatus}`;
       try {
         const response = await axios.post(url, result);
-        console.log("External API Response:", response.data);
+        strapi.log.info(`External API Response: ${JSON.stringify(response.data)}`);
       } catch (error) {
-        console.error("Error in afterUpdate API call:", error.message);
+        strapi.log.error(`Error in afterUpdate API call: ${error.message}`);
       }
     }
   },

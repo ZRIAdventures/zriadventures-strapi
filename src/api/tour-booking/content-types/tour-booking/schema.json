@@ -8,7 +8,7 @@
     "description": "Tour booking records with price snapshots (never recalculate prices after booking)"
   },
   "options": {
-    "draftAndPublish": true
+    "draftAndPublish": false
   },
   "pluginOptions": {},
   "attributes": {

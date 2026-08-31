@@ -42,7 +42,7 @@ function computeMinPrices(data) {
     ? data.cost.LKR
     : null;
 
-  console.log(
+  strapi.log.debug(
     `[Event Lifecycle] Computed prices - USD: $${data.minPriceUSD}, LKR: රු${data.minPriceLKR}`
   );
 }

@@ -64,9 +64,8 @@ module.exports = {
       data.minPriceUSD = minPriceUSD;
       data.minPriceLKR = minPriceLKR;
     } catch (error) {
-      console.error(
-        "[merchandise beforeCreate] Error calculating min prices:",
-        error.message,
+      strapi.log.error(
+        `[merchandise beforeCreate] Error calculating min prices: ${error.message}`,
       );
     }
   },
@@ -76,7 +75,7 @@ module.exports = {
 
     try {
       if (!strapi?.db?.query) {
-        console.warn(
+        strapi.log.warn(
           "[merchandise beforeUpdate] strapi.db.query not available",
         );
         return;
@@ -84,7 +83,7 @@ module.exports = {
 
       const id = where?.id || where?.documentId;
       if (!id) {
-        console.warn("[merchandise beforeUpdate] No id found");
+        strapi.log.warn("[merchandise beforeUpdate] No id found");
         return;
       }
 
@@ -104,7 +103,7 @@ module.exports = {
         });
 
       if (!existing) {
-        console.warn(`[merchandise beforeUpdate] Merchandise ${id} not found`);
+        strapi.log.warn(`[merchandise beforeUpdate] Merchandise ${id} not found`);
         return;
       }
 
@@ -134,9 +133,8 @@ module.exports = {
         data.minPriceLKR = minPriceLKR;
       }
     } catch (error) {
-      console.error(
-        "[merchandise beforeUpdate] Error calculating min prices:",
-        error.message,
+      strapi.log.error(
+        `[merchandise beforeUpdate] Error calculating min prices: ${error.message}`,
       );
     }
   },
