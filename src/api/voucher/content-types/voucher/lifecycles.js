@@ -19,6 +19,20 @@ module.exports = {
   async beforeCreate(event) {
     const { data } = event.params;
 
+    // TEMP DIAGNOSTIC - remove once the partial-update-on-published-entity
+    // issue is confirmed fixed. Logs exactly what this beforeCreate call
+    // received, since the backfill logic below isn't preventing the "CASH
+    // vouchers must have cash amount and currency" error in production even
+    // when the caller's payload includes full cash data.
+    console.log(
+      "[voucher beforeCreate][DEBUG] event.params keys:",
+      Object.keys(event.params),
+    );
+    console.log(
+      "[voucher beforeCreate][DEBUG] data:",
+      JSON.stringify(data),
+    );
+
     // Strapi v5's draft/publish sync can invoke beforeCreate not only for a
     // genuinely new entry, but also when it re-creates the published row for
     // an EXISTING document (e.g. any partial update - flipping voucherStatus,
@@ -73,8 +87,11 @@ module.exports = {
     // Validate CASH vouchers
     if (data.type === "CASH") {
       if (!data.cash || !data.cash.amount || !data.cash.currency) {
+        // TEMP DIAGNOSTIC - see note above beforeCreate's opening console.log.
         throw new ValidationError(
-          "CASH vouchers must have cash amount and currency",
+          `CASH vouchers must have cash amount and currency ` +
+            `[DEBUG documentId=${data.documentId} cashWasBackfilled=${cashWasBackfilled} ` +
+            `dataCash=${JSON.stringify(data.cash)} dataKeys=${JSON.stringify(Object.keys(data))}]`,
         );
       }
 
