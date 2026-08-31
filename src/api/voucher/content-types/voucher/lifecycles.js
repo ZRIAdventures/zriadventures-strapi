@@ -19,39 +19,27 @@ module.exports = {
   async beforeCreate(event) {
     const { data } = event.params;
 
-    // TEMP DIAGNOSTIC - remove once the partial-update-on-published-entity
-    // issue is confirmed fixed. Logs exactly what this beforeCreate call
-    // received, since the backfill logic below isn't preventing the "CASH
-    // vouchers must have cash amount and currency" error in production even
-    // when the caller's payload includes full cash data.
-    console.log(
-      "[voucher beforeCreate][DEBUG] event.params keys:",
-      Object.keys(event.params),
-    );
-    console.log(
-      "[voucher beforeCreate][DEBUG] data:",
-      JSON.stringify(data),
-    );
-
     // Strapi v5's draft/publish sync can invoke beforeCreate not only for a
     // genuinely new entry, but also when it re-creates the published row for
     // an EXISTING document (e.g. any partial update - flipping voucherStatus,
-    // setting confirmationSentAt - routed through the published-entity path).
-    // In that sync path `data` only reliably carries the fields the caller
-    // actually sent; component fields like `cash` are not carried over, even
-    // when explicitly included in the update payload. Validating that
-    // incomplete `data` as if it were a fresh create wrongly rejects updates
-    // that never touched type/cash/experience at all. Detect this via
-    // data.documentId (present only for an existing document) and backfill
-    // the missing required fields from the existing row before validating.
+    // setting confirmationSentAt - routed through the published-entity path,
+    // or the admin panel's Publish button). In that sync path, `data.cash`
+    // is NOT the {amount, currency} value - it's Strapi's internal component
+    // pivot reference (e.g. `{id: 74, __pivot: {...}}`), regardless of what
+    // the caller's payload actually contained. Validating that pivot stub as
+    // if it were real cash data wrongly rejects updates that never touched
+    // type/cash/experience at all. Detect this via data.documentId (present
+    // only for an existing document) and backfill the real amount/currency
+    // from the existing row before validating.
     let cashWasBackfilled = false;
 
-    if (
-      data.documentId &&
-      (!data.type ||
-        (data.type === "CASH" && !data.cash) ||
-        (data.type === "EXPERIENCE" && !data.experience))
-    ) {
+    const cashIsIncomplete =
+      data.type === "CASH" &&
+      (!data.cash || data.cash.amount == null || data.cash.currency == null);
+    const experienceIsIncomplete =
+      data.type === "EXPERIENCE" && !data.experience;
+
+    if (data.documentId && (!data.type || cashIsIncomplete || experienceIsIncomplete)) {
       const existing = await strapi.db.query("api::voucher.voucher").findOne({
         where: { documentId: data.documentId },
         populate: ["cash"],
@@ -61,7 +49,11 @@ module.exports = {
         if (!data.type) {
           data.type = existing.type;
         }
-        if (data.type === "CASH" && !data.cash && existing.cash) {
+        if (
+          data.type === "CASH" &&
+          (!data.cash || data.cash.amount == null || data.cash.currency == null) &&
+          existing.cash
+        ) {
           data.cash = {
             amount: existing.cash.amount,
             currency: existing.cash.currency,
@@ -86,12 +78,9 @@ module.exports = {
 
     // Validate CASH vouchers
     if (data.type === "CASH") {
-      if (!data.cash || !data.cash.amount || !data.cash.currency) {
-        // TEMP DIAGNOSTIC - see note above beforeCreate's opening console.log.
+      if (!data.cash || data.cash.amount == null || data.cash.currency == null) {
         throw new ValidationError(
-          `CASH vouchers must have cash amount and currency ` +
-            `[DEBUG documentId=${data.documentId} cashWasBackfilled=${cashWasBackfilled} ` +
-            `dataCash=${JSON.stringify(data.cash)} dataKeys=${JSON.stringify(Object.keys(data))}]`,
+          "CASH vouchers must have cash amount and currency",
         );
       }
 
