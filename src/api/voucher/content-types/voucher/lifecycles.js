@@ -15,6 +15,37 @@
 const { errors } = require("@strapi/utils");
 const { ValidationError } = errors;
 
+// Cash vouchers accept any amount at or above the minimum, in whole
+// increments of the currency's step - not just the predefined tiers shown in
+// the UI. Keep this in sync with zriadventures-web's lib/booking/voucherCash.ts.
+const CASH_RULES = {
+  LKR: { min: 1000, increment: 1000 },
+  USD: { min: 5, increment: 5 },
+};
+
+function isValidCashAmount(currency, amount) {
+  const rule = CASH_RULES[currency];
+  if (!rule || typeof amount !== "number" || !Number.isFinite(amount)) {
+    return false;
+  }
+  return amount >= rule.min && amount % rule.increment === 0;
+}
+
+// Once Strapi's document service has processed a component field for
+// create/update, the value handed to this lifecycle is no longer the raw
+// {amount, currency} payload a caller submitted - it's an internal pivot
+// reference like `{id: 74, __pivot: {field: 'cash', component_type: '...'}}`
+// pointing at a component row Strapi already created/attached elsewhere in
+// the same request. Never re-validate or overwrite a value in that shape:
+// doing so previously caused the linked component to go missing entirely
+// (the pivot reference would get replaced by a plain object attachRelations
+// doesn't know how to attach), which is how CASH vouchers ended up with no
+// `cash` data despite having been created successfully. Only ever treat a
+// plain object (no `__pivot`) as real, validatable input.
+function isComponentPivotRef(value) {
+  return Boolean(value && typeof value === "object" && value.__pivot);
+}
+
 module.exports = {
   async beforeCreate(event) {
     const { data } = event.params;
@@ -23,49 +54,31 @@ module.exports = {
     // genuinely new entry, but also when it re-creates the published row for
     // an EXISTING document (e.g. any partial update - flipping voucherStatus,
     // setting confirmationSentAt - routed through the published-entity path,
-    // or the admin panel's Publish button). In that sync path, `data.cash`
-    // is NOT the {amount, currency} value - it's Strapi's internal component
-    // pivot reference (e.g. `{id: 74, __pivot: {...}}`), regardless of what
-    // the caller's payload actually contained. Validating that pivot stub as
-    // if it were real cash data wrongly rejects updates that never touched
-    // type/cash/experience at all. Detect this via data.documentId (present
-    // only for an existing document) and backfill the real amount/currency
-    // from the existing row before validating.
-    let cashWasBackfilled = false;
-
-    const cashIsIncomplete =
-      data.type === "CASH" &&
-      (!data.cash || data.cash.amount == null || data.cash.currency == null);
-    const experienceIsIncomplete =
-      data.type === "EXPERIENCE" && !data.experience;
-
-    if (data.documentId && (!data.type || cashIsIncomplete || experienceIsIncomplete)) {
-      const existing = await strapi.db.query("api::voucher.voucher").findOne({
+    // or the admin panel's Publish button). Detect that via an existing row
+    // with the same documentId, and backfill plain (non-component-pivot)
+    // fields from it whenever the sync payload doesn't carry real values.
+    let existing = null;
+    if (data.documentId) {
+      existing = await strapi.db.query("api::voucher.voucher").findOne({
         where: { documentId: data.documentId },
         populate: ["cash"],
       });
+    }
 
-      if (existing) {
-        if (!data.type) {
-          data.type = existing.type;
-        }
-        if (
-          data.type === "CASH" &&
-          (!data.cash || data.cash.amount == null || data.cash.currency == null) &&
-          existing.cash
-        ) {
-          data.cash = {
-            amount: existing.cash.amount,
-            currency: existing.cash.currency,
-          };
-          cashWasBackfilled = true;
-        }
-        if (data.type === "EXPERIENCE" && !data.experience && existing.experience) {
-          data.experience = existing.experience;
-        }
-        if (data.percentageAmount === undefined && existing.percentageAmount != null) {
-          data.percentageAmount = existing.percentageAmount;
-        }
+    if (existing) {
+      if (!data.type) {
+        data.type = existing.type;
+      }
+      if (data.type === "EXPERIENCE" && !data.experience && existing.experience) {
+        data.experience = existing.experience;
+      }
+      if (data.percentageAmount == null && existing.percentageAmount != null) {
+        data.percentageAmount = existing.percentageAmount;
+      }
+      if (!data.expiryDate && existing.expiryDate) {
+        // Preserve the originally-computed expiry - never recompute it just
+        // because the document is being re-synced/republished.
+        data.expiryDate = existing.expiryDate;
       }
     }
 
@@ -78,39 +91,29 @@ module.exports = {
 
     // Validate CASH vouchers
     if (data.type === "CASH") {
-      if (!data.cash || data.cash.amount == null || data.cash.currency == null) {
-        throw new ValidationError(
-          "CASH vouchers must have cash amount and currency",
-        );
-      }
+      if (isComponentPivotRef(data.cash)) {
+        // Already-attached component from earlier in this same request -
+        // trust it, Strapi's own attribute validation already ran on the
+        // original raw input before it reached this pivot shape.
+      } else {
+        if (!data.cash || data.cash.amount == null || data.cash.currency == null) {
+          throw new ValidationError(
+            "CASH vouchers must have cash amount and currency",
+          );
+        }
 
-      // Validate fixed amounts. Skip this for cash data we backfilled from
-      // an existing record above: it's already-persisted historical data
-      // being carried forward untouched (e.g. a record predating the
-      // current fixed-tier list), not new input a caller is submitting.
-      const validLKRAmounts = [
-        10000, 15000, 20000, 25000, 30000, 35000, 40000, 45000,
-      ];
-      const validUSDAmounts = [10, 15, 20, 25, 30, 35, 40, 45];
-
-      if (
-        !cashWasBackfilled &&
-        data.cash.currency === "LKR" &&
-        !validLKRAmounts.includes(data.cash.amount)
-      ) {
-        throw new ValidationError(
-          `Invalid LKR amount: ${data.cash.amount}. Must be one of: ${validLKRAmounts.join(", ")}`,
-        );
-      }
-
-      if (
-        !cashWasBackfilled &&
-        data.cash.currency === "USD" &&
-        !validUSDAmounts.includes(data.cash.amount)
-      ) {
-        throw new ValidationError(
-          `Invalid USD amount: ${data.cash.amount}. Must be one of: ${validUSDAmounts.join(", ")}`,
-        );
+        if (!isValidCashAmount(data.cash.currency, data.cash.amount)) {
+          const rule = CASH_RULES[data.cash.currency];
+          if (!rule) {
+            throw new ValidationError(
+              `Unsupported cash voucher currency: ${data.cash.currency}`,
+            );
+          }
+          throw new ValidationError(
+            `Invalid ${data.cash.currency} amount: ${data.cash.amount}. Must be at least ` +
+              `${rule.min} in increments of ${rule.increment}.`,
+          );
+        }
       }
 
       // Ensure experience field is not populated for CASH vouchers
@@ -158,11 +161,11 @@ module.exports = {
         whereClause.documentId = { $ne: data.documentId };
       }
 
-      const existing = await strapi.db.query("api::voucher.voucher").findOne({
+      const existingCoupon = await strapi.db.query("api::voucher.voucher").findOne({
         where: whereClause,
       });
 
-      if (existing) {
+      if (existingCoupon) {
         throw new ValidationError(
           `Coupon code ${data.couponCode} already exists`,
         );
@@ -172,11 +175,11 @@ module.exports = {
     // === AUTO-SET DEFAULTS ===
 
     // Reject a manually-supplied expiry date that's already in the past.
-    // Only applies to a genuinely new voucher (no documentId) - the
-    // documentId-bearing publish-sync path above can legitimately carry an
+    // Only applies to a genuinely new voucher (no pre-existing row for this
+    // document) - the publish-sync path above can legitimately carry an
     // expiryDate from long ago (e.g. re-syncing an old voucher whose
     // validity window has since elapsed), which must not be rejected here.
-    if (!data.documentId && data.expiryDate) {
+    if (!existing && data.expiryDate) {
       const today = new Date().toISOString().split("T")[0];
       if (data.expiryDate < today) {
         throw new ValidationError(
@@ -264,25 +267,19 @@ module.exports = {
       }
     }
 
-    // Validate CASH voucher amounts on update
-    if (data.type === "CASH" && data.cash) {
-      const validLKRAmounts = [
-        10000, 15000, 20000, 25000, 30000, 35000, 40000, 45000,
-      ];
-      const validUSDAmounts = [10, 15, 20, 25, 30, 35, 40, 45];
-
-      if (
-        data.cash.currency === "LKR" &&
-        !validLKRAmounts.includes(data.cash.amount)
-      ) {
-        throw new ValidationError(`Invalid LKR amount: ${data.cash.amount}`);
-      }
-
-      if (
-        data.cash.currency === "USD" &&
-        !validUSDAmounts.includes(data.cash.amount)
-      ) {
-        throw new ValidationError(`Invalid USD amount: ${data.cash.amount}`);
+    // Validate CASH voucher amounts on update. Skip when the value is
+    // Strapi's internal component pivot reference rather than real caller
+    // input - see the isComponentPivotRef comment in beforeCreate for why
+    // re-validating/overwriting that shape is unsafe.
+    if (data.type === "CASH" && data.cash && !isComponentPivotRef(data.cash)) {
+      if (!isValidCashAmount(data.cash.currency, data.cash.amount)) {
+        const rule = CASH_RULES[data.cash.currency];
+        throw new ValidationError(
+          rule
+            ? `Invalid ${data.cash.currency} amount: ${data.cash.amount}. Must be at least ` +
+              `${rule.min} in increments of ${rule.increment}.`
+            : `Unsupported cash voucher currency: ${data.cash.currency}`,
+        );
       }
     }
 
@@ -313,8 +310,13 @@ module.exports = {
     // the cash component via entityService.update if it came back missing
     // after a publish-sync) and reverted - it risked lock contention with
     // the create()'s own transaction on the same row and caused requests to
-    // hang. Any repair for the "cash goes missing on republish" bug must run
-    // fully outside this lifecycle's call stack, not inline here.
+    // hang. The actual fix was twofold: beforeCreate above no longer
+    // overwrites Strapi's internal component pivot reference (see
+    // isComponentPivotRef), and zriadventures-web verifies the cash data
+    // right after creation via a separate follow-up request
+    // (verifyAndRepairCashVoucher in lib/server/orders/process-success.ts),
+    // which avoids the lock contention since it isn't nested in this
+    // transaction.
 
     // The recipient email is sent from the Next.js app (ensureVouchers() in
     // lib/server/orders/process-success.ts) right after it creates the
