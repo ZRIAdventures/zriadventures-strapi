@@ -31,6 +31,10 @@
       "component": "voucher.cash",
       "repeatable": false
     },
+    "redeemedAmount": {
+      "type": "decimal",
+      "default": 0
+    },
     "experience": {
       "type": "json"
     },

@@ -308,6 +308,15 @@ module.exports = {
     if (data.reusable === undefined || data.reusable === null) {
       data.reusable = false;
     }
+
+    // A brand new voucher always starts with its full balance intact. The
+    // running balance is only ever moved by the redeem/refund service
+    // actions, never by a caller-supplied value on create.
+    if (!existing) {
+      data.redeemedAmount = 0;
+    } else if (data.redeemedAmount == null) {
+      data.redeemedAmount = existing.redeemedAmount ?? 0;
+    }
   },
 
   async beforeUpdate(event) {

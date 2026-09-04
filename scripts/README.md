@@ -47,6 +47,38 @@ Passed: 6 ✅
 Failed: 0 ❌
 ```
 
+### 1.1 `test-voucher-redemption.js`
+
+**Purpose:** Test partial redemption of CASH vouchers - the behaviour the gift
+voucher terms promise ("the voucher can be used as a full or part payment").
+
+**Usage:**
+
+```bash
+npm run strapi -- scripts/test-voucher-redemption.js
+```
+
+**What it tests:**
+
+- Partial redemption leaves the voucher `AVAILABLE` with a recorded
+  `redeemedAmount`
+- Spending the last of the balance flips it to `CLAIMED`
+- A spent-out voucher can't be redeemed again
+- `refund` restores the balance and re-opens the voucher
+- Redeeming more than the remaining balance is rejected and changes nothing
+- Two concurrent redemptions can never both spend the same balance
+
+**Requires:** the `redeemedAmount` field on `api::voucher.voucher` (added
+alongside the `redeem` / `refund` service actions).
+
+> **Deployment note:** the new `POST /api/vouchers/:documentId/redeem` and
+> `/refund` routes get their own per-action permissions in Strapi. After
+> deploying, enable **Voucher → redeem** and **Voucher → refund** for the API
+> token the Next.js app uses (Settings → API Tokens, if the token is
+> *Custom*-scoped rather than *Full access*). Until that is done the web app
+> falls back to the old all-or-nothing `claim`, so checkout keeps working but
+> unspent balances are not preserved.
+
 ### 2. `backfill-computed-fields.js`
 
 **Purpose:** Populate computed fields (including `minPrice*` and duration fields) for all existing records.

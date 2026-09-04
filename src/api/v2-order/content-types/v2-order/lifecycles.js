@@ -5,10 +5,16 @@ module.exports = {
     // Get documentId from where clause (REST API) or try to extract from context
     let documentId = where?.documentId;
 
-    // If documentId not in where clause, it might be in the event's params.data.documentId (for direct calls)
-    // Or we can try to infer it from the query
+    // A numeric row id is deliberately NOT used as a documentId fallback here:
+    // documents().findOne({ documentId }) can never match one, so it looked
+    // up nothing, logged no warning, and quietly dropped the previous payment
+    // status - suppressing the status-change notification below.
     if (!documentId && where?.id) {
-      documentId = where.id;
+      const row = await strapi.db.query("api::v2-order.v2-order").findOne({
+        where: { id: where.id },
+        select: ["documentId"],
+      });
+      documentId = row?.documentId;
     }
 
     // If still no documentId, log warning but don't fail - allow the update to proceed
@@ -112,11 +118,8 @@ module.exports = {
   },
 
   async afterCreate(event) {
-    const { result } = event;
-
-    strapi.log.info(`[v2-order afterCreate] New order created: ${result.orderId}`);
-
-    // Trigger notification for new order (optional - external API handles this)
-    // Could add additional logic here for order confirmation emails
+    strapi.log.info(
+      `[v2-order afterCreate] New order created: ${event.result.orderId}`,
+    );
   },
 };

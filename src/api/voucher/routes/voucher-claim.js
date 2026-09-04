@@ -25,5 +25,15 @@ module.exports = {
       path: '/vouchers/:documentId/release',
       handler: 'voucher.release',
     },
+    {
+      method: 'POST',
+      path: '/vouchers/:documentId/redeem',
+      handler: 'voucher.redeem',
+    },
+    {
+      method: 'POST',
+      path: '/vouchers/:documentId/refund',
+      handler: 'voucher.refund',
+    },
   ],
 };
