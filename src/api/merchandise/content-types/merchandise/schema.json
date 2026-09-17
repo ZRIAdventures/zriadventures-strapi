@@ -88,6 +88,10 @@
     },
     "minPriceLKR": {
       "type": "decimal"
+    },
+    "advancePayable": {
+      "type": "boolean",
+      "default": true
     }
   }
 }
