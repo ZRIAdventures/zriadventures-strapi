@@ -38,6 +38,9 @@
     },
     "lastNewsletterAt": {
       "type": "datetime"
+    },
+    "lastMarketingAt": {
+      "type": "datetime"
     }
   }
 }

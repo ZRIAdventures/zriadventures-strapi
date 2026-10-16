@@ -116,6 +116,22 @@
     "pretripUpsellSentAt": {
       "type": "datetime"
     },
+    "postTripEmailSentAt": {
+      "type": "datetime"
+    },
+    "nextTripEmailSentAt": {
+      "type": "datetime"
+    },
+    "marketingOptIn": {
+      "type": "boolean",
+      "default": false
+    },
+    "tripDate": {
+      "type": "date"
+    },
+    "tripEndDate": {
+      "type": "date"
+    },
     "internalEmailStatus": {
       "type": "enumeration",
       "enum": [
