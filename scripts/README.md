@@ -2,6 +2,12 @@
 
 This directory contains maintenance and migration scripts for the ZRI Adventures Strapi backend.
 
+## Email regression checks
+
+Run `npm test` for isolated email integration checks. They exercise the real order lifecycle and role setup with in-memory dependencies: email timestamp writes must not retrigger fulfillment, a payment transition must send the authenticated callback, numeric row updates must resolve their document, and subscriber/customer collections must remain outside public role grants. These tests do not connect to a database or send email.
+
+The private `newsletter-subscriber` collection supports subscribe/unsubscribe preferences and newsletter delivery timestamps. Deploy it and the new order notification fields before releasing the frontend email migration. Give the frontend's server API token find/create/update access to subscribers; do not enable subscriber permissions for Public or Authenticated roles. Subscriber import and SMTP configuration are documented in the frontend's `docs/email-system.md`.
+
 ## 📜 Available Scripts
 
 ### 1. `test-voucher-lifecycle.js`

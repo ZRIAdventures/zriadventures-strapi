@@ -101,6 +101,38 @@
     "bankCurrency": {
       "type": "string"
     },
+    "bookingsCreatedAt": {
+      "type": "datetime"
+    },
+    "vouchersCreatedAt": {
+      "type": "datetime"
+    },
+    "receiptSentAt": {
+      "type": "datetime"
+    },
+    "upsellSentAt": {
+      "type": "datetime"
+    },
+    "pretripUpsellSentAt": {
+      "type": "datetime"
+    },
+    "internalEmailStatus": {
+      "type": "enumeration",
+      "enum": [
+        "PENDING",
+        "SENT",
+        "FAILED"
+      ],
+      "default": "PENDING"
+    },
+    "internalNotificationState": {
+      "type": "enumeration",
+      "enum": [
+        "PENDING",
+        "SUCCESS",
+        "FAILED"
+      ]
+    },
     "appliedCoupon": {
       "type": "json"
     },

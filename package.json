@@ -7,7 +7,8 @@
     "develop": "strapi develop",
     "start": "strapi start",
     "build": "strapi build",
-    "strapi": "strapi"
+    "strapi": "strapi",
+    "test": "node --test scripts/email-integration.test.cjs"
   },
   "dependencies": {
     "@strapi/plugin-users-permissions": "5.35.0",
